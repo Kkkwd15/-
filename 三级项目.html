@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜鸟集团-电商物流行业的全球领导者</title>
+    <style>
+        :root {
+            --primary-blue: #0052d9;
+            --text-color: #333;
+            --bg-light: #f5f7fa;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            background: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .header-right a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 500px;
+            background: url('https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=Cainiao+global+logistics+background+London+Big+Ben+Eye+Tower+Bridge+blue+overlay&image_size=landscape_16_9') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            position: relative;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 82, 217, 0.4);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn-consult {
+            display: inline-block;
+            padding: 12px 40px;
+            background: var(--white);
+            color: var(--primary-blue);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: transform 0.3s;
+        }
+
+        .btn-consult:hover {
+            transform: translateY(-2px);
+        }
+
+        /* News Ticker */
+        .news-ticker {
+            background: #003a99;
+            color: var(--white);
+            padding: 12px 0;
+            font-size: 14px;
+        }
+
+        .ticker-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Section Common */
+        .section {
+            padding: 80px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -10px;
+            width: 40px;
+            height: 4px;
+            background: var(--primary-blue);
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .domestic-logistics {
+            padding: 30px;
+            position: relative;
+        }
+
+        .domestic-logistics .content-top {
+            margin-bottom: 30px;
+        }
+
+        .domestic-logistics h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .logistics-sub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .sub-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .list-items {
+            list-style: none;
+        }
+
+        .list-items li {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .list-items li::before {
+            content: "✓";
+            color: #52c41a;
+            margin-right: 8px;
+        }
+
+        .card-btns {
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-outline {
+            padding: 8px 25px;
+            border: 1px solid var(--primary-blue);
+            color: var(--primary-blue);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .intl-tech-card {
+            color: var(--white);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 400px;
+        }
+
+        .intl-card {
+            background: linear-gradient(rgba(0,82,217,0.7), rgba(0,82,217,0.7)), url('https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=logistics+airplane+flying+in+sky&image_size=portrait_4_3') center/cover;
+        }
+
+        .tech-card {
+            background: linear-gradient(rgba(0,82,217,0.7), rgba(0,82,217,0.7)), url('https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=logistics+robot+warehouse+automation&image_size=portrait_4_3') center/cover;
+        }
+
+        /* Network Section */
+        .network-section {
+            background: #f0f4ff url('https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=world+map+network+connections+blue+soft&image_size=landscape_16_9') center/cover;
+            padding: 80px 0;
+        }
+
+        .network-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .network-stats {
+            margin-top: 40px;
+            list-style: none;
+        }
+
+        .network-stats li {
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        .network-stats li::before {
+            content: "●";
+            color: var(--primary-blue);
+            margin-right: 15px;
+            font-size: 12px;
+        }
+
+        .network-stats b {
+            color: var(--primary-blue);
+            margin: 0 5px;
+        }
+
+        /* Tech Section */
+        .tech-section {
+            background: var(--white);
+        }
+
+        .tech-desc {
+            max-width: 800px;
+            font-size: 18px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a1a;
+            color: #888;
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            color: var(--white);
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .copyright {
+            font-size: 14px;
+            margin-top: 40px;
+            border-top: 1px solid #333;
+            padding-top: 20px;
+        }
+
+        /* Floating Contact */
+        .floating-contact {
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 999;
+        }
+
+        .contact-item {
+            width: 50px;
+            height: 50px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            .intl-tech-card {
+                min-height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <a href="#" class="logo">CAINIAO 菜鸟</a>
+        <nav class="nav-links">
+            <a href="#">首页</a>
+            <a href="#">国内物流</a>
+            <a href="#">国际物流</a>
+            <a href="#">科技与其他</a>
+            <a href="#">ESG</a>
+            <a href="#">关于我们</a>
+        </nav>
+        <div class="header-right">
+            <a href="#">商家/物流商服务</a>
+            <a href="#">注册/登录</a>
+            <span>简体中文</span>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>菜鸟三日达 72小时直抵英国</h1>
+        <p>更快速 更普惠 更简单</p>
+        <a href="#" class="btn-consult">立即咨询</a>
+    </div>
+</section>
+
+<div class="news-ticker">
+    <div class="ticker-container">
+        <span>新闻 ▶ 菜鸟发布“全球三日达”，跨境电商迈入“72小时达” | 菜鸟推出海外仓尾程优配产品，使用AI为跨境商家降本，最高可省...</span>
+        <a href="#" style="color: white; text-decoration: none;">了解更多 →</a>
+    </div>
+</div>
+
+<section class="section">
+    <h2 class="section-title">我们的服务</h2>
+    <div class="services-grid">
+        <!-- Domestic Logistics -->
+        <div class="service-card domestic-logistics">
+            <div class="content-top">
+                <h3>国内物流</h3>
+                <p style="color: #666; font-size: 14px;">中国领先的电子商务供应链解决方案提供商和逆向物流解决方案提供商，通过打造全渠道供应链、品质快递和逆向物流能力，提供差异化的供应链和配送服务。</p>
+            </div>
+            <div class="logistics-sub-grid">
+                <div>
+                    <div class="sub-title">国内供应链</div>
+                    <ul class="list-items">
+                        <li>B2C仓配服务</li>
+                        <li>B2B仓配服务</li>
+                        <li>数字供应链</li>
+                        <li>绿色供应链</li>
+                    </ul>
+                    <div style="margin-top: 15px; font-size: 13px; color: #999;">优选仓配-半日达 &nbsp;&nbsp; 智选仓配-次日达</div>
+                </div>
+                <div>
+                    <div class="sub-title">菜鸟裹裹</div>
+                    <ul class="list-items">
+                        <li>逆向物流解决方案提供商</li>
+                    </ul>
+                    <div style="margin-top: 15px; font-size: 13px; color: #999;">个人寄件 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 商家寄件</div>
+                </div>
+            </div>
+            <div class="card-btns">
+                <a href="#" class="btn-outline">了解更多</a>
+                <a href="#" class="btn-outline">立即咨询</a>
+            </div>
+        </div>
+
+        <!-- Intl Logistics -->
+        <div class="service-card intl-tech-card intl-card">
+            <div>
+                <h3 style="font-size: 24px; margin-bottom: 15px;">国际物流</h3>
+                <p style="font-size: 14px; opacity: 0.9;">全球最大的跨境电子商务物流提供商，拥有全球最大的跨境电商仓网，为商家提供端到端的...</p>
+            </div>
+            <a href="#" class="btn-outline" style="color: white; border-color: white; align-self: flex-start;">了解更多</a>
+        </div>
+
+        <!-- Tech -->
+        <div class="service-card intl-tech-card tech-card">
+            <div>
+                <h3 style="font-size: 24px; margin-bottom: 15px;">科技与其他</h3>
+                <p style="font-size: 14px; opacity: 0.9;">率先在中国成功推出标准化的“电子面单”系统，已经建成全球最大的数字化驿站网络，为...</p>
+            </div>
+            <a href="#" class="btn-outline" style="color: white; border-color: white; align-self: flex-start;">了解更多</a>
+        </div>
+    </div>
+</section>
+
+<section class="network-section">
+    <div class="network-container">
+        <h2 class="section-title">我们的网络覆盖</h2>
+        <p style="font-size: 18px; margin-top: 20px; color: #444;">菜鸟建立了具有端到端能力的全球智慧物流网络，在具有战略意义的关键节点和设施上进行了重点建设和自主运营，<b>遍布全球 200 多个国家及地区</b>。</p>
+        <ul class="network-stats">
+            <li>全球<b>1,100 多个</b>仓库，总建筑面积约<b>1,650</b>万平方米</li>
+            <li>拥有全球最大的跨境物流仓网，总建筑面积约<b>300</b>万平方米</li>
+            <li>全球<b>380 多个</b>分拣中心，其中<b>18 个</b>分布于海外重点市场</li>
+            <li>全球约<b>170 架次/周</b>航空包机和包板，超过<b>2,700 条</b>卡车班列运输线路</li>
+            <li>与超过<b>100 个</b>口岸的服务提供商合作建立智能清关系统</li>
+            <li>菜鸟驿站<b>170,000 多个</b>站点，是全球最大的数字化驿站网络</li>
+        </ul>
+    </div>
+</section>
+
+<section class="section tech-section">
+    <h2 class="section-title">我们的技术能力</h2>
+    <h3>科技是菜鸟成功优化效率、提升客户体验和促进创新的关键</h3>
+    <p class="tech-desc">通过一体化的AI、自动化及物联网技术贯穿整个全球智慧物流网络，并开发经济高效、实用的技术，恰到好处地解决物流链条中的难题。</p>
+</section>
+
+<footer>
+    <div class="footer-logo">CAINIAO 菜鸟</div>
+    <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 30px;">
+        <a href="#" style="color: #888; text-decoration: none;">国内物流</a>
+        <a href="#" style="color: #888; text-decoration: none;">国际物流</a>
+        <a href="#" style="color: #888; text-decoration: none;">科技与其他</a>
+        <a href="#" style="color: #888; text-decoration: none;">关于我们</a>
+    </div>
+    <div class="copyright">
+        © 2026 菜鸟集团 版权所有 | 孙宁 三级项目 课程实践
+    </div>
+</footer>
+
+<div class="floating-contact">
+    <div class="contact-item">📞</div>
+    <div class="contact-item">💬</div>
+</div>
+
+</body>
+</html>

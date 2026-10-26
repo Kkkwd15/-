@@ -13,6 +13,7 @@
             --muted: #5d6b82;
             --primary: #5b67f1;
             --primary-dark: #3f4cc9;
+            --accent: #ffb86c;
             --line: rgba(91,103,241,0.18);
             --shadow: 0 18px 45px rgba(42, 64, 153, 0.12);
         }
@@ -164,6 +165,31 @@
             font-size: 0.96rem;
         }
 
+        .prompt-box {
+            margin-top: 42px;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid var(--line);
+            border-left: 6px solid var(--accent);
+            border-radius: 20px;
+            box-shadow: 0 12px 28px rgba(80, 89, 117, 0.08);
+            padding: 22px 24px;
+        }
+
+        .prompt-box h2 {
+            margin: 0 0 12px;
+            font-size: 1.3rem;
+        }
+
+        .prompt-box blockquote {
+            margin: 0;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: #fffaf4;
+            color: #5b4b2b;
+            line-height: 1.9;
+            font-size: 1rem;
+        }
+
         footer {
             margin-top: 48px;
             text-align: center;
@@ -192,11 +218,11 @@
         <header class="hero">
             <span class="badge">课堂实践导航</span>
             <h1>孙宁的《高级网页设计》课堂实践</h1>
-            <p class="subtitle">这是一个以 HTML、CSS 与 JavaScript 为核心的课程作品集，汇总了本目录中的所有学习页面，展示了从基础标记、样式设计到程序逻辑的学习成果。</p>
+            <p class="subtitle">这是一个以 HTML、CSS 与网页布局为核心的课程作品集，汇总了本目录中的所有学习页面，展示了从基础标记到样式设计的学习成果。</p>
 
             <div class="summary">
                 <div class="chip">
-                    <strong>10</strong>
+                    <strong>6</strong>
                     网页作品
                 </div>
                 <div class="chip">
@@ -204,8 +230,8 @@
                     结构基础
                 </div>
                 <div class="chip">
-                    <strong>CSS &amp; JS</strong>
-                    样式与逻辑
+                    <strong>CSS</strong>
+                    样式美化
                 </div>
             </div>
         </header>
@@ -243,40 +269,16 @@
                     <p>CSS 进阶页面，综合应用群组选择器、后代选择器和文本样式，体现网页设计的层次与结构感。</p>
                 </a>
 
-                <a class="card" href="5-1层叠与继承.html">
-                    <span class="tag">作业 06</span>
-                    <h3>5-1层叠与继承.html</h3>
-                    <p>层叠与继承练习，通过 id、class 选择器与外部样式表的对比，理解 CSS 优先级与样式的继承规则。</p>
-                </a>
-
-                <a class="card" href="5-2盒模型.html">
-                    <span class="tag">作业 07</span>
-                    <h3>5-2盒模型.html</h3>
-                    <p>盒模型（box model）实践，对比 content-box 与 border-box，理解 margin、border、padding 与内容区的关系。</p>
-                </a>
-
-                <a class="card" href="10.15.html">
-                    <span class="tag">作业 08</span>
-                    <h3>10.15.html</h3>
-                    <p>该页面暂时为空，还没有内容，待后续补充完善。</p>
-                </a>
-
-                <a class="card" href="15-1.html">
-                    <span class="tag">作业 09</span>
-                    <h3>15-1.html</h3>
-                    <p>数 7 规则：用 for 循环配合 if 条件，7 的倍数或个位是 7 的盒子留空，其余盒子显示数字。</p>
-                </a>
-
-                <a class="card" href="15-2.html">
-                    <span class="tag">作业 10</span>
-                    <h3>15-2.html</h3>
-                    <p>JavaScript 程序结构演示：if/switch 条件语句与 for、while、do...while 循环，并含九九乘法表综合实例。</p>
+                <a class="card" href="三级项目.html">
+                    <span class="tag">三级项目</span>
+                    <h3>菜鸟快递服务网站</h3>
+                    <p>综合实战：仿菜鸟官网，包含国内/国际物流服务、网络覆盖统计及技术能力展示。</p>
                 </a>
             </div>
         </section>
 
         <footer>
-            课程实践页 · 采用原生 HTML + CSS + JavaScript 编写 · 2026
+            课程实践页 · 采用原生 HTML + CSS 编写 · 2026
         </footer>
     </div>
 </body>

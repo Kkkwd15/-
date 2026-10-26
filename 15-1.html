@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数7规则 - 孙宁</title>
+    <style>
+        body {
+            margin: 24px;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .boxes {
+            display: grid;
+            grid-template-columns: repeat(10, 48px);
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .box {
+            box-sizing: border-box;
+            width: 48px;
+            height: 48px;
+            border: 1px solid #4472c4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>数7规则</h1>
+    <p>孙宁</p>
+    <p>7的倍数或个位数是7的盒子留空，其余盒子显示数字。</p>
+    <div class="boxes" id="boxes"></div>
+
+    <script>
+        const boxes = document.getElementById("boxes");
+
+        for (let number = 1; number <= 100; number++) {
+            const box = document.createElement("div");
+            box.className = "box";
+
+            if (number % 7 !== 0 && number % 10 !== 7) {
+                box.textContent = number;
+            }
+
+            boxes.appendChild(box);
+        }
+    </script>
+</body>
+</html>

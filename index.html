@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>孙宁的《高级网页设计》课堂实践</title>
+    <style>
+        :root {
+            --bg1: #f7f3ff;
+            --bg2: #eef7ff;
+            --card: rgba(255,255,255,0.8);
+            --text: #1f2a44;
+            --muted: #5d6b82;
+            --primary: #5b67f1;
+            --primary-dark: #3f4cc9;
+            --line: rgba(91,103,241,0.18);
+            --shadow: 0 18px 45px rgba(42, 64, 153, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(255,184,108,0.25), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(91,103,241,0.18), transparent 35%),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 20px 80px;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(91,103,241,0.95), rgba(95,170,255,0.88));
+            padding: 42px 36px;
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            color: #fff;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            right: -30px;
+            top: -30px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 18px 0 12px;
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            margin: 0;
+            max-width: 700px;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 18px;
+            margin-top: 26px;
+        }
+
+        .chip {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 18px;
+            padding: 16px 18px;
+            backdrop-filter: blur(8px);
+        }
+
+        .chip strong {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+
+        .section {
+            margin-top: 42px;
+        }
+
+        .section-title {
+            margin: 0 0 20px;
+            font-size: 1.7rem;
+            color: var(--text);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 22px 20px 18px;
+            box-shadow: 0 10px 25px rgba(43, 60, 109, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            min-height: 190px;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 30px rgba(43, 60, 109, 0.12);
+            border-color: rgba(91,103,241,0.35);
+        }
+
+        .card .tag {
+            display: inline-block;
+            background: rgba(91,103,241,0.12);
+            color: var(--primary-dark);
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .card h3 {
+            margin: 16px 0 10px;
+            font-size: 1.25rem;
+            color: var(--text);
+        }
+
+        .card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 0.96rem;
+        }
+
+        footer {
+            margin-top: 48px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                padding-left: 14px;
+                padding-right: 14px;
+            }
+
+            .hero {
+                padding: 30px 22px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <span class="badge">课堂实践导航</span>
+            <h1>孙宁的《高级网页设计》课堂实践</h1>
+            <p class="subtitle">这是一个以 HTML、CSS 与 JavaScript 为核心的课程作品集，汇总了本目录中的所有学习页面，展示了从基础标记、样式设计到程序逻辑的学习成果。</p>
+
+            <div class="summary">
+                <div class="chip">
+                    <strong>10</strong>
+                    网页作品
+                </div>
+                <div class="chip">
+                    <strong>HTML</strong>
+                    结构基础
+                </div>
+                <div class="chip">
+                    <strong>CSS &amp; JS</strong>
+                    样式与逻辑
+                </div>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">作品导航</h2>
+            <div class="grid">
+                <a class="card" href="2-1.html">
+                    <span class="tag">作业 01</span>
+                    <h3>2-1.html</h3>
+                    <p>HTML 元素、段落、列表、块级元素与内嵌样式的基础练习，展现了网页结构与内容组织能力。</p>
+                </a>
+
+                <a class="card" href="2-2.html">
+                    <span class="tag">作业 02</span>
+                    <h3>2-2.html</h3>
+                    <p>超链接、图片、相对路径与表格布局的实践，进一步学习网页中的内容引用与信息呈现方式。</p>
+                </a>
+
+                <a class="card" href="3-1form.html">
+                    <span class="tag">作业 03</span>
+                    <h3>3-1form.html</h3>
+                    <p>表单设计与交互元素，包含文本框、密码框、单选、多选、下拉菜单和文件上传等控件。</p>
+                </a>
+
+                <a class="card" href="3-2css.html">
+                    <span class="tag">作业 04</span>
+                    <h3>3-2css.html</h3>
+                    <p>CSS 入门练习，理解选择器、颜色、背景、盒模型与样式叠加等基本网页样式概念。</p>
+                </a>
+
+                <a class="card" href="4.1 css2.html">
+                    <span class="tag">作业 05</span>
+                    <h3>4.1 css2.html</h3>
+                    <p>CSS 进阶页面，综合应用群组选择器、后代选择器和文本样式，体现网页设计的层次与结构感。</p>
+                </a>
+
+                <a class="card" href="5-1层叠与继承.html">
+                    <span class="tag">作业 06</span>
+                    <h3>5-1层叠与继承.html</h3>
+                    <p>层叠与继承练习，通过 id、class 选择器与外部样式表的对比，理解 CSS 优先级与样式的继承规则。</p>
+                </a>
+
+                <a class="card" href="5-2盒模型.html">
+                    <span class="tag">作业 07</span>
+                    <h3>5-2盒模型.html</h3>
+                    <p>盒模型（box model）实践，对比 content-box 与 border-box，理解 margin、border、padding 与内容区的关系。</p>
+                </a>
+
+                <a class="card" href="10.15.html">
+                    <span class="tag">作业 08</span>
+                    <h3>10.15.html</h3>
+                    <p>该页面暂时为空，还没有内容，待后续补充完善。</p>
+                </a>
+
+                <a class="card" href="15-1.html">
+                    <span class="tag">作业 09</span>
+                    <h3>15-1.html</h3>
+                    <p>数 7 规则：用 for 循环配合 if 条件，7 的倍数或个位是 7 的盒子留空，其余盒子显示数字。</p>
+                </a>
+
+                <a class="card" href="15-2.html">
+                    <span class="tag">作业 10</span>
+                    <h3>15-2.html</h3>
+                    <p>JavaScript 程序结构演示：if/switch 条件语句与 for、while、do...while 循环，并含九九乘法表综合实例。</p>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            课程实践页 · 采用原生 HTML + CSS + JavaScript 编写 · 2026
+        </footer>
+    </div>
+</body>
+</html>

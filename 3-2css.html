@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /*1.h2黑底，文字白色*/
+        h2 {
+            background-color: #000000;
+            color: #ffffff;
+        }
+        /*3.h3里面“选择器”三个字为白色*/
+        h3 .whiteWord {
+            color: #ffffff;
+        }
+        /*4.新盒子样式，宽、高、背景色*/
+        .newBox {
+            width: 260px;
+            height: 80px;
+            background-color: #4472c4;
+            line-height: 80px;
+        }
+    </style>
+</head>
+<body>
+    <h2>层叠样式表css</h2>
+    <div id="box">
+        <h3>css<span class="whiteWord">选择器</span></h3>
+        <!--2.孙、宁每个字不同颜色，同一行显示-->
+        <p><span style="color:red">孙</span><span style="color:blue">宁</span></p>
+        <p>css属性</p>
+    </div>
+    <!--4.新增盒子，文字24001011016-->
+    <div class="newBox">24001011016</div>
+</body>
+</html>

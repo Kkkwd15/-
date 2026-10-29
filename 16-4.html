@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票行情Tab选项卡 - 孙宁</title>
+    <style>
+        body {
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* 容器 */
+        .stock-container {
+            width: 320px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            overflow: hidden;
+        }
+
+        /* Tab 头部 */
+        .tab-header {
+            display: flex;
+            background-color: #f7f7f7;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-item {
+            flex: 1;
+            height: 36px;
+            line-height: 36px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            border-right: 1px solid #ddd;
+            transition: background-color 0.2s;
+        }
+
+        .tab-item:last-child {
+            border-right: none;
+        }
+
+        .tab-item.active {
+            background-color: #fff;
+            color: #003399; /* 深蓝色 */
+        }
+
+        /* 表格区域 */
+        .stock-content {
+            padding: 0;
+            min-height: 200px;
+            position: relative;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            opacity: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        table.fade-out {
+            opacity: 0;
+        }
+
+        tr {
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            padding: 10px 8px;
+            text-align: right;
+        }
+
+        /* 第一列：序号 + 名称 */
+        td:first-child {
+            text-align: left;
+            color: #333;
+        }
+
+        .stock-index {
+            color: #cc0000;
+            margin-right: 4px;
+        }
+
+        /* 上涨颜色 */
+        .up {
+            color: #cc0000;
+        }
+
+        .empty-tip {
+            text-align: center;
+            padding: 40px 0;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="stock-container">
+    <div class="tab-header" id="tabHeader">
+        <div class="tab-item active" data-type="huzhang">沪涨</div>
+        <div class="tab-item" data-type="hudie">沪跌</div>
+        <div class="tab-item" data-type="shenzhang">深涨</div>
+        <div class="tab-item" data-type="shendie">深跌</div>
+    </div>
+    <div class="stock-content">
+        <table id="stockTable">
+            <tbody id="stockBody">
+                <!-- JS 动态渲染 -->
+            </tbody>
+        </table>
+        <div id="emptyTip" class="empty-tip" style="display: none;">暂无数据</div>
+    </div>
+</div>
+
+<script>
+    // 股票数据
+    const stockData = {
+        huzhang: [
+            { name: "N浙能", price: "8.88", amount: "+3.35", percent: "60.58%" },
+            { name: "天津松江", price: "8.16", amount: "+0.65", percent: "8.66%" },
+            { name: "金瑞科技", price: "8.79", amount: "+0.42", percent: "5.02%" },
+            { name: "宏发股份", price: "17.22", amount: "+0.82", percent: "5.00%" },
+            { name: "杭齿前进", price: "7.23", amount: "+0.34", percent: "4.93%" }
+        ],
+        shenzhang: [
+            { name: "天顺风能", price: "10.52", amount: "+0.96", percent: "10.04%" },
+            { name: "兴源过滤", price: "16.02", amount: "+1.46", percent: "10.03%" },
+            { name: "北京君正", price: "36.92", amount: "+3.36", percent: "10.01%" },
+            { name: "美盛文化", price: "32.87", amount: "+2.99", percent: "10.01%" },
+            { name: "骅威股份", price: "15.16", amount: "+1.38", percent: "10.01%" }
+        ],
+        hudie: [],
+        shendie: []
+    };
+
+    const tabHeader = document.getElementById('tabHeader');
+    const stockTable = document.getElementById('stockTable');
+    const stockBody = document.getElementById('stockBody');
+    const emptyTip = document.getElementById('emptyTip');
+
+    // 渲染表格函数
+    function renderTable(type) {
+        const data = stockData[type];
+        
+        // 开启淡出效果
+        stockTable.classList.add('fade-out');
+
+        setTimeout(() => {
+            stockBody.innerHTML = '';
+            
+            if (data && data.length > 0) {
+                stockTable.style.display = 'table';
+                emptyTip.style.display = 'none';
+                
+                data.forEach((stock, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><span class="stock-index">${index + 1}.</span> ${stock.name}</td>
+                        <td class="up">${stock.price}</td>
+                        <td class="up">${stock.amount}</td>
+                        <td class="up">${stock.percent}</td>
+                    `;
+                    stockBody.appendChild(tr);
+                });
+            } else {
+                stockTable.style.display = 'none';
+                emptyTip.style.display = 'block';
+            }
+
+            // 关闭淡出效果（触发淡入）
+            stockTable.classList.remove('fade-out');
+        }, 200); // 延迟时间与 CSS 过渡配合
+    }
+
+    // 事件委托处理 Tab 切换
+    tabHeader.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.classList.contains('tab-item') && !target.classList.contains('active')) {
+            // 更新 UI 状态
+            document.querySelector('.tab-item.active').classList.remove('active');
+            target.classList.add('active');
+            
+            // 重新渲染数据
+            const type = target.getAttribute('data-type');
+            renderTable(type);
+        }
+    });
+
+    // 初始渲染“沪涨”
+    renderTable('huzhang');
+
+</script>
+
+</body>
+</html>

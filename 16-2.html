@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 对象与字符串 - 孙宁</title>
+    <style>
+        body {
+            margin: 24px;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        h1 {
+            margin-bottom: 4px;
+        }
+
+        .byline {
+            margin-top: 0;
+            color: #666;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 34px 0 10px;
+            padding-left: 10px;
+            border-left: 4px solid #4472c4;
+        }
+
+        .tip {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* ---------- 通用方块 ---------- */
+        .boxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+            min-height: 48px;
+            align-items: flex-start;
+        }
+
+        .slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .box {
+            box-sizing: border-box;
+            min-width: 48px;
+            height: 48px;
+            padding: 0 8px;
+            border: 1px solid #4472c4;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            background: #fff;
+            white-space: pre;
+        }
+
+        .box.char {
+            min-width: 34px;
+            padding: 0;
+        }
+
+        .box.hl {
+            background: #ffe08a;
+            border-color: #d9a300;
+            font-weight: bold;
+        }
+
+        .box.result {
+            border-color: #d9a300;
+            background: #fff6dc;
+        }
+
+        .box.string {
+            border-color: #4caf50;
+            background: #eefaf0;
+        }
+
+        .idx {
+            font-size: 11px;
+            color: #999;
+        }
+
+        /* ---------- 对象卡片 ---------- */
+        .obj-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .obj-card {
+            border: 1px solid #4472c4;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #fff;
+            min-width: 110px;
+        }
+
+        .obj-key {
+            font-size: 12px;
+            color: #2c4a86;
+            background: #eef3fc;
+            padding: 3px 10px;
+            text-align: center;
+        }
+
+        .obj-val {
+            padding: 10px;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .obj-card.added .obj-key {
+            background: #d8f0d8;
+            color: #2f7d32;
+        }
+
+        .obj-card.added {
+            border-color: #4caf50;
+        }
+
+        /* ---------- 按钮 ---------- */
+        .group-name {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+        }
+
+        .mutate {
+            color: #a33;
+            background: #ffd6d6;
+        }
+
+        .pure {
+            color: #2f7d32;
+            background: #d8f0d8;
+        }
+
+        .methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        button.method {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 7px 14px;
+            border: 1px solid #4472c4;
+            border-radius: 999px;
+            background: #fff;
+            color: #2c4a86;
+            cursor: pointer;
+        }
+
+        button.method:hover {
+            background: #eef3fc;
+        }
+
+        button.method.active {
+            background: #4472c4;
+            color: #fff;
+        }
+
+        /* ---------- 结果面板 ---------- */
+        .panel {
+            margin-top: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px 18px;
+            background: #fafbfd;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .panel-head code {
+            font-size: 15px;
+            color: #2c4a86;
+            background: #eef3fc;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 999px;
+        }
+
+        .desc {
+            margin: 6px 0 14px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .row-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .scalar {
+            display: inline-block;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: #fff6dc;
+            border: 1px solid #d9a300;
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        .empty {
+            color: #999;
+            font-size: 14px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #eef3fc;
+        }
+
+        td code {
+            color: #2c4a86;
+            font-family: Consolas, Monaco, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript 对象与字符串</h1>
+    <p class="byline">孙宁</p>
+    <p class="tip">对象用「键值卡片」表示，字符串用「字符方块」表示（方块下方是下标）。点击按钮执行，选用到的那一段字符会被高亮。</p>
+
+    <!-- ==================== 对象 ==================== -->
+    <h2>一、对象 Object</h2>
+
+    <div class="row-label">原始对象 student：</div>
+    <div id="objSource"></div>
+
+    <div class="row-label" style="margin-top:16px;">选择一个操作：</div>
+    <div id="objMethods"></div>
+
+    <div class="panel" id="objPanel"></div>
+
+    <h2>对象方法总览</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>写法</th>
+                <th>作用</th>
+                <th>返回值</th>
+                <th>改变原对象</th>
+            </tr>
+        </thead>
+        <tbody id="objTable"></tbody>
+    </table>
+
+    <!-- ==================== 字符串 ==================== -->
+    <h2>二、字符串 String</h2>
+
+    <div class="row-label">原始字符串 str（共 <b id="strLen"></b> 个字符）：</div>
+    <div id="strSource"></div>
+
+    <div class="row-label" style="margin-top:16px;">选择一个操作：</div>
+    <div id="strMethods"></div>
+
+    <div class="panel" id="strPanel"></div>
+
+    <h2>字符串方法总览</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>写法</th>
+                <th>作用</th>
+                <th>返回值</th>
+                <th>改变原字符串</th>
+            </tr>
+        </thead>
+        <tbody id="strTable"></tbody>
+    </table>
+
+    <script>
+        /* ======================= 数据 ======================= */
+
+        // 原始对象
+        const BASE_OBJ = {
+            name: "孙宁",
+            age: 20,
+            city: "北京"
+        };
+
+        // 带嵌套和数组的对象，用于演示多层取值
+        const STUDENT = {
+            name: "孙宁",
+            age: 20,
+            skills: ["HTML", "CSS", "JavaScript"],
+            contact: { city: "北京", phone: "138****8888" }
+        };
+
+        // 原始字符串
+        const BASE_STR = "Hello JavaScript";
+
+        /* ======================= 对象演示 ======================= */
+
+        const objDemos = [
+            {
+                group: "读取属性",
+                name: "obj.name",
+                code: "obj.name",
+                desc: "用“点号”读取属性值。",
+                returns: "字符串",
+                mutate: false,
+                run: function (o) {
+                    return o.name;
+                }
+            },
+            {
+                group: "读取属性",
+                name: 'obj["age"]',
+                code: 'obj["age"]',
+                desc: "用“方括号”读取，属性名可有空格、或来自变量。",
+                returns: "数字",
+                mutate: false,
+                run: function (o) {
+                    return o["age"];
+                }
+            },
+            {
+                group: "读取属性",
+                name: "obj.missing",
+                code: "obj.missing",
+                desc: "读取不存在的属性，不会报错，返回 undefined。",
+                returns: "undefined",
+                mutate: false,
+                run: function (o) {
+                    return o.missing;
+                }
+            },
+            {
+                group: "增删改",
+                name: 'obj.job = "学生"',
+                code: 'obj.job = "学生"',
+                desc: "给不存在的属性赋值，就是新增属性。",
+                returns: "新增后的对象",
+                mutate: true,
+                run: function (o) {
+                    o.job = "学生";
+                    return o;
+                }
+            },
+            {
+                group: "增删改",
+                name: "obj.age = 21",
+                code: "obj.age = 21",
+                desc: "给已有属性赋值，就是修改属性。",
+                returns: "修改后的对象",
+                mutate: true,
+                run: function (o) {
+                    o.age = 21;
+                    return o;
+                }
+            },
+            {
+                group: "增删改",
+                name: "delete obj.city",
+                code: "delete obj.city",
+                desc: "用 delete 删除属性（注意：删不掉变量，只能删属性）。",
+                returns: "删除后的对象",
+                mutate: true,
+                run: function (o) {
+                    delete o.city;
+                    return o;
+                }
+            },
+            {
+                group: "遍历",
+                name: "Object.keys(obj)",
+                code: "Object.keys(obj)",
+                desc: "把所有的键取出来，组成数组。",
+                returns: "数组",
+                mutate: false,
+                run: function (o) {
+                    return Object.keys(o);
+                }
+            },
+            {
+                group: "遍历",
+                name: "Object.values(obj)",
+                code: "Object.values(obj)",
+                desc: "把所有的值取出来，组成数组。",
+                returns: "数组",
+                mutate: false,
+                run: function (o) {
+                    return Object.values(o);
+                }
+            },
+            {
+                group: "遍历",
+                name: "Object.entries(obj)",
+                code: "Object.entries(obj)",
+                desc: "把键值对拆成 [键, 值] 的数组。",
+                returns: "数组",
+                mutate: false,
+                run: function (o) {
+                    return Object.entries(o).map(function (pair) {
+                        return pair[0] + " = " + pair[1];
+                    });
+                }
+            },
+            {
+                group: "遍历",
+                name: "for...in 循环",
+                code: "for (let k in obj) { ... }",
+                desc: "逐个遍历键，适合配合 obj[k] 取值。",
+                returns: "数组（收集展示）",
+                mutate: false,
+                run: function (o) {
+                    var out = [];
+                    for (var key in o) {
+                        out.push(key + " → " + o[key]);
+                    }
+                    return out;
+                }
+            },
+            {
+                group: "复制与合并",
+                name: "Object.assign(...)",
+                code: 'Object.assign({}, obj, { age: 21 })',
+                desc: "把后面对象的属性合并到第一个对象里，常用于复制。",
+                returns: "新对象",
+                mutate: false,
+                run: function (o) {
+                    return Object.assign({}, o, { age: 21 });
+                }
+            },
+            {
+                group: "复制与合并",
+                name: "{ ...obj, age: 21 }",
+                code: '{ ...obj, age: 21 }',
+                desc: "展开运算符复制对象，后面的同名属性会覆盖前面的。",
+                returns: "新对象",
+                mutate: false,
+                run: function (o) {
+                    return Object.assign({}, o, { age: 21 });
+                }
+            },
+            {
+                group: "判断",
+                name: '"name" in obj',
+                code: '"name" in obj',
+                desc: "判断属性是否存在（包括继承来的属性）。",
+                returns: "布尔值",
+                mutate: false,
+                run: function (o) {
+                    return "name" in o;
+                }
+            },
+            {
+                group: "判断",
+                name: 'obj.hasOwnProperty("city")',
+                code: 'obj.hasOwnProperty("city")',
+                desc: "判断是否是对象“自身”的属性。",
+                returns: "布尔值",
+                mutate: false,
+                run: function (o) {
+                    return o.hasOwnProperty("city");
+                }
+            },
+            {
+                group: "嵌套与数组",
+                name: "student.skills[1]",
+                code: "student.skills[1]",
+                desc: "对象里可以放数组，用下标取到具体元素。",
+                returns: "字符串",
+                mutate: false,
+                source: STUDENT,
+                run: function (o) {
+                    return o.skills[1];
+                }
+            },
+            {
+                group: "嵌套与数组",
+                name: "student.skills.length",
+                code: "student.skills.length",
+                desc: "取到数组后，照样能用 length 等数组属性。",
+                returns: "数字",
+                mutate: false,
+                source: STUDENT,
+                run: function (o) {
+                    return o.skills.length;
+                }
+            },
+            {
+                group: "嵌套与数组",
+                name: "student.contact.city",
+                code: "student.contact.city",
+                desc: "对象里可以再套对象，一层层“点”下去即可。",
+                returns: "字符串",
+                mutate: false,
+                source: STUDENT,
+                run: function (o) {
+                    return o.contact.city;
+                }
+            }
+        ];
+
+        /* ======================= 字符串演示 ======================= */
+
+        const strDemos = [
+            {
+                group: "基本信息",
+                name: "str.length",
+                code: "str.length",
+                desc: "length 是属性（不加括号），返回字符个数。",
+                returns: "数字",
+                mutate: false,
+                run: function (s) {
+                    return s.length;
+                }
+            },
+            {
+                group: "取字符",
+                name: "str.charAt(4)",
+                code: "str.charAt(4)",
+                desc: "返回指定下标的字符（下标从 0 开始）。",
+                returns: "字符串",
+                mutate: false,
+                hl: [4, 5],
+                run: function (s) {
+                    return s.charAt(4);
+                }
+            },
+            {
+                group: "取字符",
+                name: "str[6]",
+                code: "str[6]",
+                desc: "字符串也能像数组一样用中括号取字符。",
+                returns: "字符串",
+                mutate: false,
+                hl: [6, 7],
+                run: function (s) {
+                    return s[6];
+                }
+            },
+            {
+                group: "查找",
+                name: 'str.indexOf("Java")',
+                code: 'str.indexOf("Java")',
+                desc: "返回子串第一次出现的下标，找不到返回 -1。",
+                returns: "数字",
+                mutate: false,
+                hl: [6, 10],
+                run: function (s) {
+                    return s.indexOf("Java");
+                }
+            },
+            {
+                group: "查找",
+                name: 'str.includes("Script")',
+                code: 'str.includes("Script")',
+                desc: "判断是否包含某个子串。",
+                returns: "布尔值",
+                mutate: false,
+                hl: [10, 16],
+                run: function (s) {
+                    return s.includes("Script");
+                }
+            },
+            {
+                group: "查找",
+                name: 'str.startsWith("Hello")',
+                code: 'str.startsWith("Hello")',
+                desc: "判断是否以某个子串开头。",
+                returns: "布尔值",
+                mutate: false,
+                hl: [0, 5],
+                run: function (s) {
+                    return s.startsWith("Hello");
+                }
+            },
+            {
+                group: "查找",
+                name: 'str.endsWith("Script")',
+                code: 'str.endsWith("Script")',
+                desc: "判断是否以某个子串结尾。",
+                returns: "布尔值",
+                mutate: false,
+                hl: [10, 16],
+                run: function (s) {
+                    return s.endsWith("Script");
+                }
+            },
+            {
+                group: "截取",
+                name: "str.slice(0, 5)",
+                code: "str.slice(0, 5)",
+                desc: "截取下标 0 到 5（不含 5）的字符。",
+                returns: "新字符串",
+                mutate: false,
+                hl: [0, 5],
+                run: function (s) {
+                    return s.slice(0, 5);
+                }
+            },
+            {
+                group: "截取",
+                name: "str.slice(-6)",
+                code: "str.slice(-6)",
+                desc: "参数为负数时，从末尾往前数，-6 表示最后 6 个字符。",
+                returns: "新字符串",
+                mutate: false,
+                hl: [10, 16],
+                run: function (s) {
+                    return s.slice(-6);
+                }
+            },
+            {
+                group: "截取",
+                name: "str.substring(6, 10)",
+                code: "str.substring(6, 10)",
+                desc: "和 slice 类似，但不接受负下标。",
+                returns: "新字符串",
+                mutate: false,
+                hl: [6, 10],
+                run: function (s) {
+                    return s.substring(6, 10);
+                }
+            },
+            {
+                group: "大小写",
+                name: "str.toUpperCase()",
+                code: "str.toUpperCase()",
+                desc: "转成大写（原字符串不变，因为字符串不可变）。",
+                returns: "新字符串",
+                mutate: false,
+                run: function (s) {
+                    return s.toUpperCase();
+                }
+            },
+            {
+                group: "大小写",
+                name: "str.toLowerCase()",
+                code: "str.toLowerCase()",
+                desc: "转成小写。",
+                returns: "新字符串",
+                mutate: false,
+                run: function (s) {
+                    return s.toLowerCase();
+                }
+            },
+            {
+                group: "替换",
+                name: 'str.replace("Hello", "Hi")',
+                code: 'str.replace("Hello", "Hi")',
+                desc: "替换第一个匹配到的子串。",
+                returns: "新字符串",
+                mutate: false,
+                hl: [0, 5],
+                run: function (s) {
+                    return s.replace("Hello", "Hi");
+                }
+            },
+            {
+                group: "替换",
+                name: '"a-b-a".replaceAll("a","x")',
+                code: '"a-b-a".replaceAll("a", "x")',
+                desc: "replaceAll 替换所有匹配项，本例换一个字符串演示。",
+                returns: "新字符串",
+                mutate: false,
+                source: "a-b-a",
+                run: function (s) {
+                    return s.replaceAll("a", "x");
+                }
+            },
+            {
+                group: "分割与拼接",
+                name: 'str.split(" ")',
+                code: 'str.split(" ")',
+                desc: "按分隔符把字符串切成数组。",
+                returns: "数组",
+                mutate: false,
+                run: function (s) {
+                    return s.split(" ");
+                }
+            },
+            {
+                group: "分割与拼接",
+                name: '"JS".repeat(3)',
+                code: '"JS".repeat(3)',
+                desc: "把字符串重复指定次数。",
+                returns: "新字符串",
+                mutate: false,
+                source: "JS",
+                run: function (s) {
+                    return s.repeat(3);
+                }
+            },
+            {
+                group: "分割与拼接",
+                name: '"  JS  ".trim()',
+                code: '"  JS  ".trim()',
+                desc: "去掉字符串两端的空白字符。",
+                returns: "新字符串",
+                mutate: false,
+                source: "  JavaScript  ",
+                hl: [2, 12],
+                run: function (s) {
+                    return s.trim();
+                }
+            },
+            {
+                group: "分割与拼接",
+                name: '"5".padStart(3, "0")',
+                code: '"5".padStart(3, "0")',
+                desc: "在开头补字符到指定长度，常用来补零。",
+                returns: "新字符串",
+                mutate: false,
+                source: "5",
+                run: function (s) {
+                    return s.padStart(3, "0");
+                }
+            },
+            {
+                group: "分割与拼接",
+                name: "模板字符串",
+                code: "`${name} 今年 ${age} 岁`",
+                desc: "用反引号和 ${} 拼接变量，比用加号更直观。",
+                returns: "新字符串",
+                mutate: false,
+                template: true,
+                run: function () {
+                    return BASE_OBJ.name + " 今年 " + BASE_OBJ.age + " 岁";
+                }
+            }
+        ];
+
+        /* ======================= 渲染工具 ======================= */
+
+        // 把数组画成方块
+        function arrayBoxes(arr, cls, withIndex) {
+            if (arr.length === 0) {
+                return '<span class="empty">[] （空数组）</span>';
+            }
+            return arr.map(function (v, i) {
+                var value = Array.isArray(v) ? "[" + v.join(",") + "]" : v;
+                return '<div class="slot">' +
+                    '<div class="box ' + cls + '">' + escapeHtml(String(value)) + '</div>' +
+                    (withIndex ? '<span class="idx">' + i + '</span>' : '') +
+                    '</div>';
+            }).join("");
+        }
+
+        // 把字符串画成带下标的字符方块，可高亮 [start, end)
+        function charBoxes(str, hl) {
+            if (str.length === 0) {
+                return '<span class="empty">"" （空字符串）</span>';
+            }
+            return str.split("").map(function (ch, i) {
+                var isHl = hl && i >= hl[0] && i < hl[1];
+                var text = ch === " " ? "␣" : ch;
+                return '<div class="slot">' +
+                    '<div class="box char ' + (isHl ? "hl" : "") + '">' + escapeHtml(text) + '</div>' +
+                    '<span class="idx">' + i + '</span>' +
+                    '</div>';
+            }).join("");
+        }
+
+        // 把对象画成键值卡片，addedKeys 里的键标绿表示新增
+        function objCards(obj, addedKeys) {
+            var keys = Object.keys(obj);
+            if (keys.length === 0) {
+                return '<span class="empty">{ } （空对象）</span>';
+            }
+            return '<div class="obj-cards">' + keys.map(function (key) {
+                var value = obj[key];
+                var text = Array.isArray(value)
+                    ? "[" + value.join(", ") + "]"
+                    : (typeof value === "object" && value !== null)
+                        ? "{" + Object.keys(value).join(", ") + "}"
+                        : value;
+                var isAdded = addedKeys && addedKeys.indexOf(key) > -1;
+                return '<div class="obj-card ' + (isAdded ? "added" : "") + '">' +
+                    '<div class="obj-key">' + escapeHtml(key) + '</div>' +
+                    '<div class="obj-val">' + escapeHtml(String(text)) + '</div>' +
+                    '</div>';
+            }).join("") + '</div>';
+        }
+
+        // 按返回值类型自动选择合适的画法
+        function renderValue(value) {
+            if (Array.isArray(value)) {
+                return '<div class="boxes">' + arrayBoxes(value, "result", false) + '</div>';
+            }
+            if (value !== null && typeof value === "object") {
+                return objCards(value, null);
+            }
+            if (typeof value === "string") {
+                return '<div class="boxes">' + charBoxes(value, null) + '</div>';
+            }
+            if (typeof value === "undefined") {
+                return '<span class="empty">undefined</span>';
+            }
+            return '<span class="scalar">' + escapeHtml(String(value)) + '</span>';
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // 按分组生成按钮
+        function buildButtons(container, demos, onPick) {
+            var groups = [];
+            demos.forEach(function (demo) {
+                if (groups.indexOf(demo.group) === -1) {
+                    groups.push(demo.group);
+                }
+            });
+
+            groups.forEach(function (group) {
+                var wrapper = document.createElement("div");
+                wrapper.style.marginBottom = "14px";
+
+                var label = document.createElement("div");
+                label.className = "group-name " + (group === "增删改" ? "mutate" : "pure");
+                label.textContent = group;
+                wrapper.appendChild(label);
+
+                var row = document.createElement("div");
+                row.className = "methods";
+
+                demos.forEach(function (demo) {
+                    if (demo.group !== group) {
+                        return;
+                    }
+                    var btn = document.createElement("button");
+                    btn.className = "method";
+                    btn.textContent = demo.name;
+                    btn.addEventListener("click", function () {
+                        container.querySelectorAll("button.method").forEach(function (item) {
+                            item.classList.remove("active");
+                        });
+                        btn.classList.add("active");
+                        onPick(demo);
+                    });
+                    row.appendChild(btn);
+                });
+
+                wrapper.appendChild(row);
+                container.appendChild(wrapper);
+            });
+        }
+
+        /* ======================= 对象：初始化与执行 ======================= */
+
+        var objSource = document.getElementById("objSource");
+        var objMethods = document.getElementById("objMethods");
+        var objPanel = document.getElementById("objPanel");
+
+        objSource.innerHTML = objCards(BASE_OBJ, null);
+
+        function showObjDemo(demo) {
+            var source = demo.source || BASE_OBJ;
+            var work = JSON.parse(JSON.stringify(source));
+            var result = demo.run(work);
+
+            // 判断原对象是否被改变，以及新增了哪些键
+            var before = Object.keys(source);
+            var after = Object.keys(work);
+            var added = after.filter(function (k) {
+                return before.indexOf(k) === -1;
+            });
+            var changed = JSON.stringify(work) !== JSON.stringify(source);
+
+            var html = "";
+            html += '<div class="panel-head">' +
+                '<code>' + escapeHtml(demo.code) + '</code>' +
+                '<span class="badge ' + (changed ? "mutate" : "pure") + '">' +
+                (changed ? "原对象已被改变" : "原对象保持不变") + '</span>' +
+                '<span class="tip">返回值：' + demo.returns + '</span>' +
+                '</div>';
+            html += '<p class="desc">' + demo.desc + '</p>';
+
+            html += '<div class="row-label">调用前：</div>';
+            html += objCards(source, null);
+
+            html += '<div class="row-label" style="margin-top:14px;">返回结果：</div>';
+            html += renderValue(result);
+
+            if (changed) {
+                html += '<div class="row-label" style="margin-top:14px;">调用后的对象（绿色为新增属性）：</div>';
+                html += objCards(work, added);
+            }
+
+            objPanel.innerHTML = html;
+        }
+
+        buildButtons(objMethods, objDemos, showObjDemo);
+
+        /* ======================= 字符串：初始化与执行 ======================= */
+
+        var strSource = document.getElementById("strSource");
+        var strMethods = document.getElementById("strMethods");
+        var strPanel = document.getElementById("strPanel");
+
+        document.getElementById("strLen").textContent = BASE_STR.length;
+        strSource.innerHTML = charBoxes(BASE_STR, null);
+
+        function showStrDemo(demo) {
+            var source = demo.source || BASE_STR;
+            var result = demo.run(source);
+
+            var html = "";
+            html += '<div class="panel-head">' +
+                '<code>' + escapeHtml(demo.code) + '</code>' +
+                '<span class="badge pure">字符串不可变，原字符串始终不变</span>' +
+                '<span class="tip">返回值：' + demo.returns + '</span>' +
+                '</div>';
+            html += '<p class="desc">' + demo.desc + '</p>';
+
+            if (demo.template) {
+                html += '<div class="row-label">参与拼接的对象：</div>';
+                html += objCards(BASE_OBJ, null);
+                html += '<div class="row-label" style="margin-top:14px;">拼接结果：</div>';
+                html += '<div class="boxes">' + charBoxes(result, null) + '</div>';
+                strPanel.innerHTML = html;
+                return;
+            }
+
+            html += '<div class="row-label">原字符串（黄色为本次用到的字符）：</div>';
+            html += '<div class="boxes">' + charBoxes(source, demo.hl) + '</div>';
+
+            html += '<div class="row-label" style="margin-top:14px;">返回结果：</div>';
+            html += renderValue(result);
+
+            strPanel.innerHTML = html;
+        }
+
+        buildButtons(strMethods, strDemos, showStrDemo);
+
+        /* ======================= 总览表 ======================= */
+
+        document.getElementById("objTable").innerHTML = objDemos.map(function (demo) {
+            return '<tr>' +
+                '<td><code>' + escapeHtml(demo.code) + '</code></td>' +
+                '<td>' + demo.desc + '</td>' +
+                '<td>' + demo.returns + '</td>' +
+                '<td>' + (demo.mutate ? "是" : "否") + '</td>' +
+                '</tr>';
+        }).join("");
+
+        document.getElementById("strTable").innerHTML = strDemos.map(function (demo) {
+            return '<tr>' +
+                '<td><code>' + escapeHtml(demo.code) + '</code></td>' +
+                '<td>' + demo.desc + '</td>' +
+                '<td>' + demo.returns + '</td>' +
+                '<td>否</td>' +
+                '</tr>';
+        }).join("");
+
+        /* ======================= 默认示例 ======================= */
+
+        objMethods.querySelector("button.method").classList.add("active");
+        showObjDemo(objDemos[0]);
+
+        strMethods.querySelector("button.method").classList.add("active");
+        showStrDemo(strDemos[0]);
+    </script>
+</body>
+</html>

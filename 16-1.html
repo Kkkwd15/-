@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript 数组方法 - 孙宁</title>
+    <style>
+        body {
+            margin: 24px;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        h1 {
+            margin-bottom: 4px;
+        }
+
+        .byline {
+            margin-top: 0;
+            color: #666;
+        }
+
+        h2 {
+            font-size: 18px;
+            margin: 30px 0 10px;
+            padding-left: 10px;
+            border-left: 4px solid #4472c4;
+        }
+
+        .tip {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 数组盒子 */
+        .boxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+            min-height: 48px;
+            align-items: flex-start;
+        }
+
+        .slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .box {
+            box-sizing: border-box;
+            min-width: 48px;
+            height: 48px;
+            padding: 0 8px;
+            border: 1px solid #4472c4;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            background: #fff;
+        }
+
+        .box.result {
+            border-color: #d9a300;
+            background: #fff6dc;
+        }
+
+        .box.string {
+            border-color: #4caf50;
+            background: #eefaf0;
+        }
+
+        .idx {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .arrow {
+            font-size: 20px;
+            color: #d9a300;
+            padding: 12px 4px 0;
+        }
+
+        /* 方法按钮 */
+        .group-name {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 2px 10px;
+            border-radius: 999px;
+            margin-bottom: 8px;
+        }
+
+        .mutate {
+            color: #a33;
+            background: #ffd6d6;
+        }
+
+        .pure {
+            color: #2f7d32;
+            background: #d8f0d8;
+        }
+
+        .methods {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        button.method {
+            font-family: inherit;
+            font-size: 14px;
+            padding: 7px 14px;
+            border: 1px solid #4472c4;
+            border-radius: 999px;
+            background: #fff;
+            color: #2c4a86;
+            cursor: pointer;
+        }
+
+        button.method:hover {
+            background: #eef3fc;
+        }
+
+        button.method.active {
+            background: #4472c4;
+            color: #fff;
+        }
+
+        /* 结果面板 */
+        .panel {
+            margin-top: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px 18px;
+            background: #fafbfd;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .panel-head code {
+            font-size: 15px;
+            color: #2c4a86;
+            background: #eef3fc;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 2px 10px;
+            border-radius: 999px;
+        }
+
+        .desc {
+            margin: 6px 0 14px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .row-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        .scalar {
+            display: inline-block;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background: #fff6dc;
+            border: 1px solid #d9a300;
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        .empty {
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* 总览表 */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #eef3fc;
+        }
+
+        td code {
+            color: #2c4a86;
+            font-family: Consolas, Monaco, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript 主要数组方法</h1>
+    <p class="byline">孙宁</p>
+    <p class="tip">点击下方方法按钮，查看它对同一个数组做了什么——用盒子把数组元素画出来，改没改原数组一眼就能看出来。</p>
+
+    <h2>原始数组 arr</h2>
+    <div id="sourceBox" class="boxes"></div>
+
+    <h2>选择方法</h2>
+    <div id="methodPanel"></div>
+
+    <h2>执行结果</h2>
+    <div class="panel" id="resultPanel"></div>
+
+    <h2>方法总览</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>方法</th>
+                <th>作用</th>
+                <th>返回值</th>
+                <th>改变原数组</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+
+    <script>
+        // 演示用的原始数组
+        const BASE = [5, 12, 8, 130, 44];
+
+        // 每个方法：所属分组、按钮名、代码、说明、返回值、是否改变原数组
+        // run 接收一个数组副本，返回本次要展示的结果
+        const demos = [
+            {
+                group: "改变原数组",
+                name: "push(8, 20)",
+                code: "arr.push(8, 20)",
+                desc: "在数组末尾添加一个或多个元素。",
+                returns: "新长度",
+                mutate: true,
+                run: function (arr) {
+                    return arr.push(8, 20);
+                }
+            },
+            {
+                group: "改变原数组",
+                name: "pop()",
+                code: "arr.pop()",
+                desc: "删除并返回数组的最后一个元素。",
+                returns: "被删除的元素",
+                mutate: true,
+                run: function (arr) {
+                    return arr.pop();
+                }
+            },
+            {
+                group: "改变原数组",
+                name: "unshift(1)",
+                code: "arr.unshift(1)",
+                desc: "在数组开头添加一个或多个元素。",
+                returns: "新长度",
+                mutate: true,
+                run: function (arr) {
+                    return arr.unshift(1);
+                }
+            },
+            {
+                group: "改变原数组",
+                name: "shift()",
+                code: "arr.shift()",
+                desc: "删除并返回数组的第一个元素。",
+                returns: "被删除的元素",
+                mutate: true,
+                run: function (arr) {
+                    return arr.shift();
+                }
+            },
+            {
+                group: "改变原数组",
+                name: "splice(1, 2)",
+                code: "arr.splice(1, 2)",
+                desc: "从下标 1 开始删除 2 个元素，可实现任意位置的增删改。",
+                returns: "被删除元素组成的新数组",
+                mutate: true,
+                run: function (arr) {
+                    return arr.splice(1, 2);
+                }
+            },
+            {
+                group: "改变原数组",
+                name: "sort()",
+                code: "arr.sort((a, b) => a - b)",
+                desc: "排序。数字必须传比较函数，否则会按字符串比较。",
+                returns: "排序后的原数组",
+                mutate: true,
+                run: function (arr) {
+                    return arr.sort(function (a, b) {
+                        return a - b;
+                    });
+                }
+            },
+            {
+                group: "改变原数组",
+                name: "reverse()",
+                code: "arr.reverse()",
+                desc: "反转数组顺序。",
+                returns: "反转后的原数组",
+                mutate: true,
+                run: function (arr) {
+                    return arr.reverse();
+                }
+            },
+            {
+                group: "不改变原数组",
+                name: "slice(1, 3)",
+                code: "arr.slice(1, 3)",
+                desc: "截取下标 1 到 3（不含 3）的元素，原数组不受影响。",
+                returns: "新数组",
+                mutate: false,
+                run: function (arr) {
+                    return arr.slice(1, 3);
+                }
+            },
+            {
+                group: "不改变原数组",
+                name: "concat([7, 9])",
+                code: "arr.concat([7, 9])",
+                desc: "把其他数组或元素拼接在后面。",
+                returns: "新数组",
+                mutate: false,
+                run: function (arr) {
+                    return arr.concat([7, 9]);
+                }
+            },
+            {
+                group: "不改变原数组",
+                name: "flat()",
+                code: "[[1,2],[3,4]].flat()",
+                desc: "把嵌套数组“拍平”一层，本例用嵌套数组演示。",
+                returns: "新数组",
+                mutate: false,
+                source: [[1, 2], [3, 4]],
+                run: function (arr) {
+                    return arr.flat();
+                }
+            },
+            {
+                group: "不改变原数组",
+                name: "join(\" - \")",
+                code: "arr.join(' - ')",
+                desc: "用指定分隔符把元素连成一个字符串。",
+                returns: "字符串",
+                mutate: false,
+                run: function (arr) {
+                    return arr.join(" - ");
+                }
+            }
+        ];
+
+        const demos2 = [
+            {
+                group: "查找元素",
+                name: "indexOf(8)",
+                code: "arr.indexOf(8)",
+                desc: "返回元素第一次出现的下标，找不到返回 -1。",
+                returns: "下标数字",
+                mutate: false,
+                run: function (arr) {
+                    return arr.indexOf(8);
+                }
+            },
+            {
+                group: "查找元素",
+                name: "includes(130)",
+                code: "arr.includes(130)",
+                desc: "判断数组是否包含某个元素。",
+                returns: "布尔值",
+                mutate: false,
+                run: function (arr) {
+                    return arr.includes(130);
+                }
+            },
+            {
+                group: "查找元素",
+                name: "find(v => v > 10)",
+                code: "arr.find(v => v > 10)",
+                desc: "返回第一个满足条件的元素本身。",
+                returns: "元素",
+                mutate: false,
+                run: function (arr) {
+                    return arr.find(function (v) {
+                        return v > 10;
+                    });
+                }
+            },
+            {
+                group: "查找元素",
+                name: "findIndex(v => v > 10)",
+                code: "arr.findIndex(v => v > 10)",
+                desc: "返回第一个满足条件的元素下标。",
+                returns: "下标数字",
+                mutate: false,
+                run: function (arr) {
+                    return arr.findIndex(function (v) {
+                        return v > 10;
+                    });
+                }
+            },
+            {
+                group: "查找元素",
+                name: "at(-1)",
+                code: "arr.at(-1)",
+                desc: "按下标取值，支持负数（-1 表示最后一个）。",
+                returns: "元素",
+                mutate: false,
+                run: function (arr) {
+                    return arr.at(-1);
+                }
+            },
+            {
+                group: "筛选与转换",
+                name: "filter(v => v > 10)",
+                code: "arr.filter(v => v > 10)",
+                desc: "筛选出所有满足条件的元素，组成新数组。",
+                returns: "新数组",
+                mutate: false,
+                run: function (arr) {
+                    return arr.filter(function (v) {
+                        return v > 10;
+                    });
+                }
+            },
+            {
+                group: "筛选与转换",
+                name: "map(v => v * 2)",
+                code: "arr.map(v => v * 2)",
+                desc: "对每个元素做同样的处理，返回等长的新数组。",
+                returns: "新数组",
+                mutate: false,
+                run: function (arr) {
+                    return arr.map(function (v) {
+                        return v * 2;
+                    });
+                }
+            },
+            {
+                group: "筛选与转换",
+                name: "forEach(v => ×10)",
+                code: "arr.forEach(v => ...)",
+                desc: "遍历每个元素执行操作，本身不返回值；这里收集 ×10 的结果用于展示。",
+                returns: "undefined（下方为收集结果）",
+                mutate: false,
+                run: function (arr) {
+                    var collected = [];
+                    arr.forEach(function (v) {
+                        collected.push(v * 10);
+                    });
+                    return collected;
+                }
+            },
+            {
+                group: "判断与汇总",
+                name: "some(v => v > 100)",
+                code: "arr.some(v => v > 100)",
+                desc: "只要有一个元素满足条件就返回 true。",
+                returns: "布尔值",
+                mutate: false,
+                run: function (arr) {
+                    return arr.some(function (v) {
+                        return v > 100;
+                    });
+                }
+            },
+            {
+                group: "判断与汇总",
+                name: "every(v => v > 0)",
+                code: "arr.every(v => v > 0)",
+                desc: "所有元素都满足条件才返回 true。",
+                returns: "布尔值",
+                mutate: false,
+                run: function (arr) {
+                    return arr.every(function (v) {
+                        return v > 0;
+                    });
+                }
+            },
+            {
+                group: "判断与汇总",
+                name: "reduce((s,v) => s+v, 0)",
+                code: "arr.reduce((s, v) => s + v, 0)",
+                desc: "把数组“折叠”成一个值，本例用于求和。",
+                returns: "累积结果",
+                mutate: false,
+                run: function (arr) {
+                    return arr.reduce(function (sum, v) {
+                        return sum + v;
+                    }, 0);
+                }
+            }
+        ];
+
+        const allDemos = demos.concat(demos2);
+
+        // ---------- 渲染工具 ----------
+
+        // 用盒子画出一个数组
+        function arrayBoxes(arr, cls, withIndex) {
+            if (arr.length === 0) {
+                return '<span class="empty">[] （空数组）</span>';
+            }
+            return arr.map(function (v, i) {
+                var value = Array.isArray(v) ? "[" + v.join(",") + "]" : v;
+                return '<div class="slot">' +
+                    '<div class="box ' + cls + '">' + value + '</div>' +
+                    (withIndex ? '<span class="idx">' + i + '</span>' : '') +
+                    '</div>';
+            }).join("");
+        }
+
+        // 根据返回值类型决定怎么画
+        function renderResult(value) {
+            if (Array.isArray(value)) {
+                return '<div class="boxes">' + arrayBoxes(value, "result", false) + '</div>';
+            }
+            if (typeof value === "string") {
+                return '<div class="boxes"><div class="slot"><div class="box string">' + value + '</div></div></div>';
+            }
+            if (typeof value === "undefined") {
+                return '<span class="empty">undefined</span>';
+            }
+            if (typeof value === "boolean") {
+                return '<span class="scalar">' + value + '</span>';
+            }
+            return '<span class="scalar">' + value + '</span>';
+        }
+
+        // ---------- 页面初始化 ----------
+
+        const sourceBox = document.getElementById("sourceBox");
+        const methodPanel = document.getElementById("methodPanel");
+        const resultPanel = document.getElementById("resultPanel");
+
+        sourceBox.innerHTML = arrayBoxes(BASE, "", true);
+
+        // 按分组生成按钮
+        var groups = [];
+        allDemos.forEach(function (demo) {
+            if (groups.indexOf(demo.group) === -1) {
+                groups.push(demo.group);
+            }
+        });
+
+        groups.forEach(function (group) {
+            var wrapper = document.createElement("div");
+            wrapper.style.marginBottom = "14px";
+
+            var label = document.createElement("div");
+            label.className = "group-name " + (group === "改变原数组" ? "mutate" : "pure");
+            label.textContent = group;
+            wrapper.appendChild(label);
+
+            var row = document.createElement("div");
+            row.className = "methods";
+
+            allDemos.forEach(function (demo) {
+                if (demo.group !== group) {
+                    return;
+                }
+                var btn = document.createElement("button");
+                btn.className = "method";
+                btn.textContent = demo.name;
+                btn.addEventListener("click", function () {
+                    document.querySelectorAll("button.method").forEach(function (item) {
+                        item.classList.remove("active");
+                    });
+                    btn.classList.add("active");
+                    showDemo(demo);
+                });
+                row.appendChild(btn);
+            });
+
+            wrapper.appendChild(row);
+            methodPanel.appendChild(wrapper);
+        });
+
+        // ---------- 执行并展示 ----------
+
+        function showDemo(demo) {
+            var source = demo.source || BASE;
+            var arr = source.slice();
+            var result = demo.run(arr);
+            var changed = JSON.stringify(arr) !== JSON.stringify(source);
+
+            var badgeClass = changed ? "mutate" : "pure";
+            var badgeText = changed ? "原数组已被改变" : "原数组保持不变";
+
+            var html = "";
+            html += '<div class="panel-head">' +
+                '<code>' + escapeHtml(demo.code) + '</code>' +
+                '<span class="badge ' + badgeClass + '">' + badgeText + '</span>' +
+                '<span class="tip">返回值：' + demo.returns + '</span>' +
+                '</div>';
+            html += '<p class="desc">' + demo.desc + '</p>';
+
+            // 原数组
+            html += '<div class="row-label">调用前 arr：</div>';
+            html += '<div class="boxes">' + arrayBoxes(source, "", false) + '</div>';
+
+            // 结果
+            html += '<div class="row-label">返回结果：</div>';
+            html += renderResult(result);
+
+            // 若原数组被改，额外展示改后的样子
+            if (changed) {
+                html += '<div class="row-label" style="margin-top:14px;">调用后 arr（已改变）：</div>';
+                html += '<div class="boxes">' + arrayBoxes(arr, "result", false) + '</div>';
+            }
+
+            resultPanel.innerHTML = html;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // ---------- 总览表 ----------
+
+        var tableBody = document.getElementById("tableBody");
+        tableBody.innerHTML = allDemos.map(function (demo) {
+            return '<tr>' +
+                '<td><code>' + escapeHtml(demo.name) + '</code></td>' +
+                '<td>' + demo.desc + '</td>' +
+                '<td>' + demo.returns + '</td>' +
+                '<td>' + (demo.mutate ? "是" : "否") + '</td>' +
+                '</tr>';
+        }).join("");
+
+        // 默认先演示 push
+        document.querySelector("button.method").classList.add("active");
+        showDemo(allDemos[0]);
+    </script>
+</body>
+</html>

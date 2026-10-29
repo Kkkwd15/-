@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>菜鸟集团 - 孙宁 16-3</title>
+    <style>
+        :root {
+            --cainiao-blue: #002FA7;
+            --header-bg: #001529;
+            --text-color: #333;
+            --white: #ffffff;
+            --news-bg: #001d3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            color: var(--text-color);
+            background: #fff;
+        }
+
+        /* Header */
+        header {
+            width: 100%;
+            background: var(--header-bg);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 40px;
+            color: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-right: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            font-size: 14px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+        }
+
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            gap: 20px;
+            font-size: 13px;
+            align-items: center;
+        }
+
+        .header-right a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .student-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        /* Hero */
+        .hero {
+            height: 500px;
+            background: url('https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=Cainiao+logistics+background+with+London+landmarks+Big+Ben+London+Eye+Tower+Bridge+blue+sky&image_size=landscape_16_9') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            color: var(--white);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(0, 82, 217, 0.6) 0%, rgba(0, 82, 217, 0.2) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 40px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn-consult {
+            display: inline-block;
+            padding: 12px 36px;
+            background: var(--white);
+            color: var(--cainiao-blue);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* News Bar */
+        .news-bar {
+            background: var(--news-bg);
+            color: var(--white);
+            padding: 10px 40px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .news-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Services Section */
+        .section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 40px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 4px;
+            background: var(--cainiao-blue);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .service-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .service-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        /* Floating Buttons */
+        .floating-btns {
+            position: fixed;
+            right: 20px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .float-btn {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">CAINIAO 菜鸟</div>
+    <nav class="nav-links">
+        <a href="#">首页</a>
+        <a href="#">国内物流</a>
+        <a href="#">国际物流</a>
+        <a href="#">科技与其他</a>
+        <a href="#">ESG</a>
+        <a href="#">关于我们</a>
+    </nav>
+    <div class="header-right">
+        <a href="#">🤝 商家/物流商服务</a>
+        <a href="#">👤 注册/登录</a>
+        <span>🌐 简体中文</span>
+        <span class="student-badge">孙宁 24001011016</span>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>菜鸟三日达 72小时直抵英国</h1>
+        <p>更快速 更普惠 更简单</p>
+        <a href="#" class="btn-consult">立即咨询</a>
+    </div>
+</section>
+
+<div class="news-bar">
+    <div class="news-item">
+        <span>新闻 ▶</span>
+        <span>菜鸟发布“全球三日达”，跨境电商迈入“72小时达”</span>
+        <span>|</span>
+        <span>菜鸟推出海外仓尾程优配产品，使用AI为跨境商家降本，最高可省...</span>
+    </div>
+    <a href="#" style="color: #fff; text-decoration: none;">了解更多 →</a>
+</div>
+
+<main class="section">
+    <h2 class="section-title">我们的服务</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <img src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=Cainiao+logistics+warehouse+boxes+shelves&image_size=landscape_4_3" alt="国内物流">
+        </div>
+        <div class="service-card">
+            <img src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=Cainiao+logistics+airplane+cargo&image_size=landscape_4_3" alt="国际物流">
+        </div>
+        <div class="service-card">
+            <img src="https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=Cainiao+logistics+robot+automation&image_size=landscape_4_3" alt="科技与其它">
+        </div>
+    </div>
+</main>
+
+<div class="floating-btns">
+    <div class="float-btn">🎧</div>
+    <div class="float-btn">💬</div>
+</div>
+
+</body>
+</html>

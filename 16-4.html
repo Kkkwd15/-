@@ -88,6 +88,16 @@
             color: #333;
         }
 
+        td:first-child a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        td:first-child a:hover {
+            text-decoration: underline;
+            color: #003399;
+        }
+
         .stock-index {
             color: #cc0000;
             margin-right: 4px;
@@ -129,18 +139,18 @@
     // 股票数据
     const stockData = {
         huzhang: [
-            { name: "N浙能", price: "8.88", amount: "+3.35", percent: "60.58%" },
-            { name: "天津松江", price: "8.16", amount: "+0.65", percent: "8.66%" },
-            { name: "金瑞科技", price: "8.79", amount: "+0.42", percent: "5.02%" },
-            { name: "宏发股份", price: "17.22", amount: "+0.82", percent: "5.00%" },
-            { name: "杭齿前进", price: "7.23", amount: "+0.34", percent: "4.93%" }
+            { name: "N浙能", price: "8.88", amount: "+3.35", percent: "60.58%", code: "sh600023" },
+            { name: "天津松江", price: "8.16", amount: "+0.65", percent: "8.66%", code: "sh600225" },
+            { name: "金瑞科技", price: "8.79", amount: "+0.42", percent: "5.02%", code: "sh600390" },
+            { name: "宏发股份", price: "17.22", amount: "+0.82", percent: "5.00%", code: "sh600885" },
+            { name: "杭齿前进", price: "7.23", amount: "+0.34", percent: "4.93%", code: "sh601177" }
         ],
         shenzhang: [
-            { name: "天顺风能", price: "10.52", amount: "+0.96", percent: "10.04%" },
-            { name: "兴源过滤", price: "16.02", amount: "+1.46", percent: "10.03%" },
-            { name: "北京君正", price: "36.92", amount: "+3.36", percent: "10.01%" },
-            { name: "美盛文化", price: "32.87", amount: "+2.99", percent: "10.01%" },
-            { name: "骅威股份", price: "15.16", amount: "+1.38", percent: "10.01%" }
+            { name: "天顺风能", price: "10.52", amount: "+0.96", percent: "10.04%", code: "sz002531" },
+            { name: "兴源过滤", price: "16.02", amount: "+1.46", percent: "10.03%", code: "sz300266" },
+            { name: "北京君正", price: "36.92", amount: "+3.36", percent: "10.01%", code: "sz300223" },
+            { name: "美盛文化", price: "32.87", amount: "+2.99", percent: "10.01%", code: "sz002699" },
+            { name: "骅威股份", price: "15.16", amount: "+1.38", percent: "10.01%", code: "sz002502" }
         ],
         hudie: [],
         shendie: []
@@ -167,8 +177,9 @@
                 
                 data.forEach((stock, index) => {
                     const tr = document.createElement('tr');
+                    const url = `https://finance.sina.com.cn/realstock/company/${stock.code}/nc.shtml`;
                     tr.innerHTML = `
-                        <td><span class="stock-index">${index + 1}.</span> ${stock.name}</td>
+                        <td><span class="stock-index">${index + 1}.</span> <a href="${url}" target="_blank">${stock.name}</a></td>
                         <td class="up">${stock.price}</td>
                         <td class="up">${stock.amount}</td>
                         <td class="up">${stock.percent}</td>

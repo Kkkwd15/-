@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>接口测试工具 - 孙宁 24001011016</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .student-info {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        h1 { color: #2c3e50; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        textarea { height: 100px; resize: vertical; }
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .btn-get { background: #3498db; color: white; }
+        .btn-post { background: #2ecc71; color: white; }
+        button:hover { opacity: 0.9; }
+        .result-container {
+            margin-top: 30px;
+            border-top: 2px solid #eee;
+            padding-top: 20px;
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        #statusBadge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-ok { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+            overflow-x: auto;
+            max-height: 400px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="student-info">孙宁 - 24001011016</div>
+        <h1>17-4 远程数据接口测试</h1>
+        
+        <div class="form-group">
+            <label>接口 URL (jsonplaceholder)</label>
+            <input type="text" id="apiUrl" value="https://jsonplaceholder.typicode.com/posts" placeholder="输入 API 地址">
+        </div>
+
+        <div class="form-group">
+            <label>POST 数据 (JSON 格式)</label>
+            <textarea id="postData" placeholder='{"title": "foo", "body": "bar", "userId": 1}'></textarea>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-get" onclick="handleRequest('GET')">发送 GET 请求</button>
+            <button class="btn-post" onclick="handleRequest('POST')">发送 POST 请求</button>
+        </div>
+
+        <div class="result-container" id="resultBox" style="display: none;">
+            <div class="result-header">
+                <h3>响应结果:</h3>
+                <span id="statusBadge"></span>
+            </div>
+            <pre id="responseOutput"></pre>
+        </div>
+    </div>
+
+    <script>
+        async function handleRequest(method) {
+            const url = document.getElementById('apiUrl').value;
+            const postDataStr = document.getElementById('postData').value;
+            const resultBox = document.getElementById('resultBox');
+            const badge = document.getElementById('statusBadge');
+            const output = document.getElementById('responseOutput');
+
+            resultBox.style.display = 'block';
+            output.innerText = '正在请求...';
+            badge.className = '';
+            badge.innerText = '';
+
+            const options = { method };
+
+            if (method === 'POST') {
+                try {
+                    options.body = postDataStr;
+                    options.headers = {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    };
+                    // 验证是否为合法 JSON
+                    JSON.parse(postDataStr);
+                } catch (e) {
+                    badge.className = 'status-error';
+                    badge.innerText = '错误';
+                    output.innerText = 'POST 数据不是有效的 JSON 格式';
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    badge.className = 'status-ok';
+                    badge.innerText = `状态码: ${response.status} OK`;
+                } else {
+                    badge.className = 'status-error';
+                    badge.innerText = `状态码: ${response.status} 错误`;
+                }
+                
+                output.innerText = JSON.stringify(data, null, 4);
+            } catch (error) {
+                badge.className = 'status-error';
+                badge.innerText = '网络错误';
+                output.innerText = error.message;
+            }
+        }
+    </script>
+</body>
+</html>

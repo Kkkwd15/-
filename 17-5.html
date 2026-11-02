@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS 定时器演示 - 孙宁 24001011016</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', sans-serif;
+            background-color: #f8fafc;
+            padding: 40px;
+            color: #1e293b;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .student-info {
+            background: #3b82f6;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .timer-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-left: 5px solid #3b82f6;
+        }
+        .timer-card.interval { border-left-color: #10b981; }
+        h2 { margin-top: 0; color: #334155; }
+        .display {
+            font-size: 32px;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .controls { display: flex; gap: 10px; }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            background: #e2e8f0;
+            transition: all 0.2s;
+        }
+        button:hover { background: #cbd5e1; }
+        .btn-start { background: #3b82f6; color: white; }
+        .btn-start:hover { background: #2563eb; }
+        .btn-stop { background: #ef4444; color: white; }
+        .btn-stop:hover { background: #dc2626; }
+        .log {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 10px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="student-info">孙宁 - 24001011016</div>
+        <h1>17-5 展示 JavaScript 的两种定时器</h1>
+
+        <!-- setTimeout 演示 -->
+        <div class="timer-card">
+            <h2>1. setTimeout (一次性定时器)</h2>
+            <p>点击按钮后，3秒后会弹出一个问候语。</p>
+            <div id="timeoutDisplay" class="display">等待启动...</div>
+            <div class="controls">
+                <button class="btn-start" onclick="startTimeout()">启动 setTimeout</button>
+                <button onclick="clearTimeoutDemo()">取消 setTimeout</button>
+            </div>
+            <div id="timeoutLog" class="log"></div>
+        </div>
+
+        <!-- setInterval 演示 -->
+        <div class="timer-card interval">
+            <h2>2. setInterval (循环定时器)</h2>
+            <p>每隔1秒钟，计数器会自动加1。</p>
+            <div id="intervalDisplay" class="display">0</div>
+            <div class="controls">
+                <button class="btn-start" id="startIntBtn" onclick="startInterval()">启动 setInterval</button>
+                <button class="btn-stop" onclick="stopInterval()">停止 setInterval</button>
+                <button onclick="resetInterval()">重置</button>
+            </div>
+            <div id="intervalLog" class="log"></div>
+        </div>
+    </div>
+
+    <script>
+        // setTimeout 逻辑
+        let timeoutId = null;
+        function startTimeout() {
+            if (timeoutId) clearTimeout(timeoutId);
+            const display = document.getElementById('timeoutDisplay');
+            const log = document.getElementById('timeoutLog');
+            
+            display.innerText = '倒计时 3s...';
+            log.innerText = '定时器已启动';
+            
+            timeoutId = setTimeout(() => {
+                display.innerText = '🎉 孙宁向你问好！';
+                display.style.color = '#3b82f6';
+                log.innerText = '执行完成';
+                timeoutId = null;
+            }, 3000);
+        }
+
+        function clearTimeoutDemo() {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+                timeoutId = null;
+                document.getElementById('timeoutDisplay').innerText = '已取消';
+                document.getElementById('timeoutDisplay').style.color = '#ef4444';
+                document.getElementById('timeoutLog').innerText = '定时器已被取消';
+            }
+        }
+
+        // setInterval 逻辑
+        let intervalId = null;
+        let count = 0;
+        function startInterval() {
+            if (intervalId) return;
+            const display = document.getElementById('intervalDisplay');
+            const log = document.getElementById('intervalLog');
+            
+            log.innerText = '计数开始...';
+            document.getElementById('startIntBtn').disabled = true;
+
+            intervalId = setInterval(() => {
+                count++;
+                display.innerText = count;
+            }, 1000);
+        }
+
+        function stopInterval() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+                document.getElementById('intervalLog').innerText = '计数已停止';
+                document.getElementById('startIntBtn').disabled = false;
+            }
+        }
+
+        function resetInterval() {
+            stopInterval();
+            count = 0;
+            document.getElementById('intervalDisplay').innerText = count;
+            document.getElementById('intervalLog').innerText = '已重置';
+        }
+    </script>
+</body>
+</html>

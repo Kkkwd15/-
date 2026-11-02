@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON 展示 - 孙宁 24001011016</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 40px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h1 {
+            color: #1a73e8;
+            border-bottom: 2px solid #e8f0fe;
+            padding-bottom: 10px;
+        }
+        .student-info {
+            background: #e8f0fe;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #1967d2;
+        }
+        pre {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .key { color: #e06c75; }
+        .string { color: #98c379; }
+        .number { color: #d19a66; }
+        .boolean { color: #56b6c2; }
+        .null { color: #c678dd; }
+        .desc {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="student-info">孙宁 - 24001011016</div>
+        <h1>17-1 展示 JSON</h1>
+        <div class="desc">
+            JSON (JavaScript Object Notation) 是一种轻量级的数据交换格式。它基于 ECMAScript 的一个子集，采用完全独立于编程语言的文本格式来存储和表示数据。
+        </div>
+        
+        <h3>示例 JSON 数据：</h3>
+        <pre id="jsonDisplay"></pre>
+
+        <h3>JSON 语法规则：</h3>
+        <ul>
+            <li>数据在名称/值对中</li>
+            <li>数据由逗号分隔</li>
+            <li>大括号 <code>{}</code> 保存对象</li>
+            <li>中括号 <code>[]</code> 保存数组</li>
+        </ul>
+    </div>
+
+    <script>
+        const data = {
+            "project": "高级网页设计实践",
+            "student": {
+                "name": "孙宁",
+                "id": "24001011016",
+                "active": true
+            },
+            "topics": ["HTML", "CSS", "JavaScript", "JSON", "Fetch API"],
+            "score": 95.5,
+            "metadata": null
+        };
+
+        // 格式化展示
+        const jsonStr = JSON.stringify(data, null, 4);
+        
+        // 简单的语法高亮
+        function syntaxHighlight(json) {
+            if (typeof json != 'string') {
+                 json = JSON.stringify(json, undefined, 2);
+            }
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        document.getElementById('jsonDisplay').innerHTML = syntaxHighlight(jsonStr);
+    </script>
+</body>
+</html>

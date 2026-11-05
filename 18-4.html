@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECharts 图表展示 - 孙宁</title>
+    <script src="cdn/echarts.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background-color: #f0f2f5;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .charts-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .chart-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            width: 500px;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <h2>ECharts 数据可视化 - 孙宁</h2>
+    
+    <div class="charts-container">
+        <!-- 第一个图表：柱状图 -->
+        <div id="chart1" class="chart-box"></div>
+        
+        <!-- 第二个图表：饼图 -->
+        <div id="chart2" class="chart-box"></div>
+    </div>
+
+    <script>
+        // --- 初始化图表 1 (柱状图) ---
+        var myChart1 = echarts.init(document.getElementById('chart1'));
+        var option1 = {
+            title: {
+                text: '各科学习时长统计',
+                left: 'center'
+            },
+            tooltip: {},
+            xAxis: {
+                data: ['HTML', 'CSS', 'JavaScript', 'Vue', 'React', 'Node.js']
+            },
+            yAxis: {},
+            series: [{
+                name: '时长(小时)',
+                type: 'bar',
+                data: [35, 42, 68, 50, 45, 30],
+                itemStyle: {
+                    color: '#5470c6'
+                }
+            }]
+        };
+        myChart1.setOption(option1);
+
+        // --- 初始化图表 2 (饼图) ---
+        var myChart2 = echarts.init(document.getElementById('chart2'));
+        var option2 = {
+            title: {
+                text: '技能熟练度分布',
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left'
+            },
+            series: [
+                {
+                    name: '熟练度',
+                    type: 'pie',
+                    radius: '50%',
+                    data: [
+                        {value: 1048, name: '前端基础'},
+                        {value: 735, name: '前端框架'},
+                        {value: 580, name: '工程化'},
+                        {value: 484, name: 'UI设计'},
+                        {value: 300, name: '后端基础'}
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        myChart2.setOption(option2);
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas动画 - 孙宁</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        canvas {
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let x = 100;
+        let y = 100;
+        let dx = 4;
+        let dy = 3;
+        const text = "孙宁";
+        ctx.font = "bold 60px 'Microsoft YaHei'";
+        
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw text
+            ctx.fillStyle = "#ff5722";
+            ctx.fillText(text, x, y);
+            
+            const metrics = ctx.measureText(text);
+            const textWidth = metrics.width;
+            // Approximate height
+            const textHeight = 60;
+            
+            // Bounce off walls
+            if (x + textWidth > canvas.width || x < 0) {
+                dx = -dx;
+            }
+            // Note: y is the baseline for text, so top is y - textHeight, bottom is y
+            if (y > canvas.height || y - textHeight < 0) {
+                dy = -dy;
+            }
+            
+            x += dx;
+            y += dy;
+            
+            requestAnimationFrame(draw);
+        }
+        
+        draw();
+    </script>
+</body>
+</html>

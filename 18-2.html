@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商系统架构图 - 孙宁</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f5f5f5;
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+        }
+        h2 {
+            color: #333;
+        }
+        canvas {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <h2>全站系统架构图 (电商系统)</h2>
+    <canvas id="archCanvas" width="900" height="600"></canvas>
+    
+    <script>
+        const canvas = document.getElementById('archCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Helper function to draw rounded rectangle with text
+        function drawBox(x, y, w, h, text, bgColor, textColor) {
+            ctx.fillStyle = bgColor;
+            ctx.beginPath();
+            ctx.roundRect(x, y, w, h, 8);
+            ctx.fill();
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            ctx.fillStyle = textColor;
+            ctx.font = "16px 'Microsoft YaHei'";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, x + w / 2, y + h / 2);
+        }
+
+        // Helper function to draw arrows
+        function drawArrow(fromX, fromY, toX, toY) {
+            const headlen = 10;
+            const angle = Math.atan2(toY - fromY, toX - fromX);
+            ctx.beginPath();
+            ctx.moveTo(fromX, fromY);
+            ctx.lineTo(toX, toY);
+            ctx.strokeStyle = '#666';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.moveTo(toX, toY);
+            ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.lineTo(toX, toY);
+            ctx.fillStyle = '#666';
+            ctx.fill();
+        }
+        
+        // Draw layers
+        // User Layer
+        ctx.fillStyle = "#e0f7fa";
+        ctx.fillRect(50, 50, 800, 100);
+        ctx.fillStyle = "#006064";
+        ctx.font = "bold 18px 'Microsoft YaHei'";
+        ctx.fillText("用户终端层 (User Layer)", 450, 70);
+        drawBox(200, 90, 120, 40, "PC Web端", "#fff", "#333");
+        drawBox(400, 90, 120, 40, "移动 APP", "#fff", "#333");
+        drawBox(600, 90, 120, 40, "微信小程序", "#fff", "#333");
+
+        // Gateway Layer
+        ctx.fillStyle = "#fff3e0";
+        ctx.fillRect(50, 200, 800, 80);
+        ctx.fillStyle = "#e65100";
+        ctx.fillText("网关与负载均衡层", 450, 220);
+        drawBox(350, 230, 200, 40, "Nginx / API Gateway", "#fff", "#333");
+        
+        // Business Layer
+        ctx.fillStyle = "#f1f8e9";
+        ctx.fillRect(50, 330, 800, 100);
+        ctx.fillStyle = "#33691e";
+        ctx.fillText("业务服务层 (Business Layer)", 450, 350);
+        drawBox(100, 370, 120, 40, "用户服务", "#fff", "#333");
+        drawBox(250, 370, 120, 40, "商品服务", "#fff", "#333");
+        drawBox(400, 370, 120, 40, "订单服务", "#fff", "#333");
+        drawBox(550, 370, 120, 40, "支付服务", "#fff", "#333");
+        drawBox(700, 370, 120, 40, "库存服务", "#fff", "#333");
+
+        // Data Layer
+        ctx.fillStyle = "#fce4ec";
+        ctx.fillRect(50, 480, 800, 100);
+        ctx.fillStyle = "#880e4f";
+        ctx.fillText("数据存储层 (Data Layer)", 450, 500);
+        drawBox(200, 520, 120, 40, "MySQL 集群", "#fff", "#333");
+        drawBox(400, 520, 120, 40, "Redis 缓存", "#fff", "#333");
+        drawBox(600, 520, 120, 40, "ES / MQ", "#fff", "#333");
+
+        // Arrows connecting layers
+        // User to Gateway
+        drawArrow(260, 130, 450, 230);
+        drawArrow(450, 130, 450, 230);
+        drawArrow(660, 130, 450, 230);
+        
+        // Gateway to Business
+        drawArrow(450, 270, 160, 370);
+        drawArrow(450, 270, 310, 370);
+        drawArrow(450, 270, 450, 370);
+        drawArrow(450, 270, 610, 370);
+        drawArrow(450, 270, 760, 370);
+        
+        // Business to Data
+        drawArrow(160, 410, 260, 520);
+        drawArrow(310, 410, 260, 520);
+        drawArrow(450, 410, 450, 520);
+        drawArrow(610, 410, 660, 520);
+        drawArrow(760, 410, 660, 520);
+
+    </script>
+</body>
+</html>

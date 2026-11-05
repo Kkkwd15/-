@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能客服系统架构图 (SVG) - 孙宁</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fafafa;
+            font-family: "SimSun", "宋体", Arial, sans-serif;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        svg {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h2>知识库智能客服系统架构图 (科研方向)</h2>
+    <svg width="800" height="550" xmlns="http://www.w3.org/2000/svg">
+        <!-- Define styles & markers -->
+        <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#666" />
+            </marker>
+        </defs>
+
+        <style>
+            .layer-bg { stroke: #e0e0e0; stroke-width: 1; rx: 8; ry: 8; }
+            .layer-title { font-size: 16px; font-weight: bold; fill: #555; font-family: 'Microsoft YaHei'; }
+            .node-box { fill: #fff; stroke: #999; stroke-width: 1.5; rx: 4; ry: 4; }
+            .node-text { font-size: 14px; fill: #333; font-family: 'Microsoft YaHei'; text-anchor: middle; dominant-baseline: middle; }
+            .link-line { stroke: #666; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+        </style>
+
+        <!-- Presentation Layer -->
+        <rect x="40" y="40" width="720" height="90" fill="#e3f2fd" class="layer-bg" />
+        <text x="400" y="65" class="layer-title" text-anchor="middle">交互展示层 (Interaction Layer)</text>
+        
+        <rect x="150" y="80" width="120" height="36" class="node-box" />
+        <text x="210" y="98" class="node-text">多模态输入</text>
+        
+        <rect x="340" y="80" width="120" height="36" class="node-box" />
+        <text x="400" y="98" class="node-text">Web/App 终端</text>
+        
+        <rect x="530" y="80" width="120" height="36" class="node-box" />
+        <text x="590" y="98" class="node-text">对话反馈界面</text>
+
+
+        <!-- Core AI Model Layer -->
+        <rect x="40" y="160" width="720" height="150" fill="#fff3e0" class="layer-bg" />
+        <text x="400" y="185" class="layer-title" text-anchor="middle">核心算法与模型层 (Core AI Layer - 科研重点)</text>
+        
+        <rect x="100" y="200" width="140" height="40" class="node-box" />
+        <text x="170" y="220" class="node-text">意图识别与槽位提取</text>
+
+        <rect x="330" y="200" width="140" height="40" class="node-box" />
+        <text x="400" y="220" class="node-text">大语言模型 (LLM)</text>
+
+        <rect x="560" y="200" width="140" height="40" class="node-box" />
+        <text x="630" y="220" class="node-text">多轮对话管理 (DST)</text>
+        
+        <rect x="330" y="255" width="140" height="40" class="node-box" />
+        <text x="400" y="275" class="node-text">RAG (检索增强生成)</text>
+
+
+        <!-- Knowledge Base Layer -->
+        <rect x="40" y="340" width="720" height="110" fill="#f1f8e9" class="layer-bg" />
+        <text x="400" y="365" class="layer-title" text-anchor="middle">知识库层 (Knowledge Base Layer)</text>
+
+        <rect x="150" y="390" width="120" height="40" class="node-box" />
+        <text x="210" y="410" class="node-text">向量数据库</text>
+        
+        <rect x="340" y="390" width="120" height="40" class="node-box" />
+        <text x="400" y="410" class="node-text">知识图谱 (KG)</text>
+        
+        <rect x="530" y="390" width="120" height="40" class="node-box" />
+        <text x="590" y="410" class="node-text">文档解析引擎</text>
+
+
+        <!-- Infrastructure Layer -->
+        <rect x="40" y="480" width="720" height="50" fill="#f3e5f5" class="layer-bg" />
+        <text x="400" y="510" class="layer-title" text-anchor="middle">基础设施层 (GPU 集群 / 算力支撑 / 监控运维)</text>
+
+
+        <!-- Connecting Lines -->
+        <!-- Layer 1 to Layer 2 -->
+        <path d="M 210 116 L 170 200" class="link-line" />
+        <path d="M 400 116 L 400 200" class="link-line" />
+        <path d="M 590 116 L 630 200" class="link-line" />
+        
+        <!-- Inside Layer 2 -->
+        <path d="M 240 220 L 330 220" class="link-line" />
+        <path d="M 470 220 L 560 220" class="link-line" />
+        <path d="M 400 240 L 400 255" class="link-line" marker-end="none" />
+        <path d="M 400 255 L 400 240" class="link-line" />
+        
+        <!-- Layer 2 to Layer 3 -->
+        <path d="M 360 295 L 210 390" class="link-line" />
+        <path d="M 400 295 L 400 390" class="link-line" />
+        <path d="M 440 295 L 590 390" class="link-line" />
+
+    </svg>
+</body>
+</html>

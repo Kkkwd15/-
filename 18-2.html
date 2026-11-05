@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>电商系统架构图 - 孙宁</title>
+    <title>全站系统架构图 (电商系统) - 孙宁</title>
     <style>
         body {
             margin: 0;
@@ -11,122 +11,311 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f5f5f5;
-            font-family: "SimSun", "宋体", Arial, sans-serif;
+            background: linear-gradient(160deg, #0f1b2d 0%, #16243a 100%);
+            min-height: 100vh;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
         }
         h2 {
-            color: #333;
+            color: #e8f0fe;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+        p.author {
+            color: #7f9cc4;
+            font-size: 13px;
+            margin: 0 0 16px;
         }
         canvas {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background: #0b1526;
+            border: 1px solid #24395c;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
 <body>
-    <h2>全站系统架构图 (电商系统)</h2>
-    <canvas id="archCanvas" width="900" height="600"></canvas>
-    
+    <h2>全站系统架构图（电商系统）</h2>
+    <p class="author">设计：孙宁</p>
+    <canvas id="archCanvas" width="980" height="680"></canvas>
+
     <script>
         const canvas = document.getElementById('archCanvas');
         const ctx = canvas.getContext('2d');
-        
-        // Helper function to draw rounded rectangle with text
-        function drawBox(x, y, w, h, text, bgColor, textColor) {
-            ctx.fillStyle = bgColor;
+        const W = canvas.width, H = canvas.height;
+        let frame = 0;
+
+        // ---------- 工具：圆角矩形 ----------
+        function roundRect(x, y, w, h, r) {
             ctx.beginPath();
-            ctx.roundRect(x, y, w, h, 8);
+            ctx.moveTo(x + r, y);
+            ctx.arcTo(x + w, y, x + w, y + h, r);
+            ctx.arcTo(x + w, y + h, x, y + h, r);
+            ctx.arcTo(x, y + h, x, y, r);
+            ctx.arcTo(x, y, x + w, y, r);
+            ctx.closePath();
+        }
+
+        // ---------- 工具：发光节点盒子 ----------
+        function drawNode(x, y, w, h, text, hue) {
+            // 渐变底色
+            const g = ctx.createLinearGradient(x, y, x, y + h);
+            g.addColorStop(0, `hsla(${hue}, 60%, 22%, 0.95)`);
+            g.addColorStop(1, `hsla(${hue}, 55%, 14%, 0.95)`);
+            ctx.fillStyle = g;
+            roundRect(x, y, w, h, 7);
             ctx.fill();
-            ctx.strokeStyle = '#999';
-            ctx.lineWidth = 1;
+            // 发光描边
+            ctx.strokeStyle = `hsla(${hue}, 90%, 65%, 0.85)`;
+            ctx.lineWidth = 1.2;
+            ctx.shadowColor = `hsla(${hue}, 90%, 60%, 0.5)`;
+            ctx.shadowBlur = 8;
             ctx.stroke();
-            
-            ctx.fillStyle = textColor;
-            ctx.font = "16px 'Microsoft YaHei'";
+            ctx.shadowBlur = 0;
+            // 文字
+            ctx.fillStyle = `hsl(${hue}, 80%, 85%)`;
+            ctx.font = "13px 'PingFang SC', 'Microsoft YaHei'";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillText(text, x + w / 2, y + h / 2);
         }
 
-        // Helper function to draw arrows
-        function drawArrow(fromX, fromY, toX, toY) {
-            const headlen = 10;
+        // ---------- 工具：分层容器 ----------
+        function drawLayer(x, y, w, h, title, hue) {
+            ctx.fillStyle = `hsla(${hue}, 50%, 16%, 0.55)`;
+            roundRect(x, y, w, h, 10);
+            ctx.fill();
+            ctx.strokeStyle = `hsla(${hue}, 60%, 50%, 0.35)`;
+            ctx.setLineDash([6, 4]);
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.setLineDash([]);
+            // 标题
+            ctx.fillStyle = `hsl(${hue}, 75%, 72%)`;
+            ctx.font = "bold 14px 'PingFang SC', 'Microsoft YaHei'";
+            ctx.textAlign = "left";
+            ctx.textBaseline = "top";
+            ctx.fillText(title, x + 14, y + 8);
+            // 标题下分隔线
+            ctx.strokeStyle = `hsla(${hue}, 60%, 55%, 0.3)`;
+            ctx.beginPath();
+            ctx.moveTo(x + 10, y + 30);
+            ctx.lineTo(x + w - 10, y + 30);
+            ctx.stroke();
+        }
+
+        // ---------- 工具：层间箭头 ----------
+        const flows = []; // 数据流动画通道
+        function drawArrow(fromX, fromY, toX, toY, hue) {
+            const headlen = 9;
             const angle = Math.atan2(toY - fromY, toX - fromX);
+            ctx.strokeStyle = `hsla(${hue}, 70%, 60%, 0.6)`;
+            ctx.lineWidth = 1.6;
             ctx.beginPath();
             ctx.moveTo(fromX, fromY);
             ctx.lineTo(toX, toY);
-            ctx.strokeStyle = '#666';
-            ctx.lineWidth = 2;
             ctx.stroke();
-            
             ctx.beginPath();
             ctx.moveTo(toX, toY);
             ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
             ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
-            ctx.lineTo(toX, toY);
-            ctx.fillStyle = '#666';
+            ctx.closePath();
+            ctx.fillStyle = `hsla(${hue}, 70%, 60%, 0.8)`;
             ctx.fill();
         }
-        
-        // Draw layers
-        // User Layer
-        ctx.fillStyle = "#e0f7fa";
-        ctx.fillRect(50, 50, 800, 100);
-        ctx.fillStyle = "#006064";
-        ctx.font = "bold 18px 'Microsoft YaHei'";
-        ctx.fillText("用户终端层 (User Layer)", 450, 70);
-        drawBox(200, 90, 120, 40, "PC Web端", "#fff", "#333");
-        drawBox(400, 90, 120, 40, "移动 APP", "#fff", "#333");
-        drawBox(600, 90, 120, 40, "微信小程序", "#fff", "#333");
 
-        // Gateway Layer
-        ctx.fillStyle = "#fff3e0";
-        ctx.fillRect(50, 200, 800, 80);
-        ctx.fillStyle = "#e65100";
-        ctx.fillText("网关与负载均衡层", 450, 220);
-        drawBox(350, 230, 200, 40, "Nginx / API Gateway", "#fff", "#333");
-        
-        // Business Layer
-        ctx.fillStyle = "#f1f8e9";
-        ctx.fillRect(50, 330, 800, 100);
-        ctx.fillStyle = "#33691e";
-        ctx.fillText("业务服务层 (Business Layer)", 450, 350);
-        drawBox(100, 370, 120, 40, "用户服务", "#fff", "#333");
-        drawBox(250, 370, 120, 40, "商品服务", "#fff", "#333");
-        drawBox(400, 370, 120, 40, "订单服务", "#fff", "#333");
-        drawBox(550, 370, 120, 40, "支付服务", "#fff", "#333");
-        drawBox(700, 370, 120, 40, "库存服务", "#fff", "#333");
+        // ---------- 页面布局 ----------
+        const MAIN_X = 40, MAIN_W = 780;
 
-        // Data Layer
-        ctx.fillStyle = "#fce4ec";
-        ctx.fillRect(50, 480, 800, 100);
-        ctx.fillStyle = "#880e4f";
-        ctx.fillText("数据存储层 (Data Layer)", 450, 500);
-        drawBox(200, 520, 120, 40, "MySQL 集群", "#fff", "#333");
-        drawBox(400, 520, 120, 40, "Redis 缓存", "#fff", "#333");
-        drawBox(600, 520, 120, 40, "ES / MQ", "#fff", "#333");
+        // 第一层：用户终端层
+        drawLayer(MAIN_X, 20, MAIN_W, 100, "用户终端层 User Layer", 200);
+        drawNode(140, 62, 130, 38, "PC Web 端", 200);
+        drawNode(310, 62, 130, 38, "移动 APP", 200);
+        drawNode(480, 62, 130, 38, "微信小程序", 200);
+        drawNode(650, 62, 130, 38, "H5 商城", 200);
 
-        // Arrows connecting layers
-        // User to Gateway
-        drawArrow(260, 130, 450, 230);
-        drawArrow(450, 130, 450, 230);
-        drawArrow(660, 130, 450, 230);
-        
-        // Gateway to Business
-        drawArrow(450, 270, 160, 370);
-        drawArrow(450, 270, 310, 370);
-        drawArrow(450, 270, 450, 370);
-        drawArrow(450, 270, 610, 370);
-        drawArrow(450, 270, 760, 370);
-        
-        // Business to Data
-        drawArrow(160, 410, 260, 520);
-        drawArrow(310, 410, 260, 520);
-        drawArrow(450, 410, 450, 520);
-        drawArrow(610, 410, 660, 520);
-        drawArrow(760, 410, 660, 520);
+        // 第二层：接入网关层
+        drawLayer(MAIN_X, 150, MAIN_W, 100, "接入网关层 Gateway Layer", 35);
+        drawNode(140, 192, 130, 38, "CDN 加速", 35);
+        drawNode(310, 192, 130, 38, "Nginx / SLB", 35);
+        drawNode(480, 192, 130, 38, "API 网关", 35);
+        drawNode(650, 192, 130, 38, "安全鉴权", 35);
 
+        // 第三层：业务服务层（微服务）
+        drawLayer(MAIN_X, 280, MAIN_W, 130, "业务服务层 Microservices", 130);
+        drawNode(70,  330, 110, 38, "用户服务", 130);
+        drawNode(196, 330, 110, 38, "商品服务", 130);
+        drawNode(322, 330, 110, 38, "购物车", 130);
+        drawNode(448, 330, 110, 38, "订单服务", 130);
+        drawNode(574, 330, 110, 38, "支付服务", 130);
+        drawNode(700, 330, 110, 38, "库存服务", 130);
+        // 服务注册与发现
+        ctx.fillStyle = "hsla(130, 70%, 60%, 0.85)";
+        ctx.font = "12px 'PingFang SC'";
+        ctx.textAlign = "center";
+        ctx.fillText("Nacos 注册中心 / 配置中心", 430, 390);
+
+        // 第四层：中间件层
+        drawLayer(MAIN_X, 440, MAIN_W, 100, "中间件层 Middleware", 265);
+        drawNode(140, 482, 160, 38, "Redis 缓存集群", 265);
+        drawNode(340, 482, 160, 38, "Kafka 消息队列", 265);
+        drawNode(540, 482, 160, 38, "Elasticsearch", 265);
+
+        // 第五层：数据存储层
+        drawLayer(MAIN_X, 570, MAIN_W, 90, "数据存储层 Data Layer", 320);
+        drawNode(120, 608, 170, 36, "MySQL 主从集群", 320);
+        drawNode(330, 608, 170, 36, "ShardingSphere 分库分表", 320);
+        drawNode(540, 608, 170, 36, "对象存储 OSS", 320);
+
+        // 右侧：运维支撑体系
+        drawLayer(850, 20, 110, 640, "运维支撑", 180);
+        const ops = ["Prometheus 监控", "ELK 日志", "链路追踪", "Jenkins CI/CD", "Docker", "Kubernetes"];
+        ops.forEach(function (t, i) {
+            ctx.save();
+            drawNode(860, 60 + i * 100, 90, 44, "", 180);
+            ctx.restore();
+            // 竖排文字
+            ctx.fillStyle = "hsl(180, 80%, 85%)";
+            ctx.font = "12px 'PingFang SC', 'Microsoft YaHei'";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            const chars = t.split(' ');
+            chars.forEach(function (c, j) {
+                ctx.fillText(c, 905, 76 + i * 100 + j * 15);
+            });
+        });
+
+        // ---------- 层间箭头 ----------
+        // 用户层 → 网关层
+        [[205, 100], [430, 100], [655, 100]].forEach(function (p) {
+            drawArrow(p[0], p[0] === 430 ? 100 : 100, 430, 192, 35);
+        });
+        // 网关层 → 业务层
+        drawArrow(430, 230, 430, 280, 130);
+        // 业务层 → 中间件层
+        drawArrow(220, 368, 220, 482, 265);
+        drawArrow(430, 395, 430, 482, 265);
+        drawArrow(650, 368, 650, 482, 265);
+        // 中间件层 → 数据层
+        drawArrow(205, 520, 205, 608, 320);
+        drawArrow(430, 520, 430, 608, 320);
+        drawArrow(625, 520, 625, 608, 320);
+        // 主链路（供流动光点使用）
+        flows.push({ x1: 430, y1: 100, x2: 430, y2: 192, hue: 35 });
+        flows.push({ x1: 430, y1: 230, x2: 430, y2: 280, hue: 130 });
+        flows.push({ x1: 430, y1: 395, x2: 430, y2: 482, hue: 265 });
+        flows.push({ x1: 430, y1: 520, x2: 430, y2: 608, hue: 320 });
+
+        // ---------- 数据流动画：沿主链路移动的发光点 ----------
+        function drawFlowDots() {
+            flows.forEach(function (f, idx) {
+                const t = ((frame * 0.01 + idx * 0.25) % 1);
+                const x = f.x1 + (f.x2 - f.x1) * t;
+                const y = f.y1 + (f.y2 - f.y1) * t;
+                ctx.save();
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `hsla(${f.hue}, 90%, 65%, 0.9)`;
+                ctx.fillStyle = `hsla(${f.hue}, 90%, 70%, ${0.9 - t * 0.5})`;
+                ctx.beginPath();
+                ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        // ---------- 重绘循环（静态结构 + 流动光点） ----------
+        // 说明：结构只绘制一次，动画帧仅叠加光点，避免整图重绘开销
+        function drawScene() {
+            ctx.clearRect(0, 0, W, H);
+            // 背景：微弱网格
+            ctx.strokeStyle = "rgba(80, 120, 180, 0.06)";
+            ctx.lineWidth = 1;
+            for (let gx = 0; gx < W; gx += 40) {
+                ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+            }
+            for (let gy = 0; gy < H; gy += 40) {
+                ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+            }
+            // 标题区
+            ctx.fillStyle = "rgba(255,255,255,0.03)";
+            roundRect(0, 0, W, H, 12);
+            ctx.fill();
+        }
+        drawScene();
+        drawFlowDots();
+
+        function animate() {
+            // 擦除上一帧光点：重绘结构（低频）+ 光点（高频）
+            // 为简化实现，每帧重绘整个静态场景（结构绘制成本低）
+            drawScene();
+            // 重新绘制所有结构
+            drawAllStructures();
+            drawFlowDots();
+            frame++;
+            requestAnimationFrame(animate);
+        }
+
+        // 把结构绘制封装为函数
+        function drawAllStructures() {
+            drawLayer(MAIN_X, 20, MAIN_W, 100, "用户终端层 User Layer", 200);
+            drawNode(140, 62, 130, 38, "PC Web 端", 200);
+            drawNode(310, 62, 130, 38, "移动 APP", 200);
+            drawNode(480, 62, 130, 38, "微信小程序", 200);
+            drawNode(650, 62, 130, 38, "H5 商城", 200);
+
+            drawLayer(MAIN_X, 150, MAIN_W, 100, "接入网关层 Gateway Layer", 35);
+            drawNode(140, 192, 130, 38, "CDN 加速", 35);
+            drawNode(310, 192, 130, 38, "Nginx / SLB", 35);
+            drawNode(480, 192, 130, 38, "API 网关", 35);
+            drawNode(650, 192, 130, 38, "安全鉴权", 35);
+
+            drawLayer(MAIN_X, 280, MAIN_W, 130, "业务服务层 Microservices", 130);
+            drawNode(70,  330, 110, 38, "用户服务", 130);
+            drawNode(196, 330, 110, 38, "商品服务", 130);
+            drawNode(322, 330, 110, 38, "购物车", 130);
+            drawNode(448, 330, 110, 38, "订单服务", 130);
+            drawNode(574, 330, 110, 38, "支付服务", 130);
+            drawNode(700, 330, 110, 38, "库存服务", 130);
+            ctx.fillStyle = "hsla(130, 70%, 60%, 0.85)";
+            ctx.font = "12px 'PingFang SC'";
+            ctx.textAlign = "center";
+            ctx.fillText("Nacos 注册中心 / 配置中心", 430, 390);
+
+            drawLayer(MAIN_X, 440, MAIN_W, 100, "中间件层 Middleware", 265);
+            drawNode(140, 482, 160, 38, "Redis 缓存集群", 265);
+            drawNode(340, 482, 160, 38, "Kafka 消息队列", 265);
+            drawNode(540, 482, 160, 38, "Elasticsearch", 265);
+
+            drawLayer(MAIN_X, 570, MAIN_W, 90, "数据存储层 Data Layer", 320);
+            drawNode(120, 608, 170, 36, "MySQL 主从集群", 320);
+            drawNode(330, 608, 170, 36, "ShardingSphere 分库分表", 320);
+            drawNode(540, 608, 170, 36, "对象存储 OSS", 320);
+
+            drawLayer(850, 20, 110, 640, "运维支撑", 180);
+            ops.forEach(function (t, i) {
+                drawNode(860, 60 + i * 100, 90, 44, "", 180);
+                ctx.fillStyle = "hsl(180, 80%, 85%)";
+                ctx.font = "12px 'PingFang SC', 'Microsoft YaHei'";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                t.split(' ').forEach(function (c, j) {
+                    ctx.fillText(c, 905, 76 + i * 100 + j * 15);
+                });
+            });
+
+            [[205, 100], [655, 100]].forEach(function (p) {
+                drawArrow(p[0], 100, 430, 192, 35);
+            });
+            drawArrow(430, 100, 430, 192, 35);
+            drawArrow(430, 230, 430, 280, 130);
+            drawArrow(220, 368, 220, 482, 265);
+            drawArrow(430, 395, 430, 482, 265);
+            drawArrow(650, 368, 650, 482, 265);
+            drawArrow(205, 520, 205, 608, 320);
+            drawArrow(430, 520, 430, 608, 320);
+            drawArrow(625, 520, 625, 608, 320);
+        }
+
+        animate();
     </script>
 </body>
 </html>

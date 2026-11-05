@@ -4,107 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ECharts 图表展示 - 孙宁</title>
+    <!-- 使用下载到本地 cdn 目录的 echarts 文件 -->
     <script src="cdn/echarts.min.js"></script>
     <style>
         body {
             margin: 0;
-            padding: 40px;
-            background-color: #f0f2f5;
+            padding: 30px;
+            background: linear-gradient(160deg, #eef2f7 0%, #e3ebf5 100%);
+            min-height: 100vh;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
         }
         h2 {
             text-align: center;
-            color: #333;
-            margin-bottom: 40px;
+            color: #2c3e50;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+        p.author {
+            text-align: center;
+            color: #8a97a8;
+            font-size: 13px;
+            margin: 0 0 26px;
         }
         .charts-container {
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: 36px;
             flex-wrap: wrap;
         }
-        .chart-box {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            width: 500px;
-            height: 400px;
+        .chart-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(30, 50, 90, 0.1);
+            padding: 18px;
         }
+        .chart-card h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            color: #34495e;
+            border-left: 4px solid #3b82c4;
+            padding-left: 10px;
+        }
+        #chart1, #chart2 { width: 520px; height: 400px; }
     </style>
 </head>
 <body>
-    <h2>ECharts 数据可视化 - 孙宁</h2>
-    
+    <h2>ECharts 数据可视化（双图）</h2>
+    <p class="author">制作：孙宁 ｜ 数据来源：本地 cdn/echarts.min.js 渲染</p>
+
     <div class="charts-container">
-        <!-- 第一个图表：柱状图 -->
-        <div id="chart1" class="chart-box"></div>
-        
-        <!-- 第二个图表：饼图 -->
-        <div id="chart2" class="chart-box"></div>
+        <!-- 图一：柱状图 + 折线图组合 -->
+        <div class="chart-card">
+            <h3>图一：每月学习时长与测验成绩（柱线组合图）</h3>
+            <div id="chart1"></div>
+        </div>
+        <!-- 图二：雷达图 -->
+        <div class="chart-card">
+            <h3>图二：前端技能掌握度（雷达图）</h3>
+            <div id="chart2"></div>
+        </div>
     </div>
 
     <script>
-        // --- 初始化图表 1 (柱状图) ---
-        var myChart1 = echarts.init(document.getElementById('chart1'));
+        // ============ 图一：柱状图 + 折线图组合 ============
+        var chart1 = echarts.init(document.getElementById('chart1'));
         var option1 = {
-            title: {
-                text: '各科学习时长统计',
-                left: 'center'
-            },
-            tooltip: {},
-            xAxis: {
-                data: ['HTML', 'CSS', 'JavaScript', 'Vue', 'React', 'Node.js']
-            },
-            yAxis: {},
-            series: [{
-                name: '时长(小时)',
-                type: 'bar',
-                data: [35, 42, 68, 50, 45, 30],
-                itemStyle: {
-                    color: '#5470c6'
-                }
-            }]
-        };
-        myChart1.setOption(option1);
-
-        // --- 初始化图表 2 (饼图) ---
-        var myChart2 = echarts.init(document.getElementById('chart2'));
-        var option2 = {
-            title: {
-                text: '技能熟练度分布',
-                left: 'center'
-            },
             tooltip: {
-                trigger: 'item'
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' }
             },
             legend: {
-                orient: 'vertical',
-                left: 'left'
+                data: ['学习时长(小时)', '测验成绩(分)'],
+                top: 0
             },
+            grid: { left: 50, right: 55, top: 45, bottom: 35 },
+            xAxis: {
+                type: 'category',
+                data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月']
+            },
+            yAxis: [
+                { type: 'value', name: '小时', min: 0 },
+                { type: 'value', name: '分', min: 50, max: 100,
+                  axisLine: { show: false }, splitLine: { show: false } }
+            ],
             series: [
                 {
-                    name: '熟练度',
-                    type: 'pie',
-                    radius: '50%',
-                    data: [
-                        {value: 1048, name: '前端基础'},
-                        {value: 735, name: '前端框架'},
-                        {value: 580, name: '工程化'},
-                        {value: 484, name: 'UI设计'},
-                        {value: 300, name: '后端基础'}
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
+                    name: '学习时长(小时)',
+                    type: 'bar',
+                    data: [32, 45, 38, 52, 60, 55, 68, 74],
+                    barWidth: 22,
+                    itemStyle: {
+                        borderRadius: [5, 5, 0, 0],
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: '#5b8ff9' },
+                            { offset: 1, color: '#a7c4f5' }
+                        ])
+                    }
+                },
+                {
+                    name: '测验成绩(分)',
+                    type: 'line',
+                    yAxisIndex: 1,
+                    data: [62, 68, 66, 74, 79, 77, 85, 90],
+                    smooth: true,
+                    symbol: 'circle',
+                    symbolSize: 8,
+                    lineStyle: { width: 3, color: '#f5a623' },
+                    itemStyle: { color: '#f5a623' },
+                    markPoint: {
+                        data: [{ type: 'max', name: '最高分' }],
+                        itemStyle: { color: '#e4393c' }
                     }
                 }
             ]
         };
-        myChart2.setOption(option2);
+        chart1.setOption(option1);
+
+        // ============ 图二：雷达图 ============
+        var chart2 = echarts.init(document.getElementById('chart2'));
+        var option2 = {
+            tooltip: {},
+            legend: {
+                data: ['入学时', '当前水平'],
+                top: 0
+            },
+            radar: {
+                indicator: [
+                    { name: 'HTML/CSS', max: 100 },
+                    { name: 'JavaScript', max: 100 },
+                    { name: 'Vue', max: 100 },
+                    { name: 'React', max: 100 },
+                    { name: 'Node.js', max: 100 },
+                    { name: '工程化', max: 100 }
+                ],
+                radius: '62%',
+                splitArea: {
+                    areaStyle: { color: ['#fbfdff', '#f0f5fb'] }
+                }
+            },
+            series: [{
+                type: 'radar',
+                data: [
+                    {
+                        value: [70, 40, 25, 15, 20, 18],
+                        name: '入学时',
+                        areaStyle: { opacity: 0.15 },
+                        lineStyle: { color: '#95a5b8' },
+                        itemStyle: { color: '#95a5b8' }
+                    },
+                    {
+                        value: [92, 85, 78, 66, 60, 72],
+                        name: '当前水平',
+                        areaStyle: { opacity: 0.25 },
+                        lineStyle: { color: '#3b82c4', width: 2.5 },
+                        itemStyle: { color: '#3b82c4' }
+                    }
+                ]
+            }]
+        };
+        chart2.setOption(option2);
+
+        // 窗口尺寸变化时自适应
+        window.addEventListener('resize', function () {
+            chart1.resize();
+            chart2.resize();
+        });
     </script>
 </body>
 </html>

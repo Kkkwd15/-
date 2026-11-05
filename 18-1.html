@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas动画 - 孙宁</title>
+    <title>复杂 Canvas 动画 - 孙宁</title>
     <style>
         body {
             margin: 0;
@@ -12,57 +12,279 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            background-color: #121212;
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
         }
         canvas {
-            background-color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border-radius: 8px;
+            background-color: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border-radius: 12px;
+            cursor: crosshair;
+        }
+        .hint {
+            position: absolute;
+            top: 30px;
+            color: rgba(255,255,255,0.6);
+            font-size: 16px;
+            pointer-events: none;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <div class="hint">提示：移动鼠标排斥粒子，点击画布触发爆裂特效</div>
+    <canvas id="myCanvas" width="900" height="600"></canvas>
     <script>
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
-        
-        let x = 100;
-        let y = 100;
-        let dx = 4;
-        let dy = 3;
-        const text = "孙宁";
-        ctx.font = "bold 60px 'Microsoft YaHei'";
-        
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw text
-            ctx.fillStyle = "#ff5722";
-            ctx.fillText(text, x, y);
-            
-            const metrics = ctx.measureText(text);
-            const textWidth = metrics.width;
-            // Approximate height
-            const textHeight = 60;
-            
-            // Bounce off walls
-            if (x + textWidth > canvas.width || x < 0) {
-                dx = -dx;
-            }
-            // Note: y is the baseline for text, so top is y - textHeight, bottom is y
-            if (y > canvas.height || y - textHeight < 0) {
-                dy = -dy;
-            }
-            
-            x += dx;
-            y += dy;
-            
-            requestAnimationFrame(draw);
+
+        let particleArray = [];   // 文字粒子
+        let burstArray = [];      // 点击爆裂粒子
+        let starArray = [];       // 背景星星
+        let frame = 0;            // 帧计数器，用于驱动色相流转与闪烁
+
+        let mouse = {
+            x: null,
+            y: null,
+            radius: 80
         }
-        
-        draw();
+
+        // 监听鼠标移动
+        canvas.addEventListener('mousemove', function(event) {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = event.clientX - rect.left;
+            mouse.y = event.clientY - rect.top;
+        });
+
+        // 鼠标移出画布时重置
+        canvas.addEventListener('mouseleave', function() {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // 鼠标点击：在点击处生成一圈爆裂粒子
+        canvas.addEventListener('click', function(event) {
+            const rect = canvas.getBoundingClientRect();
+            const cx = event.clientX - rect.left;
+            const cy = event.clientY - rect.top;
+            for (let i = 0; i < 40; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                burstArray.push({
+                    x: cx,
+                    y: cy,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 3 + 1,
+                    life: 1,                                   // 生命周期 1 → 0
+                    decay: Math.random() * 0.02 + 0.01,
+                    hue: Math.random() * 60 + 10               // 暖色系火花
+                });
+            }
+        });
+
+        // 1. 离屏绘制文字并获取像素数据
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 150px "Microsoft YaHei"';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('孙宁', canvas.width / 2, canvas.height / 2);
+
+        const textCoordinates = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        // 2. 粒子类定义
+        class Particle {
+            constructor(x, y) {
+                // 初始位置随机，形成入场聚合效果
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1.5;
+                this.baseX = x;
+                this.baseY = y;
+                this.density = (Math.random() * 30) + 5;
+                // 每个粒子的基础色相与闪烁相位
+                this.baseHue = Math.random() * 50 + 15;
+                this.phase = Math.random() * Math.PI * 2;
+            }
+
+            draw() {
+                // 色相随全局时间缓慢流转，形成流光效果
+                const hue = (this.baseHue + frame * 0.3) % 360;
+                // 粒子大小呼吸式闪烁
+                const size = this.size * (0.75 + 0.25 * Math.sin(frame * 0.08 + this.phase));
+                ctx.fillStyle = `hsl(${hue}, 100%, 65%)`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, size, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            update() {
+                // 计算粒子与鼠标的距离
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+
+                // 粒子受到的排斥力
+                let forceDirectionX = dx / distance;
+                let forceDirectionY = dy / distance;
+                let maxDistance = mouse.radius;
+                let force = (maxDistance - distance) / maxDistance;
+                let directionX = forceDirectionX * force * this.density;
+                let directionY = forceDirectionY * force * this.density;
+
+                // 鼠标靠近时散开，否则回到原位
+                if (distance < mouse.radius) {
+                    this.x -= directionX;
+                    this.y -= directionY;
+                } else {
+                    if (this.x !== this.baseX) {
+                        let dx = this.x - this.baseX;
+                        this.x -= dx / 15;
+                    }
+                    if (this.y !== this.baseY) {
+                        let dy = this.y - this.baseY;
+                        this.y -= dy / 15;
+                    }
+                }
+            }
+        }
+
+        // 3. 初始化粒子系统
+        function init() {
+            particleArray = [];
+            // 采样步长（数值越小粒子越密集，性能消耗越大）
+            const step = 6;
+            for (let y = 0; y < textCoordinates.height; y += step) {
+                for (let x = 0; x < textCoordinates.width; x += step) {
+                    // 如果该像素点的 alpha 值大于 128（即非透明）
+                    if (textCoordinates.data[(y * 4 * textCoordinates.width) + (x * 4) + 3] > 128) {
+                        particleArray.push(new Particle(x, y));
+                    }
+                }
+            }
+        }
+        init();
+
+        // 4. 初始化背景星空（三层视差：远、中、近）
+        function initStars() {
+            starArray = [];
+            for (let i = 0; i < 150; i++) {
+                const layer = Math.floor(Math.random() * 3); // 0 远 1 中 2 近
+                starArray.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: layer * 0.6 + Math.random() * 0.8 + 0.4,
+                    speed: (layer + 1) * 0.15,               // 越近的层移动越快，产生视差
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
+        }
+        initStars();
+
+        // 5. 绘制背景：缓慢漂移的星云 + 视差星空
+        function drawBackground() {
+            // 星云：两个大半径径向渐变，中心缓慢游走
+            const t = frame * 0.004;
+            const g1 = ctx.createRadialGradient(
+                canvas.width / 2 + Math.sin(t) * 250, canvas.height / 2 + Math.cos(t * 0.7) * 150, 0,
+                canvas.width / 2 + Math.sin(t) * 250, canvas.height / 2 + Math.cos(t * 0.7) * 150, 320);
+            g1.addColorStop(0, 'rgba(40, 20, 90, 0.35)');
+            g1.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = g1;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const g2 = ctx.createRadialGradient(
+                canvas.width / 2 - Math.sin(t * 0.8) * 220, canvas.height / 2 + Math.sin(t * 1.1) * 180, 0,
+                canvas.width / 2 - Math.sin(t * 0.8) * 220, canvas.height / 2 + Math.sin(t * 1.1) * 180, 300);
+            g2.addColorStop(0, 'rgba(80, 30, 20, 0.3)');
+            g2.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = g2;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 星星：向下漂移并闪烁
+            for (let i = 0; i < starArray.length; i++) {
+                const s = starArray[i];
+                s.y += s.speed;
+                if (s.y > canvas.height) { s.y = -2; s.x = Math.random() * canvas.width; }
+                const alpha = 0.3 + 0.7 * Math.abs(Math.sin(frame * 0.03 + s.phase));
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // 6. 连线效果
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particleArray.length; a++) {
+                for (let b = a; b < particleArray.length; b++) {
+                    let dx = particleArray[a].x - particleArray[b].x;
+                    let dy = particleArray[a].y - particleArray[b].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    // 当两个粒子距离较近时，画线连接
+                    if (distance < 20) {
+                        opacityValue = 1 - (distance / 20);
+                        ctx.strokeStyle = `rgba(255, 165, 0, ${opacityValue * 0.3})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particleArray[a].x, particleArray[a].y);
+                        ctx.lineTo(particleArray[b].x, particleArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // 7. 爆裂粒子：更新并绘制，生命周期结束后移除
+        function updateBursts() {
+            for (let i = burstArray.length - 1; i >= 0; i--) {
+                const p = burstArray[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05;              // 轻微重力
+                p.vx *= 0.97;              // 空气阻力
+                p.vy *= 0.97;
+                p.life -= p.decay;
+
+                if (p.life <= 0) {
+                    burstArray.splice(i, 1);
+                    continue;
+                }
+                // 发光火花
+                ctx.save();
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = `hsla(${p.hue}, 100%, 60%, ${p.life})`;
+                ctx.fillStyle = `hsla(${p.hue}, 100%, 70%, ${p.life})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // 8. 动画循环（用半透明覆盖实现运动拖尾）
+        function animate() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.28)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawBackground();
+            connect();          // 粒子连线
+            for (let i = 0; i < particleArray.length; i++) {
+                particleArray[i].update();
+                particleArray[i].draw();
+            }
+            updateBursts();
+
+            frame++;
+            requestAnimationFrame(animate);
+        }
+
+        // 延迟一点启动动画，让离屏绘制彻底完成
+        setTimeout(animate, 100);
     </script>
 </body>
 </html>

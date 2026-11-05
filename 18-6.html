@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基于 Mermaid 的智能客服系统图表 - 孙宁</title>
+    <!-- 使用下载到本地 cdn 目录的 mermaid -->
+    <script src="cdn/mermaid.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f4f6fa;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 4px; }
+        p.author { text-align: center; color: #8a97a8; font-size: 13px; margin: 0 0 24px; }
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(30, 50, 90, 0.1);
+            padding: 24px 20px;
+            margin: 0 auto 30px;
+            max-width: 860px;
+        }
+        .card h3 {
+            margin: 0 0 14px;
+            font-size: 16px;
+            color: #34495e;
+            border-left: 4px solid #3b82c4;
+            padding-left: 10px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>基于 Mermaid 的智能客服系统图表</h2>
+    <p class="author">制作：孙宁 ｜ 渲染引擎：本地 cdn/mermaid.min.js</p>
+
+    <!-- 图一：智能客服业务流程图 -->
+    <div class="card">
+        <h3>图一：智能客服业务流程图（flowchart）</h3>
+        <pre class="mermaid">
+flowchart TD
+    A(["用户发起提问"]) --> B["接入网关 / 会话管理"]
+    B --> C{"意图识别 NLU"}
+    C -- 闲聊问候 --> D["寒暄应答直接回复"]
+    C -- 业务咨询 --> E["知识库检索 RAG"]
+    E --> F{"是否命中知识"}
+    F -- 是 --> G["组装答案并返回用户"]
+    F -- 否 --> H["转接人工坐席"]
+    G --> I["记录对话日志"]
+    D --> I
+    H --> I
+    I --> J["Badcase 分析与知识库更新"]
+    J -.-> E
+        </pre>
+    </div>
+
+    <!-- 图二：智能客服系统 ER 图 -->
+    <div class="card">
+        <h3>图二：智能客服系统数据库 ER 图（erDiagram）</h3>
+        <pre class="mermaid">
+erDiagram
+    USER ||--o{ SESSION : initiates
+    SESSION ||--|{ MESSAGE : contains
+    AGENT ||--o{ SESSION : handles
+    CATEGORY ||--|{ KNOWLEDGE : groups
+    KNOWLEDGE ||--o{ MESSAGE : answers
+
+    USER {
+        int user_id PK "user id"
+        string nickname "nickname"
+        string email "email"
+        datetime created_at "create time"
+    }
+    SESSION {
+        int session_id PK "session id"
+        int user_id FK "user id"
+        int agent_id FK "agent id"
+        string status "open closed"
+        datetime started_at "start time"
+    }
+    MESSAGE {
+        int message_id PK "message id"
+        int session_id FK "session id"
+        string role "user bot agent"
+        text content "message body"
+        datetime sent_at "send time"
+    }
+    AGENT {
+        int agent_id PK "agent id"
+        string name "agent name"
+        string group_name "service group"
+    }
+    CATEGORY {
+        int category_id PK "category id"
+        string name "category name"
+    }
+    KNOWLEDGE {
+        int knowledge_id PK "knowledge id"
+        int category_id FK "category id"
+        string question "standard question"
+        text answer "standard answer"
+        float score "hit score"
+    }
+        </pre>
+    </div>
+
+    <script>
+        // 初始化 Mermaid（本地 cdn 文件）
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#e8f1fc',
+                primaryBorderColor: '#3b82c4',
+                primaryTextColor: '#2c3e50',
+                lineColor: '#7a8ba3',
+                fontSize: '14px'
+            },
+            flowchart: { curve: 'basis' }
+        });
+    </script>
+</body>
+</html>

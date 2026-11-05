@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基于 Three.js 的四个 3D 图表 - 孙宁</title>
+    <!-- 使用下载到本地 cdn 目录的 three.js -->
+    <script src="cdn/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 24px;
+            background: #101827;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        h2 { text-align: center; color: #e8f0fe; margin-bottom: 4px; letter-spacing: 2px; }
+        p.author { text-align: center; color: #7f9cc4; font-size: 13px; margin: 0 0 20px; }
+        .tip { text-align: center; color: #55708f; font-size: 12px; margin-bottom: 18px; }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .panel {
+            background: #16213a;
+            border: 1px solid #24395c;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .panel h3 {
+            margin: 0;
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #9ecbff;
+            border-bottom: 1px solid #24395c;
+        }
+        .chart { width: 100%; height: 320px; cursor: grab; }
+        .chart:active { cursor: grabbing; }
+    </style>
+</head>
+<body>
+    <h2>基于 Three.js 的四个 3D 图表</h2>
+    <p class="author">制作：孙宁 ｜ 渲染引擎：本地 cdn/three.min.js</p>
+    <p class="tip">提示：按住鼠标左右拖动可旋转视角</p>
+
+    <div class="grid">
+        <div class="panel">
+            <h3>图一：3D 柱状图（月度销量）</h3>
+            <div class="chart" id="chartBar"></div>
+        </div>
+        <div class="panel">
+            <h3>图二：3D 饼图（渠道占比）</h3>
+            <div class="chart" id="chartPie"></div>
+        </div>
+        <div class="panel">
+            <h3>图三：3D 散点图（用户分布）</h3>
+            <div class="chart" id="chartScatter"></div>
+        </div>
+        <div class="panel">
+            <h3>图四：3D 曲面图（函数波动）</h3>
+            <div class="chart" id="chartSurface"></div>
+        </div>
+    </div>
+
+    <script>
+        // ================= 通用场景创建 =================
+        function createScene(containerId) {
+            var container = document.getElementById(containerId);
+            var scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x101827);
+
+            var camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 200);
+            camera.position.set(0, 10, 16);
+            camera.lookAt(0, 0, 0);
+
+            var renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // 光照
+            var ambient = new THREE.AmbientLight(0xffffff, 0.5);
+            var dir = new THREE.DirectionalLight(0xffffff, 0.9);
+            dir.position.set(8, 14, 10);
+            scene.add(ambient, dir);
+
+            // 地面网格
+            var grid = new THREE.GridHelper(20, 20, 0x2c4a75, 0x1a2c48);
+            scene.add(grid);
+
+            // 数据容器（拖拽时旋转它）
+            var group = new THREE.Group();
+            scene.add(group);
+
+            // 拖拽旋转
+            var dragging = false, lastX = 0, lastY = 0;
+            container.addEventListener('mousedown', function (e) { dragging = true; lastX = e.clientX; lastY = e.clientY; });
+            window.addEventListener('mouseup', function () { dragging = false; });
+            window.addEventListener('mousemove', function (e) {
+                if (!dragging) return;
+                group.rotation.y += (e.clientX - lastX) * 0.006;
+                group.rotation.x += (e.clientY - lastY) * 0.004;
+                group.rotation.x = Math.max(-0.6, Math.min(0.6, group.rotation.x));
+                lastX = e.clientX; lastY = e.clientY;
+            });
+
+            return { scene: scene, camera: camera, renderer: renderer, group: group, container: container };
+        }
+
+        var scenes = [];
+
+        // ================= 图一：3D 柱状图 =================
+        (function () {
+            var s = createScene('chartBar');
+            var data = [
+                [3, 5, 2, 7, 4],
+                [6, 2, 8, 3, 5],
+                [4, 7, 3, 6, 9],
+                [8, 4, 6, 2, 5]
+            ];
+            var max = 9;
+            var cols = data.length, rows = data[0].length;
+            for (var i = 0; i < cols; i++) {
+                for (var j = 0; j < rows; j++) {
+                    var v = data[i][j];
+                    var h = v * 0.7;
+                    var geo = new THREE.BoxGeometry(0.9, h, 0.9);
+                    var color = new THREE.Color().setHSL(0.55 - (v / max) * 0.45, 0.85, 0.55);
+                    var mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: color }));
+                    mesh.position.set((i - (cols - 1) / 2) * 1.4, h / 2, (j - (rows - 1) / 2) * 1.4);
+                    s.group.add(mesh);
+                }
+            }
+            scenes.push(s);
+        })();
+
+        // ================= 图二：3D 饼图 =================
+        (function () {
+            var s = createScene('chartPie');
+            var data = [
+                { name: '直营店', value: 35, color: 0x4f9df7 },
+                { name: '电商平台', value: 28, color: 0x35c3a9 },
+                { name: '加盟店', value: 20, color: 0xf5b83d },
+                { name: '直播带货', value: 12, color: 0xf0736a },
+                { name: '其他', value: 5, color: 0x9a7bf0 }
+            ];
+            var total = 100, startAngle = 0;
+            data.forEach(function (d) {
+                var angle = d.value / total * Math.PI * 2;
+                var geo = new THREE.CylinderGeometry(4, 4, 1.6, 48, 1, false, startAngle, angle);
+                var mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color: d.color }));
+                // 每个扇区沿自身角平分线方向外移，形成分离效果
+                var mid = startAngle + angle / 2;
+                mesh.position.set(Math.sin(mid) * 0.6, 0, Math.cos(mid) * 0.6);
+                s.group.add(mesh);
+                startAngle += angle;
+            });
+            s.group.position.y = -1;
+            scenes.push(s);
+        })();
+
+        // ================= 图三：3D 散点图 =================
+        (function () {
+            var s = createScene('chartScatter');
+            for (var i = 0; i < 90; i++) {
+                var size = 0.12 + Math.random() * 0.35;
+                var hue = Math.random();
+                var sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(size, 20, 20),
+                    new THREE.MeshLambertMaterial({
+                        color: new THREE.Color().setHSL(hue, 0.85, 0.6),
+                        transparent: true,
+                        opacity: 0.9
+                    })
+                );
+                sphere.position.set(
+                    (Math.random() - 0.5) * 10,
+                    Math.random() * 7,
+                    (Math.random() - 0.5) * 10
+                );
+                s.group.add(sphere);
+            }
+            s.group.position.y = -2.5;
+            scenes.push(s);
+        })();
+
+        // ================= 图四：3D 曲面图 =================
+        (function () {
+            var s = createScene('chartSurface');
+            var seg = 40, size = 12;
+            var geo = new THREE.PlaneGeometry(size, size, seg, seg);
+            var pos = geo.attributes.position;
+            // z = sin(x)*cos(y) 波动曲面
+            for (var i = 0; i < pos.count; i++) {
+                var x = pos.getX(i), y = pos.getY(i);
+                pos.setZ(i, Math.sin(x * 0.6) * Math.cos(y * 0.6) * 1.6);
+            }
+            geo.computeVertexNormals();
+            var mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({
+                color: 0x3b82c4,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.85
+            }));
+            mesh.rotation.x = -Math.PI / 2; // 平铺为"地面"
+            s.group.add(mesh);
+            // 线框叠加增强立体感
+            var wire = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+                color: 0x7fc4ff, wireframe: true, transparent: true, opacity: 0.25
+            }));
+            wire.rotation.x = -Math.PI / 2;
+            wire.position.y = 0.02;
+            s.group.add(wire);
+            scenes.push(s);
+        })();
+
+        // ================= 渲染循环 =================
+        function animate() {
+            scenes.forEach(function (s, i) {
+                if (i === 2) s.group.rotation.y += 0.002; // 散点图缓慢自转
+                s.renderer.render(s.scene, s.camera);
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 窗口变化自适应
+        window.addEventListener('resize', function () {
+            scenes.forEach(function (s) {
+                s.camera.aspect = s.container.clientWidth / s.container.clientHeight;
+                s.camera.updateProjectionMatrix();
+                s.renderer.setSize(s.container.clientWidth, s.container.clientHeight);
+            });
+        });
+    </script>
+</body>
+</html>

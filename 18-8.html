@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧电商数据大屏 - 孙宁</title>
+    <!-- 使用本地 cdn 目录的 echarts 与中国地图数据 -->
+    <script src="cdn/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #041129;
+            color: #cfe6ff;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+        }
+        /* 顶部标题栏 */
+        header {
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(180deg, rgba(0, 229, 255, 0.12), transparent);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.25);
+        }
+        header h1 {
+            font-size: 24px;
+            letter-spacing: 6px;
+            background: linear-gradient(180deg, #ffffff, #6fd6ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .author {
+            position: absolute;
+            right: 20px;
+            font-size: 12px;
+            color: #5f8bb5;
+        }
+        #clock {
+            position: absolute;
+            left: 20px;
+            font-size: 13px;
+            color: #6fd6ff;
+            font-family: Consolas, monospace;
+        }
+        /* 三列布局 */
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr 1fr;
+            gap: 12px;
+            padding: 12px;
+            height: calc(100vh - 64px);
+        }
+        .col { display: flex; flex-direction: column; gap: 12px; }
+        .panel {
+            flex: 1;
+            background: rgba(10, 34, 64, 0.55);
+            border: 1px solid rgba(0, 229, 255, 0.22);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .panel h3 {
+            font-size: 14px;
+            color: #6fd6ff;
+            padding: 10px 14px 0;
+            letter-spacing: 2px;
+        }
+        .panel h3::before {
+            content: '▎';
+            color: #00e5ff;
+        }
+        .chart { flex: 1; min-height: 0; }
+        /* 中间地图占更高比例 */
+        #mapPanel { flex: 1.6; }
+    </style>
+</head>
+<body>
+    <header>
+        <span id="clock"></span>
+        <h1>智慧电商数据大屏</h1>
+        <span class="author">制作：孙宁</span>
+    </header>
+
+    <main>
+        <!-- 左列 -->
+        <div class="col">
+            <div class="panel">
+                <h3>各品类销售额（万元）</h3>
+                <div class="chart" id="c1"></div>
+            </div>
+            <div class="panel">
+                <h3>24 小时订单趋势</h3>
+                <div class="chart" id="c2"></div>
+            </div>
+        </div>
+
+        <!-- 中列：上面是地理信息图（中国地图） -->
+        <div class="col">
+            <div class="panel" id="mapPanel">
+                <h3>全国订单地理分布</h3>
+                <div class="chart" id="map"></div>
+            </div>
+            <div class="panel">
+                <h3>销售额与同比增长</h3>
+                <div class="chart" id="c3"></div>
+            </div>
+        </div>
+
+        <!-- 右列 -->
+        <div class="col">
+            <div class="panel">
+                <h3>流量渠道占比</h3>
+                <div class="chart" id="c4"></div>
+            </div>
+            <div class="panel">
+                <h3>平台服务指标</h3>
+                <div class="chart" id="c5"></div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 统一的深色大屏配色
+        var AXIS = { axisLine: { lineStyle: { color: '#1e4a72' } }, axisLabel: { color: '#7fa8cc', fontSize: 10 } };
+        function baseGrid() { return { left: 42, right: 16, top: 28, bottom: 26 }; }
+
+        // ============ 左上：品类销售额柱状图 ============
+        var c1 = echarts.init(document.getElementById('c1'));
+        c1.setOption({
+            grid: baseGrid(),
+            tooltip: {},
+            xAxis: Object.assign({ type: 'category', data: ['数码', '服饰', '美妆', '食品', '家居', '图书'] }, AXIS),
+            yAxis: Object.assign({ type: 'value', splitLine: { lineStyle: { color: 'rgba(30,74,114,.4)' } } }, AXIS),
+            series: [{
+                type: 'bar',
+                data: [860, 720, 645, 520, 470, 300],
+                barWidth: 18,
+                itemStyle: {
+                    borderRadius: [4, 4, 0, 0],
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: '#00e5ff' }, { offset: 1, color: '#0a4a8a' }
+                    ])
+                }
+            }]
+        });
+
+        // ============ 左下：24小时订单趋势折线图 ============
+        var c2 = echarts.init(document.getElementById('c2'));
+        var hours = [];
+        for (var h = 0; h < 24; h++) hours.push(h + ':00');
+        c2.setOption({
+            grid: baseGrid(),
+            tooltip: { trigger: 'axis' },
+            xAxis: Object.assign({ type: 'category', data: hours, boundaryGap: false }, AXIS),
+            yAxis: Object.assign({ type: 'value', splitLine: { lineStyle: { color: 'rgba(30,74,114,.4)' } } }, AXIS),
+            series: [{
+                name: '订单量',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                data: [120, 80, 50, 40, 45, 90, 210, 380, 450, 420, 470, 520, 560, 510, 480, 530, 620, 780, 950, 1100, 860, 540, 320, 200],
+                lineStyle: { color: '#00e5ff', width: 2 },
+                areaStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        { offset: 0, color: 'rgba(0,229,255,.4)' }, { offset: 1, color: 'rgba(0,229,255,0)' }
+                    ])
+                }
+            }]
+        });
+
+        // ============ 中下：销售额与同比增长（柱线组合） ============
+        var c3 = echarts.init(document.getElementById('c3'));
+        c3.setOption({
+            grid: baseGrid(),
+            tooltip: { trigger: 'axis' },
+            legend: { textStyle: { color: '#7fa8cc', fontSize: 10 }, top: 0, itemWidth: 12 },
+            xAxis: Object.assign({ type: 'category', data: ['一季度', '二季度', '三季度', '四季度'] }, AXIS),
+            yAxis: [
+                Object.assign({ type: 'value', splitLine: { lineStyle: { color: 'rgba(30,74,114,.4)' } } }, AXIS),
+                Object.assign({ type: 'value', max: 40, axisLabel: { formatter: '{value}%' } }, AXIS)
+            ],
+            series: [
+                { name: '销售额', type: 'bar', barWidth: 26, data: [2650, 3120, 2890, 3560],
+                  itemStyle: { borderRadius: [4, 4, 0, 0], color: '#3b82f6' } },
+                { name: '同比增长', type: 'line', yAxisIndex: 1, smooth: true,
+                  data: [12, 18, 15, 26], lineStyle: { color: '#f5b83d', width: 2 }, itemStyle: { color: '#f5b83d' } }
+            ]
+        });
+
+        // ============ 右上：流量渠道饼图 ============
+        var c4 = echarts.init(document.getElementById('c4'));
+        c4.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { bottom: 0, textStyle: { color: '#7fa8cc', fontSize: 10 }, itemWidth: 12 },
+            series: [{
+                type: 'pie',
+                radius: ['42%', '66%'],
+                center: ['50%', '44%'],
+                label: { color: '#cfe6ff', fontSize: 10, formatter: '{b}\n{d}%' },
+                data: [
+                    { value: 38, name: 'App' },
+                    { value: 27, name: '小程序' },
+                    { value: 18, name: 'PC 官网' },
+                    { value: 12, name: '第三方平台' },
+                    { value: 5, name: '其他' }
+                ],
+                itemStyle: { borderColor: '#041129', borderWidth: 2 },
+                color: ['#00e5ff', '#3b82f6', '#f5b83d', '#f0736a', '#9a7bf0']
+            }]
+        });
+
+        // ============ 右下：平台服务指标雷达图 ============
+        var c5 = echarts.init(document.getElementById('c5'));
+        c5.setOption({
+            tooltip: {},
+            legend: { textStyle: { color: '#7fa8cc', fontSize: 10 }, top: 0, itemWidth: 12 },
+            radar: {
+                indicator: [
+                    { name: '响应速度', max: 100 }, { name: '发货时效', max: 100 },
+                    { name: '好评率', max: 100 }, { name: '退货率', max: 100 },
+                    { name: '客服满意度', max: 100 }
+                ],
+                radius: '58%',
+                axisName: { color: '#7fa8cc', fontSize: 10 },
+                splitLine: { lineStyle: { color: 'rgba(30,74,114,.6)' } },
+                splitArea: { areaStyle: { color: ['rgba(10,34,64,.2)', 'rgba(10,34,64,.5)'] } }
+            },
+            series: [{
+                type: 'radar',
+                data: [
+                    { value: [88, 76, 94, 20, 90], name: '本月', areaStyle: { opacity: .3 }, lineStyle: { color: '#00e5ff' }, itemStyle: { color: '#00e5ff' } },
+                    { value: [80, 70, 90, 28, 85], name: '上月', areaStyle: { opacity: .15 }, lineStyle: { color: '#f0736a' }, itemStyle: { color: '#f0736a' } }
+                ]
+            }]
+        });
+
+        // ============ 中上：中国地图（地理信息） ============
+        fetch('cdn/china.json')
+            .then(function (res) { return res.json(); })
+            .then(function (chinaJson) {
+                echarts.registerMap('china', chinaJson);
+                var map = echarts.init(document.getElementById('map'));
+                map.setOption({
+                    tooltip: { trigger: 'item' },
+                    visualMap: {
+                        min: 0, max: 9000,
+                        text: ['高', '低'],
+                        left: 10, bottom: 10,
+                        textStyle: { color: '#7fa8cc', fontSize: 10 },
+                        inRange: { color: ['#0a2a52', '#1d6fb8', '#00e5ff'] }
+                    },
+                    series: [
+                        {
+                            name: '订单量',
+                            type: 'map',
+                            map: 'china',
+                            roam: true,
+                            itemStyle: { areaColor: '#0a2a52', borderColor: 'rgba(0,229,255,.5)' },
+                            emphasis: { label: { color: '#fff' }, itemStyle: { areaColor: '#f5b83d' } },
+                            data: [
+                                { name: '广东省', value: 8900 }, { name: '浙江省', value: 7600 },
+                                { name: '江苏省', value: 6900 }, { name: '北京市', value: 5800 },
+                                { name: '上海市', value: 5600 }, { name: '四川省', value: 4300 },
+                                { name: '山东省', value: 3900 }, { name: '湖北省', value: 3500 },
+                                { name: '福建省', value: 3100 }, { name: '河南省', value: 2900 }
+                            ]
+                        },
+                        {
+                            name: '重点城市',
+                            type: 'effectScatter',
+                            coordinateSystem: 'geo',
+                            symbolSize: 9,
+                            rippleEffect: { brushType: 'stroke', scale: 3.5 },
+                            label: { show: true, position: 'right', color: '#cfe6ff', fontSize: 10, formatter: '{b}' },
+                            itemStyle: { color: '#ffd043', shadowBlur: 10, shadowColor: '#ffd043' },
+                            data: [
+                                { name: '广州', value: [113.26, 23.13, 95] },
+                                { name: '杭州', value: [120.15, 30.28, 85] },
+                                { name: '上海', value: [121.47, 31.23, 90] },
+                                { name: '北京', value: [116.40, 39.90, 88] },
+                                { name: '成都', value: [104.07, 30.57, 70] }
+                            ]
+                        }
+                    ]
+                });
+                window.addEventListener('resize', function () { map.resize(); });
+            });
+
+        // 所有图表自适应
+        window.addEventListener('resize', function () {
+            [c1, c2, c3, c4, c5].forEach(function (c) { c.resize(); });
+        });
+
+        // 顶部时钟
+        function tick() {
+            var d = new Date();
+            function p(n) { return n < 10 ? '0' + n : n; }
+            document.getElementById('clock').textContent =
+                d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + ' '
+                + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+        }
+        tick();
+        setInterval(tick, 1000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-12 | 大模型：Auto
+  文件说明：AI 聊天界面（云栖小助手）- 会话列表、消息气泡、打字动效、快捷提问
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="云栖民宿 AI 聊天助手 - 孙宁 24001011016" />
+  <title>AI 对话 | 云栖小助手</title>
+  <link rel="stylesheet" href="./css/sun_chat.css" />
+</head>
+<body class="sun_chat_body">
+  <div class="sun_chat_bg" aria-hidden="true">
+    <span class="sun_chat_bg__blob sun_chat_bg__blob--one"></span>
+    <span class="sun_chat_bg__blob sun_chat_bg__blob--two"></span>
+    <span class="sun_chat_bg__grid"></span>
+  </div>
+
+  <div class="sun_chat_layout">
+    <!-- 侧边栏：会话列表 -->
+    <aside class="sun_sidebar" id="sun_sidebar">
+      <a class="sun_sidebar__brand" href="./index.html">
+        <span class="sun_sidebar__mark">栖</span>
+        <span class="sun_sidebar__brand_text">云栖小助手<small>AI CONCIERGE</small></span>
+      </a>
+
+      <button class="sun_sidebar__new" id="sun_btn_new" type="button">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        新建对话
+      </button>
+
+      <p class="sun_sidebar__label">历史会话</p>
+      <ul class="sun_session_list" id="sun_session_list"></ul>
+
+      <div class="sun_sidebar__foot">
+        <span class="sun_sidebar__avatar">孙</span>
+        <span class="sun_sidebar__foot_text">孙宁<small>24001011016</small></span>
+        <span class="sun_sidebar__links">
+          <a class="sun_sidebar__home" href="./sun_hub.html" title="云栖酒店服务网站">网站</a>
+          <a class="sun_sidebar__home" href="./sun_kb.html" title="知识库管理">知识库</a>
+          <a class="sun_sidebar__home" href="./index.html" title="返回首页">首页</a>
+        </span>
+      </div>
+    </aside>
+
+    <!-- 主对话区 -->
+    <main class="sun_chat_main">
+      <header class="sun_chat_head">
+        <button class="sun_icon_btn" id="sun_btn_menu" type="button" aria-label="打开会话列表">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </button>
+        <span class="sun_chat_head__avatar">栖</span>
+        <div class="sun_chat_head__info">
+          <h1 class="sun_chat_head__title" id="sun_chat_title">新的对话</h1>
+          <p class="sun_chat_head__status"><span class="sun_dot" aria-hidden="true"></span>云栖小助手 · 在线 · 规则引擎</p>
+        </div>
+        <button class="sun_chat_head__kb sun_chat_head__kb--on" id="sun_btn_kb" type="button" title="开启或关闭知识库检索">
+          知识库
+        </button>
+        <button class="sun_chat_head__clear" id="sun_btn_delete" type="button" title="删除当前会话">删除会话</button>
+      </header>
+
+      <section class="sun_messages" id="sun_messages" aria-live="polite">
+        <!-- 欢迎态（无消息时展示，由 JS 控制显隐） -->
+        <div class="sun_welcome" id="sun_welcome">
+          <span class="sun_welcome__avatar">栖</span>
+          <h2 class="sun_welcome__title">你好，我是云栖小助手</h2>
+          <p class="sun_welcome__desc">
+            可以帮你查房型、算价格、看退改规则与订单状态。选一个话题开始，或直接在下方输入你的问题。
+          </p>
+          <div class="sun_welcome__chips" id="sun_suggest">
+            <button class="sun_chip" type="button" data-sun_prompt="周末带 6 岁孩子，推荐什么房型？">周末亲子房型推荐</button>
+            <button class="sun_chip" type="button" data-sun_prompt="云栖民宿几点可以入住？">入住与退房时间</button>
+            <button class="sun_chip" type="button" data-sun_prompt="订单可以免费取消吗？">退改规则</button>
+            <button class="sun_chip" type="button" data-sun_prompt="民宿在什么位置，自驾怎么走？">位置与交通</button>
+          </div>
+        </div>
+      </section>
+
+      <form class="sun_composer" id="sun_composer" autocomplete="off">
+        <div class="sun_composer__box">
+          <textarea
+            class="sun_composer__input"
+            id="sun_input"
+            rows="1"
+            maxlength="1000"
+            placeholder="和云栖小助手聊聊房型、价格或订单…"
+          ></textarea>
+          <button class="sun_composer__voice" id="sun_btn_voice" type="button" aria-label="语音提问" title="语音提问：说话自动转文字并发送">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button class="sun_composer__send" id="sun_btn_send" type="submit" aria-label="发送消息">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path d="M4 12l16-8-6 8 6 8-16-8z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+        <p class="sun_composer__tip" id="sun_composer_tip">Enter 发送 · Shift + Enter 换行 · 点击麦克风可语音提问（转文字后自动发送）</p>
+      </form>
+    </main>
+  </div>
+
+  <div class="sun_mask" id="sun_mask" hidden></div>
+
+  <script src="./js/sun_chat.js"></script>
+</body>
+</html>

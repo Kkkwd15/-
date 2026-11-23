@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!--
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-19 | 大模型：Auto
+  文件说明：云栖酒店服务网站 - 后台管理页
+           含管理员登录鉴权、仪表盘图表（后端真实数据驱动）、
+           房源 / 订单 / 住客三实体的增删改查（搜索 + 分页 + 详情）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="云栖酒店服务网站后台管理 - 房源 / 订单 / 住客管理与数据仪表盘 - 孙宁 24001011016" />
+  <title>后台管理 | 云栖酒店服务网站</title>
+  <link rel="stylesheet" href="./css/sun_admin.css" />
+</head>
+<body class="sun_adm_body">
+
+  <!-- 顶部导航条 -->
+  <header class="sun_adm_topbar">
+    <a class="sun_adm_brand" href="./sun_hub.html">
+      <span class="sun_adm_brand__mark">栖</span>
+      <span class="sun_adm_brand__text">云栖酒店服务网站<small>ADMIN CONSOLE</small></span>
+    </a>
+    <div class="sun_adm_topbar__right">
+      <span class="sun_adm_topbar__admin" id="sunAdmWho" hidden>管理员</span>
+      <button class="sun_adm_btn sun_adm_btn--ghost" id="sunAdmLogoutBtn" type="button" hidden>退出登录</button>
+      <a class="sun_adm_btn sun_adm_btn--ghost" href="./sun_hub.html">返回网站</a>
+    </div>
+  </header>
+
+  <!-- 登录面板（未登录时显示） -->
+  <section class="sun_adm_login" id="sunAdmLoginPanel">
+    <form class="sun_adm_login__card" id="sunAdmLoginForm" autocomplete="off">
+      <p class="sun_adm_login__eyebrow">ADMIN · 仅限酒店管理员</p>
+      <h1 class="sun_adm_login__title">后台管理登录</h1>
+      <p class="sun_adm_login__desc">未登录时所有 /api/admin 管理接口将被拦截（401）</p>
+      <label class="sun_adm_field">
+        <span class="sun_adm_field__label">用户名</span>
+        <input class="sun_adm_field__input" id="sunAdmLoginUser" type="text"
+               placeholder="请输入管理员用户名" required />
+      </label>
+      <label class="sun_adm_field">
+        <span class="sun_adm_field__label">密码</span>
+        <input class="sun_adm_field__input" id="sunAdmLoginPass" type="password"
+               placeholder="请输入密码" required />
+      </label>
+      <p class="sun_adm_login__error" id="sunAdmLoginError" hidden></p>
+      <button class="sun_adm_btn sun_adm_btn--primary sun_adm_login__submit" type="submit">登 录</button>
+      <p class="sun_adm_login__hint">演示账号：admin / admin123</p>
+    </form>
+  </section>
+
+  <!-- 管理主界面（登录后显示） -->
+  <div class="sun_adm_layout" id="sunAdmLayout" hidden>
+
+    <!-- 侧边导航 -->
+    <aside class="sun_adm_side">
+      <nav class="sun_adm_side__nav">
+        <button class="sun_adm_side__item sun_adm_side__item--on" type="button" data-sun-view="dashboard">数据仪表盘</button>
+        <button class="sun_adm_side__item" type="button" data-sun-view="rooms">房源管理</button>
+        <button class="sun_adm_side__item" type="button" data-sun-view="orders">订单管理</button>
+        <button class="sun_adm_side__item" type="button" data-sun-view="guests">住客管理</button>
+      </nav>
+    </aside>
+
+    <main class="sun_adm_main">
+
+      <!-- ① 数据仪表盘 -->
+      <section class="sun_adm_view" id="sunAdmViewDashboard">
+        <div class="sun_adm_view__head">
+          <h2 class="sun_adm_view__title">数据仪表盘</h2>
+          <p class="sun_adm_view__desc">全部图表由后端 /api/admin/dashboard 真实聚合数据驱动</p>
+        </div>
+        <div class="sun_adm_kpis" id="sunAdmKpis"></div>
+        <div class="sun_adm_charts">
+          <figure class="sun_adm_chart">
+            <figcaption class="sun_adm_chart__title">近 7 日订单量与订单金额</figcaption>
+            <canvas id="sunAdmChartTrend" width="640" height="300"></canvas>
+          </figure>
+          <figure class="sun_adm_chart">
+            <figcaption class="sun_adm_chart__title">房源房型分布</figcaption>
+            <canvas id="sunAdmChartRoomType" width="640" height="300"></canvas>
+          </figure>
+          <figure class="sun_adm_chart">
+            <figcaption class="sun_adm_chart__title">订单状态分布</figcaption>
+            <canvas id="sunAdmChartOrderStatus" width="640" height="300"></canvas>
+          </figure>
+          <figure class="sun_adm_chart">
+            <figcaption class="sun_adm_chart__title">住客评论情感分布（AI 情感识别）</figcaption>
+            <canvas id="sunAdmChartSentiment" width="640" height="300"></canvas>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ② 房源管理 -->
+      <section class="sun_adm_view" id="sunAdmViewRooms" hidden>
+        <div class="sun_adm_view__head">
+          <h2 class="sun_adm_view__title">房源管理</h2>
+          <p class="sun_adm_view__desc">增 / 删 / 改 / 查（列表 + 详情），支持关键字搜索与分页</p>
+        </div>
+        <div class="sun_adm_toolbar">
+          <input class="sun_adm_field__input sun_adm_toolbar__search" id="sunAdmRoomKeyword"
+                 type="text" placeholder="搜索房源名称 / 介绍" />
+          <select class="sun_adm_field__input sun_adm_toolbar__select" id="sunAdmRoomType">
+            <option value="">全部房型</option>
+            <option>大床房</option>
+            <option>双床房</option>
+            <option>亲子房</option>
+            <option>景观套房</option>
+          </select>
+          <button class="sun_adm_btn sun_adm_btn--primary" id="sunAdmRoomSearchBtn" type="button">搜索</button>
+          <span class="sun_adm_toolbar__spacer"></span>
+          <button class="sun_adm_btn sun_adm_btn--violet" id="sunAdmRoomAddBtn" type="button">+ 新增房源</button>
+        </div>
+        <div class="sun_adm_table_wrap">
+          <table class="sun_adm_table">
+            <thead>
+              <tr><th>ID</th><th>房源名称</th><th>房型</th><th>价格/晚</th><th>库存</th><th>状态</th><th>操作</th></tr>
+            </thead>
+            <tbody id="sunAdmRoomTbody"></tbody>
+          </table>
+        </div>
+        <div class="sun_adm_pager" id="sunAdmRoomPager"></div>
+      </section>
+
+      <!-- ③ 订单管理 -->
+      <section class="sun_adm_view" id="sunAdmViewOrders" hidden>
+        <div class="sun_adm_view__head">
+          <h2 class="sun_adm_view__title">订单管理</h2>
+          <p class="sun_adm_view__desc">增 / 删 / 改 / 查（列表 + 详情），支持订单号 / 住客 / 房源搜索与分页</p>
+        </div>
+        <div class="sun_adm_toolbar">
+          <input class="sun_adm_field__input sun_adm_toolbar__search" id="sunAdmOrderKeyword"
+                 type="text" placeholder="搜索订单号 / 住客 / 手机号 / 房源" />
+          <select class="sun_adm_field__input sun_adm_toolbar__select" id="sunAdmOrderStatus">
+            <option value="">全部状态</option>
+            <option>待入住</option>
+            <option>已入住</option>
+            <option>已退房</option>
+            <option>已取消</option>
+          </select>
+          <button class="sun_adm_btn sun_adm_btn--primary" id="sunAdmOrderSearchBtn" type="button">搜索</button>
+          <span class="sun_adm_toolbar__spacer"></span>
+          <button class="sun_adm_btn sun_adm_btn--violet" id="sunAdmOrderAddBtn" type="button">+ 新增订单</button>
+        </div>
+        <div class="sun_adm_table_wrap">
+          <table class="sun_adm_table">
+            <thead>
+              <tr><th>订单号</th><th>住客</th><th>房源</th><th>入住 → 离店</th><th>金额</th><th>状态</th><th>操作</th></tr>
+            </thead>
+            <tbody id="sunAdmOrderTbody"></tbody>
+          </table>
+        </div>
+        <div class="sun_adm_pager" id="sunAdmOrderPager"></div>
+      </section>
+
+      <!-- ④ 住客管理 -->
+      <section class="sun_adm_view" id="sunAdmViewGuests" hidden>
+        <div class="sun_adm_view__head">
+          <h2 class="sun_adm_view__title">住客管理</h2>
+          <p class="sun_adm_view__desc">增 / 删 / 改 / 查（列表 + 详情含最近订单），支持搜索与分页</p>
+        </div>
+        <div class="sun_adm_toolbar">
+          <input class="sun_adm_field__input sun_adm_toolbar__search" id="sunAdmGuestKeyword"
+                 type="text" placeholder="搜索姓名 / 手机号 / 备注" />
+          <select class="sun_adm_field__input sun_adm_toolbar__select" id="sunAdmGuestVip">
+            <option value="">全部等级</option>
+            <option>普通</option>
+            <option>银卡</option>
+            <option>金卡</option>
+          </select>
+          <button class="sun_adm_btn sun_adm_btn--primary" id="sunAdmGuestSearchBtn" type="button">搜索</button>
+          <span class="sun_adm_toolbar__spacer"></span>
+          <button class="sun_adm_btn sun_adm_btn--violet" id="sunAdmGuestAddBtn" type="button">+ 新增住客</button>
+        </div>
+        <div class="sun_adm_table_wrap">
+          <table class="sun_adm_table">
+            <thead>
+              <tr><th>ID</th><th>姓名</th><th>手机号</th><th>会员等级</th><th>累计订单</th><th>累计消费</th><th>状态</th><th>操作</th></tr>
+            </thead>
+            <tbody id="sunAdmGuestTbody"></tbody>
+          </table>
+        </div>
+        <div class="sun_adm_pager" id="sunAdmGuestPager"></div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- 通用弹窗（表单 / 详情） -->
+  <div class="sun_adm_modal" id="sunAdmModal" hidden>
+    <div class="sun_adm_modal__mask" data-sun-close="1"></div>
+    <div class="sun_adm_modal__card" id="sunAdmModalCard"></div>
+  </div>
+
+  <script src="./js/sun_admin.js"></script>
+</body>
+</html>

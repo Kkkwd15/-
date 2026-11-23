@@ -1,0 +1,636 @@
+/*
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-12 | 大模型：Auto
+  文件说明：首页样式（深色雾山主题 + 玻璃质感卡片 + 响应式布局）
+*/
+
+:root {
+  --sun_bg: #05080f;
+  --sun_bg_soft: #0a1120;
+  --sun_ink: #eef3ff;
+  --sun_muted: #93a3bf;
+  --sun_line: rgba(255, 255, 255, 0.09);
+  --sun_card: rgba(255, 255, 255, 0.045);
+  --sun_mint: #6ce5c4;
+  --sun_blue: #79a9ff;
+  --sun_violet: #c2a2ff;
+  --sun_radius: 20px;
+  --sun_shadow: 0 24px 60px rgba(2, 6, 16, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body.sun_body {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(1200px 700px at 78% -10%, rgba(108, 229, 196, 0.13), transparent 62%),
+    radial-gradient(900px 620px at 8% 8%, rgba(121, 169, 255, 0.16), transparent 60%),
+    linear-gradient(180deg, #060a13 0%, #05080f 42%, #04070d 100%);
+  color: var(--sun_ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== 背景层 ===== */
+.sun_canvas_bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sun_aura {
+  position: fixed;
+  z-index: 0;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.32;
+  pointer-events: none;
+  animation: sun_float 18s ease-in-out infinite;
+}
+
+.sun_aura--mint {
+  top: -12vw;
+  right: -8vw;
+  background: radial-gradient(circle, rgba(108, 229, 196, 0.55), transparent 68%);
+}
+
+.sun_aura--violet {
+  bottom: -16vw;
+  left: -10vw;
+  background: radial-gradient(circle, rgba(160, 122, 255, 0.5), transparent 68%);
+  animation-delay: -7s;
+}
+
+@keyframes sun_float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-2vw, 3vw, 0) scale(1.08); }
+}
+
+/* ===== 顶部导航 ===== */
+.sun_topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px clamp(20px, 5vw, 56px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(5, 8, 15, 0.62);
+  backdrop-filter: blur(14px);
+}
+
+.sun_brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--sun_ink);
+  text-decoration: none;
+}
+
+.sun_brand__mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 13px;
+  font-size: 19px;
+  font-weight: 700;
+  color: #04120f;
+  background: linear-gradient(135deg, var(--sun_mint), var(--sun_blue));
+  box-shadow: 0 8px 22px rgba(108, 229, 196, 0.3);
+}
+
+.sun_brand__text {
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.15;
+}
+
+.sun_brand__text small {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--sun_muted);
+}
+
+.sun_topbar__nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.4vw, 30px);
+}
+
+.sun_topbar__link {
+  position: relative;
+  font-size: 14px;
+  color: var(--sun_muted);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.sun_topbar__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, var(--sun_mint), var(--sun_blue));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.sun_topbar__link:hover {
+  color: var(--sun_ink);
+}
+
+.sun_topbar__link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ===== 布局容器 ===== */
+.sun_main {
+  position: relative;
+  z-index: 10;
+  width: min(1180px, 92vw);
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* ===== 首屏 ===== */
+.sun_hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: min(84vh, 780px);
+  padding: clamp(48px, 9vh, 96px) 0 clamp(36px, 6vh, 64px);
+}
+
+.sun_hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  margin: 0 0 22px;
+  padding: 7px 16px 7px 12px;
+  border: 1px solid rgba(108, 229, 196, 0.28);
+  border-radius: 999px;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: #b9f4e4;
+  background: rgba(108, 229, 196, 0.08);
+  animation: sun_rise 0.8s ease both;
+}
+
+.sun_dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sun_mint);
+  box-shadow: 0 0 0 0 rgba(108, 229, 196, 0.7);
+  animation: sun_pulse 2.2s ease-out infinite;
+}
+
+@keyframes sun_pulse {
+  0% { box-shadow: 0 0 0 0 rgba(108, 229, 196, 0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(108, 229, 196, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(108, 229, 196, 0); }
+}
+
+.sun_hero__title {
+  margin: 0 0 20px;
+  font-size: clamp(2.5rem, 6.6vw, 4.9rem);
+  font-weight: 800;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  animation: sun_rise 0.9s 0.06s ease both;
+}
+
+.sun_hero__title--accent {
+  background: linear-gradient(100deg, var(--sun_mint), var(--sun_blue) 52%, var(--sun_violet));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sun_hero__desc {
+  max-width: 62ch;
+  margin: 0 0 34px;
+  font-size: clamp(0.95rem, 1.15vw, 1.06rem);
+  color: var(--sun_muted);
+  animation: sun_rise 0.9s 0.12s ease both;
+}
+
+@keyframes sun_rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 作者信息卡 */
+.sun_profile {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 34px;
+  padding: 0;
+  list-style: none;
+  animation: sun_rise 0.9s 0.18s ease both;
+}
+
+.sun_profile__item {
+  position: relative;
+  padding: 16px 18px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: var(--sun_card);
+  overflow: hidden;
+}
+
+.sun_profile__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(108, 229, 196, 0.65), transparent);
+}
+
+.sun_profile__label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--sun_muted);
+}
+
+.sun_profile__value {
+  font-size: clamp(1rem, 1.4vw, 1.16rem);
+  font-weight: 650;
+  color: #ffffff;
+}
+
+/* 操作按钮 */
+.sun_hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  animation: sun_rise 0.9s 0.24s ease both;
+}
+
+.sun_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.sun_btn--primary {
+  color: #04120f;
+  background: linear-gradient(120deg, var(--sun_mint), #8fd6ff);
+  box-shadow: 0 14px 34px rgba(108, 229, 196, 0.26);
+}
+
+.sun_btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 44px rgba(108, 229, 196, 0.36);
+}
+
+.sun_btn--ghost {
+  color: var(--sun_ink);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sun_btn--ghost:hover {
+  transform: translateY(-3px);
+  border-color: rgba(121, 169, 255, 0.55);
+  background: rgba(121, 169, 255, 0.1);
+}
+
+/* ===== 通用区块 ===== */
+.sun_section {
+  padding: clamp(48px, 8vh, 88px) 0 0;
+  scroll-margin-top: 90px;
+}
+
+.sun_section__head {
+  margin-bottom: 28px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--sun_line);
+}
+
+.sun_section__title {
+  position: relative;
+  margin: 0 0 8px;
+  padding-left: 16px;
+  font-size: clamp(1.3rem, 2.1vw, 1.65rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.sun_section__title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 1.05em;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--sun_mint), var(--sun_blue));
+}
+
+.sun_section__desc {
+  margin: 0;
+  font-size: 14px;
+  color: var(--sun_muted);
+}
+
+/* ===== 页面导航卡片 ===== */
+.sun_grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
+  gap: 18px;
+}
+
+.sun_card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px 22px 20px;
+  border: 1px solid var(--sun_line);
+  border-radius: var(--sun_radius);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.022));
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.sun_card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(420px 220px at var(--sun_mx, 50%) var(--sun_my, 0%), rgba(108, 229, 196, 0.16), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.sun_card--active:hover {
+  transform: translateY(-7px);
+  border-color: rgba(108, 229, 196, 0.45);
+  box-shadow: var(--sun_shadow);
+}
+
+.sun_card--active:hover::after {
+  opacity: 1;
+}
+
+.sun_card--pending {
+  border-style: dashed;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.sun_card--pending .sun_card__title {
+  color: #cfd9ea;
+}
+
+.sun_card__badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #04120f;
+  background: linear-gradient(120deg, var(--sun_mint), #9ae2ff);
+}
+
+.sun_card__badge--pending {
+  color: var(--sun_muted);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.sun_card__index {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  color: rgba(121, 169, 255, 0.85);
+}
+
+.sun_card__title {
+  margin: 0;
+  font-size: 1.16rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.sun_card__desc {
+  flex: 1;
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--sun_muted);
+}
+
+.sun_card__path {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: rgba(108, 229, 196, 0.9);
+}
+
+.sun_card--pending .sun_card__path {
+  color: rgba(147, 163, 191, 0.75);
+}
+
+/* ===== 技术栈 ===== */
+.sun_tech {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+}
+
+.sun_tech__item {
+  padding: 22px 20px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+}
+
+.sun_tech__item:hover {
+  transform: translateY(-4px);
+  border-color: rgba(121, 169, 255, 0.4);
+  background: rgba(121, 169, 255, 0.07);
+}
+
+.sun_tech__name {
+  margin: 0 0 8px;
+  font-size: 15.5px;
+  font-weight: 650;
+  color: #ffffff;
+}
+
+.sun_tech__desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--sun_muted);
+}
+
+/* ===== 项目信息 ===== */
+.sun_about {
+  padding: clamp(24px, 4vw, 38px);
+  border: 1px solid var(--sun_line);
+  border-radius: var(--sun_radius);
+  background: linear-gradient(150deg, rgba(121, 169, 255, 0.1), rgba(255, 255, 255, 0.02));
+}
+
+.sun_about__title {
+  margin: 0 0 20px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.sun_about__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 28px;
+  margin: 0;
+}
+
+.sun_about__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.sun_about__row dt {
+  font-size: 13px;
+  color: var(--sun_muted);
+}
+
+.sun_about__row dd {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* ===== 页脚 ===== */
+.sun_footer {
+  position: relative;
+  z-index: 10;
+  margin-top: 56px;
+  padding: 28px 20px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
+}
+
+.sun_footer__text {
+  margin: 0 0 4px;
+  font-size: 13.5px;
+  color: #c3cee0;
+}
+
+.sun_footer__sub {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: rgba(147, 163, 191, 0.75);
+}
+
+/* ===== 滚动出现动画 ===== */
+.sun_section {
+  animation: sun_rise 0.9s ease both;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 860px) {
+  .sun_profile {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sun_hero {
+    min-height: auto;
+  }
+
+  .sun_topbar__nav {
+    gap: 14px;
+  }
+
+  .sun_topbar__link {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 560px) {
+  .sun_topbar {
+    padding: 12px 16px;
+  }
+
+  .sun_brand__text small {
+    display: none;
+  }
+
+  .sun_topbar__link:last-child {
+    display: none;
+  }
+
+  .sun_profile {
+    grid-template-columns: 1fr;
+  }
+
+  .sun_hero__actions .sun_btn {
+    flex: 1 1 auto;
+  }
+
+  .sun_card__badge {
+    top: 12px;
+    right: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

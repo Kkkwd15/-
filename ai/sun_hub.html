@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-19 | 大模型：Auto
+  文件说明：云栖酒店服务网站（原 AI 功能合集页）- 将"酒店管理 AI 聊天"与"评论情感分析"两大板块
+           整合到同一网站中，点击不同板块卡片即可跳转至对应功能页面
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="云栖酒店服务网站 - AI 聊天与评论情感分析整合导航 - 孙宁 24001011016" />
+  <title>云栖酒店服务网站 | 云栖民宿</title>
+  <link rel="stylesheet" href="./css/sun_hub.css" />
+</head>
+<body class="sun_hub_body">
+  <!-- canvas 动态背景 -->
+  <canvas id="sun_hub_canvas_bg" class="sun_hub_canvas_bg" aria-hidden="true"></canvas>
+  <div class="sun_hub_aura sun_hub_aura--mint" aria-hidden="true"></div>
+  <div class="sun_hub_aura sun_hub_aura--violet" aria-hidden="true"></div>
+
+  <!-- 顶部导航条 -->
+  <header class="sun_hub_topbar">
+    <a class="sun_hub_brand" href="./sun_hub.html">
+      <span class="sun_hub_brand__mark">栖</span>
+      <span class="sun_hub_brand__text">云栖酒店服务网站<small>HOTEL SERVICE SITE</small></span>
+    </a>
+    <nav class="sun_hub_topbar__nav">
+      <a class="sun_hub_topbar__link" href="./index.html">返回首页</a>
+      <a class="sun_hub_topbar__link" href="./sun_chat.html">AI 对话</a>
+      <a class="sun_hub_topbar__link" href="./sun_sentiment.html">评论情感分析</a>
+      <a class="sun_hub_topbar__link" href="./sun_admin.html">后台管理</a>
+    </nav>
+  </header>
+
+  <main class="sun_hub_main">
+    <!-- 首屏 -->
+    <section class="sun_hub_hero">
+      <p class="sun_hub_hero__eyebrow">
+        <span class="sun_hub_dot" aria-hidden="true"></span>两大功能板块 · 点击卡片即可跳转
+      </p>
+      <h1 class="sun_hub_hero__title">云栖酒店<span class="sun_hub_hero__title--accent">服务网站</span></h1>
+      <p class="sun_hub_hero__desc">
+        将酒店经营场景下的「酒店管理 AI 聊天」与「评论情感分析」整合到同一网站中：
+        一个板块提供全天候智能客服问答与知识库检索，另一个板块支持 Excel、截图、语音
+        三种方式的评论情感三分类。点击任意板块卡片即可进入对应功能页面。
+      </p>
+      <div class="sun_hub_hero__actions">
+        <a class="sun_hub_btn sun_hub_btn--primary" href="#sun_hub_board_chat">AI 聊天板块</a>
+        <a class="sun_hub_btn sun_hub_btn--violet" href="#sun_hub_board_sentiment">评论分析板块</a>
+      </div>
+    </section>
+
+    <!-- 板块一：酒店管理 AI 聊天 -->
+    <section class="sun_hub_section" id="sun_hub_board_chat">
+      <div class="sun_hub_section__head">
+        <h2 class="sun_hub_section__title">板块一 · 酒店管理 AI 聊天</h2>
+        <p class="sun_hub_section__desc">民宿智能客服：住前咨询 / 住中求助 / 住后反馈一站式应答</p>
+      </div>
+      <div class="sun_hub_boards">
+        <a class="sun_hub_board sun_hub_board--chat" href="./sun_chat.html">
+          <span class="sun_hub_board__badge">核心板块</span>
+          <span class="sun_hub_board__index">01</span>
+          <h3 class="sun_hub_board__title">AI 对话（云栖小助手）</h3>
+          <p class="sun_hub_board__desc">
+            多轮对话聊天界面，支持历史会话管理与消息气泡动效；内置关键词意图引擎，
+            覆盖房型价格、入住退房、设施服务、周边交通等民宿高频问题，并支持语音提问。
+          </p>
+          <ul class="sun_hub_board__features">
+            <li>历史会话管理（新建 / 切换 / 删除）</li>
+            <li>打字机式回复动效与语音输入</li>
+            <li>配套知识库：上传文档即可检索问答</li>
+          </ul>
+          <div class="sun_hub_board__links">
+            <span class="sun_hub_board__enter">进入对话页面 →</span>
+            <a class="sun_hub_board__enter sun_hub_board__enter--sub" href="./sun_kb.html">知识库管理 →</a>
+          </div>
+          <span class="sun_hub_board__path">/sun_chat.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 板块二：评论情感分析 -->
+    <section class="sun_hub_section" id="sun_hub_board_sentiment">
+      <div class="sun_hub_section__head">
+        <h2 class="sun_hub_section__title">板块二 · 评论情感分析</h2>
+        <p class="sun_hub_section__desc">住客评论洞察：好评 / 中评 / 差评三分类与可视化统计</p>
+      </div>
+      <div class="sun_hub_boards">
+        <a class="sun_hub_board sun_hub_board--sentiment" href="./sun_sentiment.html">
+          <span class="sun_hub_board__badge">核心板块</span>
+          <span class="sun_hub_board__index">02</span>
+          <h3 class="sun_hub_board__title">评论情感分析</h3>
+          <p class="sun_hub_board__desc">
+            上传 Excel 评论文件、评论截图或语音口述，后端统一完成情感三分类并输出请求/响应报文；
+            页面以原生 canvas 饼状图展示情感分布，并精选最具代表性的评论。
+          </p>
+          <ul class="sun_hub_board__features">
+            <li>Excel 批量评论三分类</li>
+            <li>图片 OCR 识别 + 语音口述录入</li>
+            <li>饼状图可视化与精选评论展示</li>
+          </ul>
+          <div class="sun_hub_board__links">
+            <span class="sun_hub_board__enter">进入分析页面 →</span>
+          </div>
+          <span class="sun_hub_board__path">/sun_sentiment.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 使用说明 -->
+    <section class="sun_hub_section">
+      <div class="sun_hub_section__head">
+        <h2 class="sun_hub_section__title">使用说明</h2>
+        <p class="sun_hub_section__desc">网站内板块跳转关系一览</p>
+      </div>
+      <div class="sun_hub_tips">
+        <article class="sun_hub_tip">
+          <h3 class="sun_hub_tip__name">从网站进入板块</h3>
+          <p class="sun_hub_tip__desc">点击上方任意板块卡片或首屏按钮，即可跳转到对应功能页面；卡片内的子链接可直达知识库管理。</p>
+        </article>
+        <article class="sun_hub_tip">
+          <h3 class="sun_hub_tip__name">板块间互相切换</h3>
+          <p class="sun_hub_tip__desc">AI 对话页与评论分析页的顶部导航均设有「服务网站」入口，可在两个板块之间随时切换。</p>
+        </article>
+        <article class="sun_hub_tip">
+          <h3 class="sun_hub_tip__name">返回平台首页</h3>
+          <p class="sun_hub_tip__desc">顶部导航的「返回首页」可回到平台总导航页，查看全部页面与项目信息。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sun_hub_footer">
+    <p class="sun_hub_footer__text">© 2026 云栖酒店服务网站 · 孙宁 · 24001011016</p>
+    <p class="sun_hub_footer__sub">AI 聊天 · 知识库检索 · 评论情感分析</p>
+  </footer>
+
+  <script src="./js/sun_hub.js"></script>
+</body>
+</html>

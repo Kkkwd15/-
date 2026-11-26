@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+     文件说明：AI 对话页面说明（截图 + 功能说明 + 接口清单） -->
+<html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 对话 · 页面说明</title><link rel="stylesheet" href="./css/sun_doc.css" /></head>
+<body><canvas id="sun_doc_bg" aria-hidden="true"></canvas>
+<main class="sun_doc">
+  <nav class="sun_top"><a href="./sun_home.html">← 返回新版首页</a><a class="sun_top__open" href="./sun_chat.html">打开实际页面 →</a></nav>
+  <header class="sun_hero sun_reveal">
+    <span class="sun_hero__badge">需本地后端 · 接口页面</span>
+    <h1>AI 对话 · 云栖小助手</h1>
+    <p>民宿场景的会话式问答页面：左侧多会话管理，右侧聊天窗口；回答会引用知识库文档片段并标注相似度，支持语音提问把口述转成文字后发送，回复由本地规则引擎模拟生成。</p>
+  </header>
+  <section class="sun_sec sun_reveal">
+    <h2>页面截图</h2>
+    <a class="sun_shot" href="./images/sun_shot_chat.png" target="_blank" rel="noopener">
+      <img src="./images/sun_shot_chat.png" alt="AI 对话页面真实截图" />
+      <div class="sun_shot__cap">真实运行截图（本地后端 8016 端口）· <b>点击图片可放大查看</b></div>
+    </a>
+  </section>
+  <section class="sun_sec sun_reveal"><h2>功能与实现说明</h2>
+    <div class="sun_info">
+      <article class="sun_box"><h3>主要功能</h3><ul>
+        <li>新建 / 切换 / 删除会话，左侧历史会话列表实时刷新</li>
+        <li>发送消息后返回带知识库引用编号的回答（如 [1] 云栖民宿服务手册.docx）并标注相似度</li>
+        <li>语音提问：浏览器语音识别把口述文字填入输入框后发送</li>
+        <li>Enter 发送、Shift+Enter 换行、清空会话与状态提示</li>
+      </ul></article>
+      <article class="sun_box"><h3>技术实现</h3><ul>
+        <li>原生 HTML5 / CSS3 / JavaScript，fetch 调用 Express RESTful 接口</li>
+        <li>统一 JSON 响应结构（code / msg / data），前端容错不白屏</li>
+        <li>会话与消息持久化到 MySQL，服务端规则引擎模拟 LLM 回复</li>
+        <li>深空玻璃拟态界面、Canvas 粒子背景、气泡动画</li>
+      </ul></article>
+      <article class="sun_box sun_box--full"><h3>主要后台接口</h3><div class="sun_api">
+        <code>GET /api/chat/sessions</code><code>POST /api/chat/sessions</code>
+        <code>GET /api/chat/sessions/:id/messages</code><code>DELETE /api/chat/sessions/:id</code>
+        <code>POST /api/chat/messages</code><code>GET /api/health</code>
+      </div></article>
+    </div>
+  </section>
+  <section class="sun_sec sun_reveal"><h2>运行方式</h2>
+    <p class="sun_cmd">cd backend &amp;&amp; node app.js　→　http://localhost:8016/sun_chat.html</p>
+    <p class="sun_note" style="margin-top:12px">注意：该页面依赖本地 Node 后端与 MySQL；在 GitHub Pages 静态托管上打开会出现「接口请求失败」，因此新版首页只链接本说明页。</p>
+  </section>
+  <div class="sun_ctas sun_reveal"><a class="sun_ctas__primary" href="./sun_chat.html">打开 AI 对话页面</a><a class="sun_ctas__ghost" href="./sun_home.html">返回新版首页</a></div>
+  <footer class="sun_foot">孙宁 · 24001011016 · 页面说明文档 D1</footer>
+</main><script src="./js/sun_common.js"></script></body></html>

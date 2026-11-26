@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!-- 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+     文件说明：数据大屏页面说明（截图 + 功能说明 + 接口清单） -->
+<html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>数据大屏 · 页面说明</title><link rel="stylesheet" href="./css/sun_doc.css" /></head>
+<body><canvas id="sun_doc_bg" aria-hidden="true"></canvas>
+<main class="sun_doc">
+  <nav class="sun_top"><a href="./sun_home.html">← 返回新版首页</a><a class="sun_top__open" href="./sun_hub.html">打开实际页面 →</a></nav>
+  <header class="sun_hero sun_reveal">
+    <span class="sun_hero__badge">需本地后端 · 接口页面</span>
+    <h1>云栖酒店服务网站 · 数据大屏</h1>
+    <p>项目主视觉大屏：Canvas 粒子背景、运营指标卡片、动态图表与服务状态探针；页面通过 /api/health 检测后端连通性，图表指标用于演示前端可视化效果。</p>
+  </header>
+  <section class="sun_sec sun_reveal"><h2>页面截图</h2>
+    <a class="sun_shot" href="./images/sun_shot_hub.png" target="_blank" rel="noopener">
+      <img src="./images/sun_shot_hub.png" alt="数据大屏页面真实截图" />
+      <div class="sun_shot__cap">真实运行截图（本地后端 8016 端口）· <b>点击图片可放大查看</b></div>
+    </a>
+  </section>
+  <section class="sun_sec sun_reveal"><h2>功能与实现说明</h2>
+    <div class="sun_info">
+      <article class="sun_box"><h3>主要功能</h3><ul>
+        <li>顶部品牌导航与全屏首屏视觉，Canvas 星尘/连线动画</li>
+        <li>房源、订单、营收等关键指标卡片与趋势图表展示</li>
+        <li>服务健康状态探针：展示后端在线/离线与接口耗时</li>
+        <li>响应式布局，适配桌面与移动端浏览</li>
+      </ul></article>
+      <article class="sun_box"><h3>技术实现</h3><ul>
+        <li>原生 JavaScript + Canvas 绘制图表与背景动画</li>
+        <li>fetch GET /api/health 检测服务状态，统一 JSON 响应解析</li>
+        <li>指标为课程演示数据，由前端本地渲染，不依赖第三方图表库</li>
+        <li>控制台输出请求日志，便于课堂演示报文格式</li>
+      </ul></article>
+      <article class="sun_box sun_box--full"><h3>主要后台接口</h3><div class="sun_api">
+        <code>GET /api/health</code><code>GET /api/site-info</code>
+      </div></article>
+    </div>
+  </section>
+  <section class="sun_sec sun_reveal"><h2>运行方式</h2>
+    <p class="sun_cmd">cd backend &amp;&amp; node app.js　→　http://localhost:8016/sun_hub.html</p>
+    <p class="sun_note" style="margin-top:12px">注意：健康探针需要本地后端；静态托管下状态会显示离线，但页面视觉仍可查看。新版首页只链接本说明页。</p>
+  </section>
+  <div class="sun_ctas sun_reveal"><a class="sun_ctas__primary" href="./sun_hub.html">打开数据大屏</a><a class="sun_ctas__ghost" href="./sun_home.html">返回新版首页</a></div>
+  <footer class="sun_foot">孙宁 · 24001011016 · 页面说明文档 D4</footer>
+</main><script src="./js/sun_common.js"></script></body></html>

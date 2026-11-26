@@ -1,0 +1,135 @@
+/* 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+   文件说明：新版导航首页样式（只收录纯前端页面 / Supabase 页面链接，突出简历） */
+:root {
+  --sun_bg: #060b14;
+  --sun_card: rgba(255,255,255,0.045);
+  --sun_line: rgba(255,255,255,0.09);
+  --sun_text: #e8eef8;
+  --sun_muted: #93a4bd;
+  --sun_mint: #6ce5c4;
+  --sun_blue: #7fb1ff;
+  --sun_violet: #b59aff;
+  --sun_gold: #ffd9a0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh; background: var(--sun_bg); color: var(--sun_text);
+  font-family: "PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",-apple-system,sans-serif;
+  line-height: 1.7;
+}
+#sun_home_bg {
+  position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0;
+  background:
+    radial-gradient(880px 520px at 10% -6%, rgba(127,177,255,.16), transparent 62%),
+    radial-gradient(760px 480px at 90% 8%, rgba(108,229,196,.11), transparent 62%),
+    radial-gradient(900px 600px at 50% 118%, rgba(181,154,255,.12), transparent 64%),
+    var(--sun_bg);
+}
+.sun_wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 54px 26px 64px; display: grid; gap: 42px; }
+/* 顶部标题 */
+.sun_head { text-align: center; }
+.sun_head__kicker { font-size: 13px; letter-spacing: 8px; color: var(--sun_mint); }
+.sun_head__title { margin-top: 12px; font-size: 42px; letter-spacing: 6px; }
+.sun_head__desc { margin-top: 12px; font-size: 15px; color: var(--sun_muted); }
+.sun_head__chips { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.sun_head__chips span {
+  padding: 6px 16px; border: 1px solid var(--sun_line); border-radius: 999px;
+  font-size: 12.5px; color: #b9c8de; background: var(--sun_card);
+}
+/* 重点简历卡 */
+.sun_star {
+  position: relative; display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px;
+  padding: 34px; border: 1px solid rgba(108,229,196,.35); border-radius: 26px;
+  background: linear-gradient(135deg, rgba(108,229,196,.13), rgba(127,177,255,.08) 55%, rgba(181,154,255,.10));
+  box-shadow: 0 30px 70px rgba(2,8,20,.55); overflow: hidden;
+  text-decoration: none; color: inherit; transition: transform .3s ease, box-shadow .3s ease;
+}
+.sun_star::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 4px;
+  background: linear-gradient(90deg,var(--sun_mint),var(--sun_blue),var(--sun_violet),var(--sun_gold));
+}
+.sun_star:hover { transform: translateY(-6px); box-shadow: 0 36px 86px rgba(108,229,196,.18); }
+.sun_star__badge {
+  display: inline-block; padding: 6px 16px; border-radius: 999px;
+  font-size: 12.5px; font-weight: 700; color: #04120f; background: linear-gradient(135deg,var(--sun_mint),#b6f3df);
+}
+.sun_star__title { margin-top: 16px; font-size: 34px; letter-spacing: 5px; }
+.sun_star__sub { margin-top: 8px; font-size: 16px; color: #b9f4e4; }
+.sun_star__desc { margin-top: 14px; font-size: 13.5px; color: #c2cfe2; max-width: 480px; }
+.sun_star__meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.sun_star__meta i {
+  font-style: normal; padding: 5px 12px; border: 1px solid rgba(255,255,255,.16);
+  border-radius: 999px; font-size: 12px; color: #d7e4f5; background: rgba(255,255,255,.05);
+}
+.sun_star__cta {
+  display: inline-flex; align-items: center; gap: 10px; margin-top: 26px;
+  padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 700;
+  color: #04120f; background: linear-gradient(135deg,var(--sun_mint),var(--sun_blue));
+}
+.sun_star__shot { position: relative; border-radius: 18px; overflow: hidden; border: 1px solid var(--sun_line); background: #0a1120; }
+.sun_star__shot img { display: block; width: 100%; height: 100%; max-height: 330px; object-fit: cover; object-position: top; opacity: .92; }
+.sun_star__shot::after {
+  content: "SUN NING · RESUME"; position: absolute; right: 12px; bottom: 10px;
+  font-size: 11px; letter-spacing: 3px; color: rgba(255,255,255,.75);
+}
+/* 分组 */
+.sun_group__head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+.sun_group__head h2 { font-size: 23px; letter-spacing: 3px; }
+.sun_group__head h2::before {
+  content: ""; display: inline-block; width: 7px; height: 20px; margin-right: 12px;
+  border-radius: 4px; background: linear-gradient(180deg,var(--sun_mint),var(--sun_blue)); vertical-align: -2px;
+}
+.sun_group__head p { font-size: 13px; color: var(--sun_muted); }
+.sun_grid { display: grid; gap: 16px; }
+.sun_grid--3 { grid-template-columns: repeat(3,1fr); }
+.sun_grid--2 { grid-template-columns: repeat(2,1fr); }
+/* 通用链接卡 */
+.sun_card {
+  display: flex; flex-direction: column; padding: 20px; border: 1px solid var(--sun_line);
+  border-radius: 18px; background: var(--sun_card); text-decoration: none; color: inherit;
+  transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+.sun_card:hover { transform: translateY(-5px); border-color: rgba(127,177,255,.5); box-shadow: 0 20px 44px rgba(2,8,20,.5); }
+.sun_card__top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.sun_card__tag {
+  padding: 4px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 700;
+  color: #06131f; background: var(--sun_mint);
+}
+.sun_card__tag--blue { background: var(--sun_blue); }
+.sun_card__tag--gold { background: var(--sun_gold); }
+.sun_card__tag--violet { background: var(--sun_violet); }
+.sun_card__idx { font-size: 12px; color: var(--sun_muted); letter-spacing: 2px; }
+.sun_card h3 { margin-top: 14px; font-size: 18px; letter-spacing: 1px; }
+.sun_card p { margin-top: 8px; font-size: 13px; color: var(--sun_muted); flex: 1; }
+.sun_card__thumb { margin-top: 14px; border-radius: 12px; overflow: hidden; border: 1px solid var(--sun_line); background: #0a1120; }
+.sun_card__thumb img { display: block; width: 100%; height: 140px; object-fit: cover; object-position: top; opacity: .88; transition: transform .4s ease; }
+.sun_card:hover .sun_card__thumb img { transform: scale(1.05); }
+.sun_card__foot { margin-top: 14px; font-size: 12.5px; color: var(--sun_blue); }
+/* 说明卡（链接到说明页） */
+.sun_card--doc:hover { border-color: rgba(181,154,255,.5); }
+.sun_card--doc .sun_card__foot { color: var(--sun_violet); }
+/* 底部 */
+.sun_notice {
+  padding: 18px 22px; border: 1px dashed var(--sun_line); border-radius: 14px;
+  font-size: 13px; color: var(--sun_muted); background: var(--sun_card);
+}
+.sun_notice b { color: var(--sun_gold); }
+.sun_foot { text-align: center; font-size: 12px; color: rgba(147,164,189,.7); }
+.sun_foot a { color: var(--sun_blue); text-decoration: none; }
+.sun_reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1); }
+.sun_reveal--on { opacity: 1; transform: none; }
+@media (max-width: 920px) {
+  .sun_grid--3 { grid-template-columns: repeat(2,1fr); }
+  .sun_star { grid-template-columns: 1fr; }
+}
+@media (max-width: 620px) {
+  .sun_wrap { padding: 30px 14px 44px; gap: 30px; }
+  .sun_head__title { font-size: 28px; letter-spacing: 3px; }
+  .sun_grid--3, .sun_grid--2 { grid-template-columns: 1fr; }
+  .sun_star { padding: 24px; }
+  .sun_star__title { font-size: 27px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sun_reveal { opacity: 1; transform: none; transition: none; }
+}

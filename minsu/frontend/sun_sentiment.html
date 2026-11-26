@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<!--
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-16 | 大模型：Auto
+  文件说明：商业评论情感分析页 - Excel 上传、大模型三分类（好评/中评/差评）、
+           原生 canvas 饼状图、精选评论与分类明细
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="商业评论情感分析 - 孙宁 24001011016" />
+  <title>评论情感分析 | 云栖民宿</title>
+  <link rel="stylesheet" href="./css/sun_sentiment.css" />
+</head>
+<body class="sun_emo_body">
+  <canvas class="sun_emo_canvas_bg" id="sun_emo_bg" aria-hidden="true"></canvas>
+
+  <header class="sun_emo_topbar">
+    <a class="sun_emo_brand" href="./index.html">
+      <span class="sun_emo_brand__mark">析</span>
+      <span class="sun_emo_brand__text">评论情感分析<small>SENTIMENT ANALYSIS</small></span>
+    </a>
+    <nav class="sun_emo_topbar__nav">
+      <a class="sun_emo_topbar__link" href="./sun_hub.html">服务网站</a>
+      <a class="sun_emo_topbar__link" href="./sun_kb.html">知识库</a>
+      <a class="sun_emo_topbar__link" href="./sun_chat.html">AI 对话</a>
+      <a class="sun_emo_topbar__link" href="./index.html">返回首页</a>
+    </nav>
+  </header>
+
+  <main class="sun_emo_main">
+    <section class="sun_emo_hero">
+      <p class="sun_emo_hero__eyebrow"><span class="sun_emo_dot"></span>大模型三分类 · 好评 / 中评 / 差评</p>
+      <h1 class="sun_emo_hero__title">商业评论情感分类</h1>
+      <p class="sun_emo_hero__desc">
+        上传包含商业评论的 Excel 文件，后端逐条调用大模型完成情感分类，请求与响应报文全程输出到控制台；
+        页面以饼状图展示分布，并精选最具代表性的评论。
+      </p>
+    </section>
+
+    <!-- 输入方式切换 -->
+    <section class="sun_emo_section">
+      <div class="sun_emo_section__head">
+        <h2>上传评论内容</h2>
+        <p>支持三种输入方式：Excel 表格、评论截图（OCR）、语音口述（ASR），识别出的文字统一走大模型三分类</p>
+      </div>
+
+      <div class="sun_emo_tabs" role="tablist">
+        <button class="sun_emo_tab sun_emo_tab--on" type="button" data-sun_tab="excel" role="tab">Excel 文件</button>
+        <button class="sun_emo_tab" type="button" data-sun_tab="image" role="tab">图片识别</button>
+        <button class="sun_emo_tab" type="button" data-sun_tab="voice" role="tab">语音识别</button>
+      </div>
+
+      <!-- 面板 1：Excel -->
+      <div class="sun_emo_panel" data-sun_panel="excel">
+        <div class="sun_emo_upload" id="sun_emo_zone">
+          <input type="file" id="sun_emo_file" accept=".xlsx,.xls" hidden />
+          <span class="sun_emo_upload__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26">
+              <path d="M12 16V4m0 0L7 9m5-5l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              <rect x="4" y="15" width="16" height="5" rx="2" fill="none" stroke="currentColor" stroke-width="1.8" />
+            </svg>
+          </span>
+          <p class="sun_emo_upload__title">点击或拖拽 Excel 文件到此处</p>
+          <p class="sun_emo_upload__hint">示例：咖啡店评论.xlsx / 民宿评论.xlsx / 外卖餐厅评论.xlsx（各 20 条）</p>
+        </div>
+      </div>
+
+      <!-- 面板 2：图片识别 -->
+      <div class="sun_emo_panel" data-sun_panel="image" hidden>
+        <div class="sun_emo_upload" id="sun_emo_img_zone">
+          <input type="file" id="sun_emo_img_file" accept=".jpg,.jpeg,.png,.webp,.bmp" hidden />
+          <span class="sun_emo_upload__icon sun_emo_upload__icon--blue" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="26" height="26">
+              <rect x="3" y="4" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+              <circle cx="9" cy="10" r="1.6" fill="currentColor" />
+              <path d="M4.5 18l4.8-4.6 3.4 3.2 2.9-2.6L19.5 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </span>
+          <p class="sun_emo_upload__title">点击或拖拽评论截图到此处</p>
+          <p class="sun_emo_upload__hint">支持 jpg / png / webp / bmp，≤ 8MB；后端使用 macOS Vision 离线识别中文，示例见 backend/image_samples/</p>
+        </div>
+        <div class="sun_emo_ocr" id="sun_emo_ocr_box" hidden>
+          <div class="sun_emo_ocr__head">
+            <span class="sun_emo_ocr__tag">OCR 识别结果</span>
+            <span class="sun_emo_ocr__meta" id="sun_emo_ocr_meta"></span>
+          </div>
+          <img class="sun_emo_ocr__preview" id="sun_emo_ocr_preview" alt="评论截图预览" />
+          <pre class="sun_emo_ocr__text" id="sun_emo_ocr_text"></pre>
+        </div>
+      </div>
+
+      <!-- 面板 3：语音识别 -->
+      <div class="sun_emo_panel" data-sun_panel="voice" hidden>
+        <div class="sun_emo_voice">
+          <button class="sun_emo_voice__btn" id="sun_emo_voice_btn" type="button">
+            <span class="sun_emo_voice__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                <rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+              </svg>
+            </span>
+            <span id="sun_emo_voice_btn_text">开始语音识别</span>
+          </button>
+          <p class="sun_emo_voice__hint" id="sun_emo_voice_hint">点击后授权麦克风，直接口述顾客评论，识别文字实时显示在下方，可编辑后再分析</p>
+        </div>
+        <textarea class="sun_emo_voice__text" id="sun_emo_voice_text" rows="4" placeholder="语音转写结果会出现在这里，也可以手动输入多条评论（每行一条）…"></textarea>
+        <div class="sun_emo_voice__foot">
+          <span class="sun_emo_voice__status" id="sun_emo_voice_status">未开始</span>
+          <button class="sun_emo_voice__analyze" id="sun_emo_voice_analyze" type="button">分析这段语音评论</button>
+        </div>
+      </div>
+
+      <div class="sun_emo_progress" id="sun_emo_progress" hidden>
+        <div class="sun_emo_progress__bar"><span id="sun_emo_bar"></span></div>
+        <p id="sun_emo_progress_text">正在上传…</p>
+      </div>
+    </section>
+
+    <!-- 历史任务 -->
+    <section class="sun_emo_section sun_emo_section--slim" id="sun_emo_history_section" hidden>
+      <div class="sun_emo_section__head">
+        <h2>历史任务</h2>
+        <p>点击可查看之前的分类结果</p>
+      </div>
+      <div class="sun_emo_history" id="sun_emo_history"></div>
+    </section>
+
+    <!-- 结果 -->
+    <section class="sun_emo_section" id="sun_emo_result" hidden>
+      <div class="sun_emo_section__head">
+        <h2>分析结果</h2>
+        <p id="sun_emo_result_meta"></p>
+      </div>
+
+      <div class="sun_emo_stats">
+        <div class="sun_emo_stat"><span>评论总数</span><strong id="sun_emo_total">0</strong></div>
+        <div class="sun_emo_stat sun_emo_stat--good"><span>好评</span><strong id="sun_emo_good">0</strong></div>
+        <div class="sun_emo_stat sun_emo_stat--mid"><span>中评</span><strong id="sun_emo_mid">0</strong></div>
+        <div class="sun_emo_stat sun_emo_stat--bad"><span>差评</span><strong id="sun_emo_bad">0</strong></div>
+        <div class="sun_emo_stat"><span>分类耗时</span><strong id="sun_emo_cost">0ms</strong></div>
+      </div>
+
+      <div class="sun_emo_chart_row">
+        <div class="sun_emo_chart">
+          <div class="sun_emo_chart__wrap">
+            <canvas id="sun_emo_pie" width="320" height="320"></canvas>
+            <div class="sun_emo_chart__center">
+              <strong id="sun_emo_pie_total">0</strong>
+              <span>条评论</span>
+            </div>
+          </div>
+          <div class="sun_emo_legend" id="sun_emo_legend"></div>
+        </div>
+
+        <div class="sun_emo_featured">
+          <h3>精选评论</h3>
+          <div id="sun_emo_featured_list"></div>
+        </div>
+      </div>
+
+      <div class="sun_emo_table_wrap">
+        <table class="sun_emo_table">
+          <thead>
+            <tr><th>#</th><th>评论内容</th><th>分类</th><th>分值</th><th>分类依据</th></tr>
+          </thead>
+          <tbody id="sun_emo_table_body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 大模型报文 -->
+    <section class="sun_emo_section" id="sun_emo_llm_section" hidden>
+      <div class="sun_emo_section__head">
+        <h2>大模型交互报文</h2>
+        <p>与浏览器控制台输出一致，可展开查看完整 JSON</p>
+      </div>
+      <details class="sun_emo_llm">
+        <summary>请求报文（点击展开）</summary>
+        <pre id="sun_emo_llm_request"></pre>
+      </details>
+      <details class="sun_emo_llm">
+        <summary>响应报文（点击展开）</summary>
+        <pre id="sun_emo_llm_response"></pre>
+      </details>
+    </section>
+  </main>
+
+  <footer class="sun_emo_footer">
+    <p>© 2026 云栖民宿预订平台 · 孙宁 · 24001011016</p>
+  </footer>
+
+  <script src="./js/sun_sentiment.js"></script>
+</body>
+</html>

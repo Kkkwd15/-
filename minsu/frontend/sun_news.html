@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>科技 AI 新闻 · 云栖民宿平台</title>
+  <link rel="stylesheet" href="./css/sun_news.css" />
+</head>
+<body>
+  <!-- 背景粒子 -->
+  <canvas class="sun_news__bg" id="sun_news_bg" aria-hidden="true"></canvas>
+
+  <!-- 顶栏 -->
+  <header class="sun_topbar">
+    <div class="sun_topbar__inner">
+      <a class="sun_topbar__logo" href="./index.html">云栖民宿<span>AI 平台</span></a>
+      <nav class="sun_topbar__nav">
+        <a class="sun_topbar__link" href="./index.html">首页</a>
+        <a class="sun_topbar__link" href="./sun_hub.html">服务网站</a>
+        <a class="sun_topbar__link" href="./sun_admin.html">后台管理</a>
+        <a class="sun_topbar__link sun_topbar__link--on" href="./sun_news.html">AI 新闻</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="sun_news__page">
+    <!-- 页头 -->
+    <section class="sun_news__hero">
+      <h1 class="sun_news__title">科技 AI 新闻</h1>
+      <p class="sun_news__sub">
+        数据存储在 Supabase（云端 PostgreSQL），前端通过 PostgREST 接口直连读取，无需本地后端
+      </p>
+      <div class="sun_news__stats" id="sun_news_stats">
+        <div class="sun_news__stat"><b id="sun_stat_total">–</b><span>新闻总数</span></div>
+        <div class="sun_news__stat"><b id="sun_stat_categories">–</b><span>覆盖分类</span></div>
+        <div class="sun_news__stat"><b id="sun_stat_latest">–</b><span>最近更新</span></div>
+      </div>
+    </section>
+
+    <!-- 筛选工具栏 -->
+    <section class="sun_news__toolbar">
+      <div class="sun_news__tabs" id="sun_news_tabs" role="tablist">
+        <button class="sun_news__tab sun_news__tab--on" type="button" data-sun_cat="">全部</button>
+      </div>
+      <div class="sun_news__tools">
+        <div class="sun_news__search">
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <input type="search" id="sun_news_search" placeholder="搜索标题或摘要…" maxlength="50" />
+        </div>
+        <select class="sun_news__sort" id="sun_news_sort" aria-label="排序方式">
+          <option value="sun_published_at.desc">最新发布</option>
+          <option value="sun_hot.desc">热度最高</option>
+        </select>
+      </div>
+    </section>
+
+    <!-- 状态提示 -->
+    <div class="sun_news__status" id="sun_news_status" hidden></div>
+
+    <!-- 新闻列表 -->
+    <section class="sun_news__list" id="sun_news_list" aria-live="polite"></section>
+
+    <!-- 加载更多 -->
+    <div class="sun_news__more">
+      <button class="sun_news__more-btn" id="sun_news_more" type="button" hidden>加载更多</button>
+    </div>
+
+    <footer class="sun_news__foot">
+      共 <b id="sun_foot_total">0</b> 条 · 数据源 Supabase PostgREST · 演示数据每日更新
+    </footer>
+  </main>
+
+  <script src="./js/sun_news.js"></script>
+</body>
+</html>

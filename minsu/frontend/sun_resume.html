@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!-- 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+     文件说明：个人简历展示页（依据《个人简历-孙宁-市场版.docx》设计，Canvas 粒子背景动画） -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>孙宁 · 个人简历 | 前端开发工程师（实习）</title>
+  <meta name="description" content="孙宁的个人简历：前端开发工程师（实习）/ AI 应用开发（初级），大连东软信息学院计算机科学与技术 2026 届" />
+  <link rel="stylesheet" href="./css/sun_resume.css" />
+</head>
+<body>
+  <canvas id="sun_resume_bg" aria-hidden="true"></canvas>
+
+  <main class="sun_resume">
+    <!-- ============ 头部：姓名与求职意向 ============ -->
+    <header class="sun_hero sun_reveal">
+      <div class="sun_hero__avatar" aria-hidden="true">孙</div>
+      <div class="sun_hero__main">
+        <h1 class="sun_hero__name">孙宁 <span class="sun_hero__en">SUN NING</span></h1>
+        <p class="sun_hero__intent">求职意向：前端开发工程师（实习） / AI 应用开发（初级）</p>
+        <ul class="sun_hero__contacts">
+          <li>📞 <span>13577120304</span></li>
+          <li>✉️ <a href="mailto:977181886@qq.com">977181886@qq.com</a></li>
+          <li>🐱 <a href="https://github.com/yuanlei" target="_blank" rel="noopener">GitHub</a></li>
+          <li>📍 辽宁·大连（可实习 5 天/周 · 连续 6 个月）</li>
+        </ul>
+        <p class="sun_hero__edu">计算机科学与技术 · 本科 · 2026 届　|　大连东软信息学院　|　GPA 3.5/4.0（专业前 20%）　|　CET-4</p>
+      </div>
+      <button class="sun_hero__print" id="sun_btn_print" type="button" title="打印 / 导出 PDF">🖨 打印简历</button>
+    </header>
+
+    <!-- ============ 个人概述 ============ -->
+    <section class="sun_section sun_reveal" id="sun_sec_profile">
+      <h2 class="sun_section__title">个人概述</h2>
+      <div class="sun_grid sun_grid--4">
+        <article class="sun_mini">
+          <h3>Web 前端</h3>
+          <p>掌握 HTML5、CSS3 与原生 JavaScript，课程项目完成 9 个页面与 1 个后台管理界面；熟练使用语义化标签、Flex 布局、媒体查询与 Canvas 绘制。</p>
+        </article>
+        <article class="sun_mini">
+          <h3>后端与部署</h3>
+          <p>使用 Node.js、Express、SQLite 与 Supabase 完成 8 个 RESTful 接口与 JWT 鉴权；项目已部署公网，可按 README 本地运行。</p>
+        </article>
+        <article class="sun_mini">
+          <h3>AI 工具使用</h3>
+          <p>使用 Trae、CodeBuddy、Codex 等工具辅助需求梳理、代码补全与重构，通过规则文件、提示词记录与人工复核控制生成结果。</p>
+        </article>
+        <article class="sun_mini">
+          <h3>开发习惯</h3>
+          <p>Git 按功能提交、提交信息规范；整理接口文档、数据库文档与提示词记录，便于回溯实现过程。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 专业技能 ============ -->
+    <section class="sun_section sun_reveal" id="sun_sec_skills">
+      <h2 class="sun_section__title">专业技能</h2>
+      <div class="sun_skills">
+        <article class="sun_skill">
+          <header><b>前端</b><em>熟悉</em></header>
+          <p>HTML5 语义化 / CSS3（Flex、Grid、媒体查询、过渡动画）/ 原生 JavaScript（DOM、事件、ES6+、异步）/ TypeScript 基础 / Canvas / Swiper / ECharts / iconfont / animate.css</p>
+        </article>
+        <article class="sun_skill">
+          <header><b>后端与数据</b><em>了解</em></header>
+          <p>Node.js + Express、RESTful 接口设计、JWT 鉴权、MySQL / SQLite、Supabase（BaaS）、fetch / AJAX 联调、bcrypt 加密</p>
+        </article>
+        <article class="sun_skill">
+          <header><b>AI 工具</b><em>熟悉</em></header>
+          <p>Trae、CodeBuddy、Codex、OpenCode、WorkBuddy、豆包；MCP 工具调用、Prompt 工程、AGENTS.md 规则约束、AI 代码复核</p>
+        </article>
+        <article class="sun_skill">
+          <header><b>工程与部署</b><em>了解</em></header>
+          <p>Git / GitHub / Gitee、Conventional Commits、ESLint、Vite、Nginx、Linux 常用命令、Vercel / 云服务器部署、Lighthouse 调优</p>
+        </article>
+      </div>
+      <div class="sun_bars">
+        <div class="sun_bar" data-sun_value="88"><span>HTML5 / CSS3 / 原生 JS</span><i><b></b></i><em>88%</em></div>
+        <div class="sun_bar" data-sun_value="82"><span>AI 辅助开发 / Prompt 工程</span><i><b></b></i><em>82%</em></div>
+        <div class="sun_bar" data-sun_value="72"><span>Node.js / RESTful / 数据库</span><i><b></b></i><em>72%</em></div>
+        <div class="sun_bar" data-sun_value="55"><span>Vue3 / React / 小程序</span><i><b></b></i><em>55%</em></div>
+      </div>
+      <p class="sun_extra"><b>还在学习：</b>Vue3、React、UniApp 微信小程序、LangChain、FAISS 向量检索、OpenHarmony（ArkTS）、Android（Java）</p>
+    </section>
+
+    <!-- ============ AI 工具使用 ============ -->
+    <section class="sun_section sun_reveal" id="sun_sec_ai">
+      <h2 class="sun_section__title">AI 工具使用</h2>
+      <ol class="sun_flow">
+        <li>需求梳理</li><li>工具辅助实现</li><li>人工确认</li><li>分文件调整</li><li>自测复核</li><li>记录提交</li>
+      </ol>
+      <div class="sun_grid sun_grid--2">
+        <article class="sun_mini">
+          <h3>工具选择</h3>
+          <p>按任务类型选择工具：Trae 用于多文件需求拆解与页面调整，CodeBuddy 用于单文件补全与简单测试，Codex / OpenCode 用于终端批量修改，豆包用于资料整理与文档初稿。</p>
+        </article>
+        <article class="sun_mini">
+          <h3>规则约束</h3>
+          <p>在项目根目录维护 AGENTS.md，约定命名前缀、目录分层、统一 JSON 响应与注释头，使生成代码符合同一套规范。</p>
+        </article>
+        <article class="sun_mini">
+          <h3>过程记录</h3>
+          <p>提示词与模型名称按时间顺序追加记录并保留历史版本，与 Git 提交对应，便于说明代码来源。</p>
+        </article>
+        <article class="sun_mini">
+          <h3>代码复核</h3>
+          <p>对 AI 生成的代码先理解再合并，重点检查鉴权、SQL 拼接与异常分支，并用 ESLint 与自测用例验证。</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ 项目经历 ============ -->
+    <section class="sun_section sun_reveal" id="sun_sec_projects">
+      <h2 class="sun_section__title">项目经历</h2>
+
+      <article class="sun_project">
+        <header>
+          <div>
+            <h3>校园二手交易平台</h3>
+            <p class="sun_project__sub">独立完成 · 高级网页设计课程作业</p>
+          </div>
+          <time>2025.09 – 2025.11</time>
+        </header>
+        <p class="sun_project__stack">原生 HTML5 / CSS3 / JavaScript（ES6+）+ Node.js / Express + SQLite + ECharts + iconfont</p>
+        <ul>
+          <li>完成 9 个前端页面（首页、列表、详情、登录、注册、我的、发布、消息、关于），详情页按 URL 参数请求对应数据；Flex + 媒体查询完成移动端适配。</li>
+          <li>后端实现列表、详情、搜索、发布、收藏、登录、注册、上传 8 个接口，统一 JSON 响应结构；JWT 中间件拦截未登录写操作，密码 bcrypt 加密入库。</li>
+          <li>实现轮播、tab 切换、滚动加载、搜索过滤、表单校验、图片预览与本地存储等交互，加入过渡动画、关键帧动画与 Canvas 绘制。</li>
+          <li>后台含商品、用户、分类 3 个实体的增删改查与搜索分页；仪表盘用 ECharts 展示近 30 天发布趋势；前端部署 Vercel，数据使用 Supabase。</li>
+        </ul>
+      </article>
+
+      <article class="sun_project">
+        <header>
+          <div>
+            <h3>课程知识库智能问答</h3>
+            <p class="sun_project__sub">3 人小组 · 参与检索链路与前端</p>
+          </div>
+          <time>2025.03 – 2025.06</time>
+        </header>
+        <p class="sun_project__stack">Python + LangChain + FAISS + DeepSeek API + Vue3 + SSE</p>
+        <ul>
+          <li>将 200+ 份课程资料（PPT、实验指导书、FAQ）解析切片后写入向量库，完成检索、拼接上下文到模型生成的基本流程。</li>
+          <li>向量检索与 BM25 关键词混合召回，父子块保留上下文；抽检 50 条问题，答案可用率由 62% 提升至 84%。</li>
+          <li>Vue3 + SSE 实现流式输出与引用来源展示，点击引用可定位原文段落；无法回答时明确拒答。</li>
+        </ul>
+      </article>
+
+      <article class="sun_project">
+        <header>
+          <div>
+            <h3>智慧校园数据大屏</h3>
+            <p class="sun_project__sub">3 人团队 · 前端开发</p>
+          </div>
+          <time>2024.09 – 2024.12</time>
+        </header>
+        <p class="sun_project__stack">原生 JavaScript + ECharts + WebSocket + Node.js + MySQL</p>
+        <ul>
+          <li>展示人流、能耗、设备在线率等指标，WebSocket 增量推送并在前端节流合并渲染，1 秒刷新保持流畅。</li>
+          <li>封装 8 个可复用的图表与卡片组件，后续页面直接复用，减少重复开发。</li>
+          <li>按需加载与图片压缩，首屏资源由 2.1MB 降至 720KB，Lighthouse 性能评分由 68 提升至 92。</li>
+          <li>其他项目：京东商城 Web + 微信小程序双端复刻（Vue3 + UniApp）；OpenHarmony 智能备忘录（ArkTS + Canvas）课程设计。</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- ============ 实践经历与荣誉 ============ -->
+    <section class="sun_section sun_reveal" id="sun_sec_honor">
+      <h2 class="sun_section__title">实践经历与荣誉</h2>
+      <div class="sun_grid sun_grid--2">
+        <article class="sun_mini"><h3>SOVO 大学生创业中心 · 技术组</h3><p>参与组织 3 场 AI 编程工具分享（Trae / CodeBuddy、AGENTS.md 规则与提示词记录），累计约 100 人次。</p></article>
+        <article class="sun_mini"><h3>班级学习委员</h3><p>组织每周代码互评，整理命名与注释规范文档，协助同学完成课程作业。</p></article>
+        <article class="sun_mini"><h3>竞赛获奖</h3><p>蓝桥杯 Java 程序设计省赛二等奖（2024）、「互联网+」创新创业大赛校级三等奖（2025）。</p></article>
+        <article class="sun_mini"><h3>技术输出</h3><p>整理并公开 3 个仓库（课程项目模板、iconfont 图标方案、AI 工具配置示例），累计技术笔记 12 篇。</p></article>
+      </div>
+    </section>
+
+    <!-- ============ 教育背景 / 自我评价 / 作品链接 ============ -->
+    <section class="sun_section sun_reveal" id="sun_sec_tail">
+      <h2 class="sun_section__title">教育背景</h2>
+      <article class="sun_edu">
+        <header>
+          <div><b>大连东软信息学院</b>　|　计算机科学与技术（本科）</div>
+          <time>2022.09 – 2026.06</time>
+        </header>
+        <p><b>核心课程：</b>数据结构与算法、计算机网络、数据库原理、Java / Python 程序设计、Web 前端开发、高级网页设计（HTML5 / CSS3 / JavaScript）、OpenHarmony 应用开发</p>
+        <p><b>荣誉：</b>校级二等奖学金（2023—2024）、三等奖学金（2024—2025）、优秀学生干部</p>
+      </article>
+
+      <h2 class="sun_section__title">自我评价</h2>
+      <article class="sun_edu">
+        <p>计算机科学与技术专业本科在读，具备原生前端开发与基础后端能力，在课程项目中完成了从页面、接口到部署的完整实践。习惯借助 AI 工具提高效率，并对生成代码进行理解和复核；目前仍在学习工程化与性能优化相关内容。</p>
+      </article>
+
+      <h2 class="sun_section__title">作品链接</h2>
+      <article class="sun_links">
+        <a href="https://github.com/yuanlei" target="_blank" rel="noopener"><b>GitHub / Gitee</b><span>github.com/yuanlei</span></a>
+        <a href="https://github.com/yuanlei" target="_blank" rel="noopener"><b>校园二手交易平台</b><span>在线 Demo（见仓库 README）</span></a>
+      </article>
+    </section>
+
+    <footer class="sun_foot sun_reveal">
+      <p>孙宁 · 前端开发工程师（实习）候选人 · 本页面由原生 HTML5 / CSS3 / JavaScript + Canvas 动画实现</p>
+    </footer>
+  </main>
+  <script src="./js/sun_resume.js"></script>
+</body>
+</html>

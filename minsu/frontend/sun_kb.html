@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-12 | 大模型：Auto
+  文件说明：知识库管理页（RAG）- 文件上传解析、文件列表、片段预览、基于知识库的问答
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="云栖民宿知识库管理与 RAG 问答 - 孙宁 24001011016" />
+  <title>知识库管理 | 云栖民宿 RAG</title>
+  <link rel="stylesheet" href="./css/sun_kb.css" />
+</head>
+<body class="sun_kb_body">
+  <div class="sun_kb_bg" aria-hidden="true">
+    <span class="sun_kb_bg__blob sun_kb_bg__blob--mint"></span>
+    <span class="sun_kb_bg__blob sun_kb_bg__blob--violet"></span>
+    <span class="sun_kb_bg__grid"></span>
+  </div>
+
+  <header class="sun_kb_topbar">
+    <a class="sun_kb_brand" href="./index.html">
+      <span class="sun_kb_brand__mark">栖</span>
+      <span class="sun_kb_brand__text">云栖知识库<small>RAG KNOWLEDGE BASE</small></span>
+    </a>
+    <nav class="sun_kb_topbar__nav">
+      <a class="sun_kb_topbar__link" href="./sun_hub.html">服务网站</a>
+      <a class="sun_kb_topbar__link" href="./sun_chat.html">AI 对话</a>
+      <a class="sun_kb_topbar__link" href="./index.html">返回首页</a>
+    </nav>
+  </header>
+
+  <main class="sun_kb_main">
+    <section class="sun_kb_hero">
+      <p class="sun_kb_hero__eyebrow"><span class="sun_dot" aria-hidden="true"></span>检索增强生成 · 本地文件解析</p>
+      <h1 class="sun_kb_hero__title">知识库管理</h1>
+      <p class="sun_kb_hero__desc">
+        上传 doc / docx / pdf / ppt / pptx / txt 文件，后端自动抽取正文、切片入库并建立关键词索引；
+        提问时按相似度召回最相关的知识片段，拼装成带出处的答案。
+      </p>
+      <ul class="sun_kb_stats" id="sun_kb_stats">
+        <li class="sun_kb_stats__item"><span>知识文件</span><strong id="sun_stat_files">0</strong></li>
+        <li class="sun_kb_stats__item"><span>知识片段</span><strong id="sun_stat_chunks">0</strong></li>
+        <li class="sun_kb_stats__item"><span>正文字符</span><strong id="sun_stat_chars">0</strong></li>
+        <li class="sun_kb_stats__item"><span>问答次数</span><strong id="sun_stat_asks">0</strong></li>
+      </ul>
+    </section>
+
+    <!-- 上传模块 -->
+    <section class="sun_kb_section">
+      <div class="sun_kb_section__head">
+        <h2 class="sun_kb_section__title">文件上传</h2>
+        <p class="sun_kb_section__desc">支持 doc / docx / pdf / ppt / pptx / txt，单个文件不超过 15MB，同名文件将覆盖重建索引</p>
+      </div>
+
+      <div class="sun_kb_upload" id="sun_upload_zone">
+        <input class="sun_kb_upload__input" type="file" id="sun_file_input" accept=".doc,.docx,.pdf,.ppt,.pptx,.txt,.md,.csv" hidden />
+        <span class="sun_kb_upload__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26">
+            <path d="M12 16V4m0 0L7 9m5-5l5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+        </span>
+        <p class="sun_kb_upload__title">拖拽文件到此处，或点击选择文件</p>
+        <p class="sun_kb_upload__hint">示例文件已放在 backend/knowledge_samples/ 目录下，可直接上传体验</p>
+        <div class="sun_kb_upload__types">
+          <span>DOC</span><span>DOCX</span><span>PDF</span><span>PPT</span><span>PPTX</span><span>TXT</span>
+        </div>
+      </div>
+
+      <div class="sun_kb_progress" id="sun_upload_progress" hidden>
+        <div class="sun_kb_progress__bar"><span id="sun_upload_bar"></span></div>
+        <p class="sun_kb_progress__text" id="sun_upload_text">正在上传…</p>
+      </div>
+    </section>
+
+    <!-- 文件列表 -->
+    <section class="sun_kb_section">
+      <div class="sun_kb_section__head">
+        <h2 class="sun_kb_section__title">知识文件</h2>
+        <p class="sun_kb_section__desc">点击「查看片段」可检查切片结果，删除文件会级联清理其全部片段</p>
+      </div>
+      <div class="sun_kb_files" id="sun_file_list"></div>
+    </section>
+
+    <!-- 问答 -->
+    <section class="sun_kb_section">
+      <div class="sun_kb_section__head">
+        <h2 class="sun_kb_section__title">基于知识库的问答</h2>
+        <p class="sun_kb_section__desc">输入问题后检索最相关的知识片段，答案下方会标注引用的文件与章节</p>
+      </div>
+
+      <form class="sun_kb_ask" id="sun_ask_form">
+        <input class="sun_kb_ask__input" id="sun_ask_input" type="text" maxlength="300" placeholder="例如：亲子庭院房多少钱一晚？" />
+        <button class="sun_kb_ask__btn" type="submit" id="sun_ask_btn">提问</button>
+      </form>
+
+      <div class="sun_kb_samples" id="sun_ask_samples">
+        <button class="sun_kb_sample" type="button" data-sun_question="入住和退房时间是几点？">入住与退房时间</button>
+        <button class="sun_kb_sample" type="button" data-sun_question="可以带宠物吗？">宠物政策</button>
+        <button class="sun_kb_sample" type="button" data-sun_question="连住三晚有折扣吗？">连住优惠</button>
+        <button class="sun_kb_sample" type="button" data-sun_question="取消订单怎么退款？">退改规则</button>
+        <button class="sun_kb_sample" type="button" data-sun_question="会议室能容纳多少人？">未收录问题</button>
+      </div>
+
+      <article class="sun_kb_answer" id="sun_answer_box" hidden>
+        <header class="sun_kb_answer__head">
+          <span class="sun_kb_answer__badge" id="sun_answer_badge">命中</span>
+          <span class="sun_kb_answer__meta" id="sun_answer_meta"></span>
+        </header>
+        <p class="sun_kb_answer__text" id="sun_answer_text"></p>
+        <div class="sun_kb_answer__sources" id="sun_answer_sources"></div>
+      </article>
+    </section>
+  </main>
+
+  <!-- 片段预览弹层 -->
+  <div class="sun_kb_modal" id="sun_chunk_modal" hidden>
+    <div class="sun_kb_modal__panel">
+      <header class="sun_kb_modal__head">
+        <h3 id="sun_chunk_title">片段预览</h3>
+        <button class="sun_kb_modal__close" id="sun_chunk_close" type="button" aria-label="关闭">&times;</button>
+      </header>
+      <div class="sun_kb_modal__body" id="sun_chunk_body"></div>
+    </div>
+  </div>
+
+  <footer class="sun_kb_footer">
+    <p>© 2026 云栖民宿预订平台 · 孙宁 · 24001011016</p>
+  </footer>
+
+  <script src="./js/sun_kb.js"></script>
+</body>
+</html>

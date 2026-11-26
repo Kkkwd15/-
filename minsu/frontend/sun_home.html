@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<!-- 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+     文件说明：新版导航首页（只收录纯前端页面与 Supabase 直连页面的链接，重点突出个人简历；
+               使用本地后台接口的页面以「说明页」形式收录，每页含截图与说明） -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>云栖民宿 · 新版导航首页</title>
+  <meta name="description" content="纯前端页面与 Supabase 云端页面导航，重点展示大学生个人简历" />
+  <link rel="stylesheet" href="./css/sun_home.css" />
+</head>
+<body>
+  <canvas id="sun_home_bg" aria-hidden="true"></canvas>
+  <main class="sun_wrap">
+    <header class="sun_head sun_reveal">
+      <p class="sun_head__kicker">SUN NING · PORTAL</p>
+      <h1 class="sun_head__title">云栖民宿 · 项目导航</h1>
+      <p class="sun_head__desc">仅收录可直接访问的纯前端页面与 Supabase 云端页面；本地后台接口页面以「截图 + 说明」文档展示</p>
+      <div class="sun_head__chips">
+        <span>纯前端 · 零依赖</span><span>Supabase 云端数据</span><span>Canvas 背景动画</span><span>响应式布局</span>
+      </div>
+    </header>
+
+    <!-- ===== 重点突出：个人简历 ===== -->
+    <a class="sun_star sun_reveal" href="./sun_resume.html">
+      <div>
+        <span class="sun_star__badge">⭐ 重点推荐 · RESUME</span>
+        <h2 class="sun_star__title">孙宁 · 个人简历</h2>
+        <p class="sun_star__sub">前端开发工程师（实习） / AI 应用开发（初级） · 2026 届</p>
+        <p class="sun_star__desc">依据《个人简历-孙宁-市场版.docx》设计：8 大板块完整呈现教育背景、专业技能、AI 工具使用、3 个项目经历与荣誉；Canvas 粒子背景、技能进度条、滚动进场、一键打印导出 PDF。</p>
+        <div class="sun_star__meta"><i>HTML5 / CSS3</i><i>原生 JavaScript</i><i>Canvas 动画</i><i>打印适配</i></div>
+        <span class="sun_star__cta">查看完整简历 →</span>
+      </div>
+      <div class="sun_star__shot"><img src="./images/sun_shot_resume.png" alt="个人简历页面截图" /></div>
+    </a>
+
+    <!-- ===== 纯前端页面 ===== -->
+    <section class="sun_group sun_reveal">
+      <div class="sun_group__head"><h2>纯前端页面</h2><p>不依赖任何服务端接口，直接打开即可完整使用</p></div>
+      <div class="sun_grid sun_grid--2">
+        <a class="sun_card" href="./sun_resume.html">
+          <div class="sun_card__top"><span class="sun_card__tag">纯前端</span><span class="sun_card__idx">01</span></div>
+          <h3>个人简历</h3>
+          <p>大学生简历展示页：个人概述、专业技能、项目经历、荣誉与作品链接，Canvas 星尘背景动画。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_resume.png" alt="个人简历页面截图" /></div>
+          <span class="sun_card__foot">打开页面 →</span>
+        </a>
+        <a class="sun_card" href="./index.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--gold">旧版入口</span><span class="sun_card__idx">02</span></div>
+          <h3>原项目导航页</h3>
+          <p>原有功能卡片的导航首页，完整保留（包含全部页面的原始入口）。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_index.png" alt="原项目导航页截图" /></div>
+          <span class="sun_card__foot">打开页面 →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===== Supabase 页面 ===== -->
+    <section class="sun_group sun_reveal">
+      <div class="sun_group__head"><h2>Supabase 云端页面</h2><p>前端 fetch 直连 Supabase PostgREST，无需本地后端，线上可直接访问</p></div>
+      <div class="sun_grid sun_grid--3">
+        <a class="sun_card" href="./sun_news.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--blue">Supabase</span><span class="sun_card__idx">03</span></div>
+          <h3>科技 AI 新闻</h3>
+          <p>云端新闻库 20 条数据、7 个分类；分类筛选、关键词搜索、热度排序、分页加载。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_news.png" alt="科技 AI 新闻页面截图" /></div>
+          <span class="sun_card__foot">打开页面 →</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ===== 后台接口页面（说明文档） ===== -->
+    <section class="sun_group sun_reveal">
+      <div class="sun_group__head"><h2>后台接口页面 · 说明文档</h2><p>这些页面需要本地 Node 后端与 MySQL；每个页面单独建了说明页，含真实截图与功能/接口说明</p></div>
+      <div class="sun_grid sun_grid--3">
+        <a class="sun_card sun_card--doc" href="./sun_doc_chat.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--violet">说明页</span><span class="sun_card__idx">D1</span></div>
+          <h3>AI 对话</h3><p>多会话管理、知识库问答、语音提问、规则引擎回复。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_chat.png" alt="AI 对话页面截图" /></div>
+          <span class="sun_card__foot">查看截图与说明 →</span>
+        </a>
+        <a class="sun_card sun_card--doc" href="./sun_doc_kb.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--violet">说明页</span><span class="sun_card__idx">D2</span></div>
+          <h3>知识库 RAG</h3><p>文档上传、分片管理、相似度检索与引用溯源问答。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_kb.png" alt="知识库管理页面截图" /></div>
+          <span class="sun_card__foot">查看截图与说明 →</span>
+        </a>
+        <a class="sun_card sun_card--doc" href="./sun_doc_sentiment.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--violet">说明页</span><span class="sun_card__idx">D3</span></div>
+          <h3>评论情感分析</h3><p>Excel 批量导入、图片 OCR、语音转写与情感分类。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_sentiment.png" alt="评论情感分析页面截图" /></div>
+          <span class="sun_card__foot">查看截图与说明 →</span>
+        </a>
+        <a class="sun_card sun_card--doc" href="./sun_doc_hub.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--violet">说明页</span><span class="sun_card__idx">D4</span></div>
+          <h3>数据大屏</h3><p>粒子背景 + Canvas 图表、服务状态探针与运营指标展示。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_hub.png" alt="数据大屏页面截图" /></div>
+          <span class="sun_card__foot">查看截图与说明 →</span>
+        </a>
+        <a class="sun_card sun_card--doc" href="./sun_doc_admin.html">
+          <div class="sun_card__top"><span class="sun_card__tag sun_card__tag--violet">说明页</span><span class="sun_card__idx">D5</span></div>
+          <h3>后台管理</h3><p>管理员登录鉴权、仪表盘聚合统计、房源/订单/住客增删改查。</p>
+          <div class="sun_card__thumb"><img src="./images/sun_shot_admin.png" alt="后台管理仪表盘截图" /></div>
+          <span class="sun_card__foot">查看截图与说明 →</span>
+        </a>
+      </div>
+    </section>
+
+    <p class="sun_notice sun_reveal">
+      <b>访问说明：</b>本页列出的「纯前端 / Supabase」页面在静态托管（GitHub Pages）上即可正常使用；
+      <b>后台接口页面</b>需要启动本地服务 <code>cd backend &amp;&amp; node app.js</code>（端口 8016）并连接 MySQL，
+      因此新版首页不直接放它们的链接，只提供带截图的说明页。说明页均为纯静态 HTML，线上可直接查看。
+    </p>
+    <footer class="sun_foot sun_reveal">孙宁 · 24001011016 · 2026 · <a href="./index.html">返回原项目导航页</a></footer>
+  </main>
+  <script src="./js/sun_common.js"></script>
+</body>
+</html>

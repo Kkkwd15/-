@@ -1,0 +1,780 @@
+/*
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-12 | 大模型：Auto
+  文件说明：知识库管理页样式（上传拖拽区、文件卡片、问答面板、片段预览弹层）
+*/
+
+:root {
+  --sun_bg: #05080f;
+  --sun_ink: #eef3ff;
+  --sun_muted: #93a3bf;
+  --sun_line: rgba(255, 255, 255, 0.09);
+  --sun_panel: rgba(12, 19, 32, 0.7);
+  --sun_mint: #6ce5c4;
+  --sun_blue: #79a9ff;
+  --sun_violet: #c2a2ff;
+  --sun_radius: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body.sun_kb_body {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(1100px 680px at 84% -8%, rgba(108, 229, 196, 0.13), transparent 62%),
+    radial-gradient(960px 620px at 2% 10%, rgba(121, 169, 255, 0.15), transparent 60%),
+    linear-gradient(180deg, #060a13, #04070d);
+  color: var(--sun_ink);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 背景 */
+.sun_kb_bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sun_kb_bg__blob {
+  position: absolute;
+  width: 46vw;
+  height: 46vw;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.28;
+  animation: sun_kb_drift 20s ease-in-out infinite;
+}
+
+.sun_kb_bg__blob--mint {
+  top: -14vw;
+  right: -10vw;
+  background: radial-gradient(circle, rgba(108, 229, 196, 0.55), transparent 68%);
+}
+
+.sun_kb_bg__blob--violet {
+  bottom: -16vw;
+  left: -12vw;
+  background: radial-gradient(circle, rgba(160, 122, 255, 0.5), transparent 68%);
+  animation-delay: -8s;
+}
+
+.sun_kb_bg__grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 50% 20%, #000 18%, transparent 76%);
+  -webkit-mask-image: radial-gradient(circle at 50% 20%, #000 18%, transparent 76%);
+}
+
+@keyframes sun_kb_drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-2vw, 3vw, 0) scale(1.06); }
+}
+
+/* 顶部 */
+.sun_kb_topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(20px, 5vw, 56px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(5, 8, 15, 0.65);
+  backdrop-filter: blur(14px);
+}
+
+.sun_kb_brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: var(--sun_ink);
+  text-decoration: none;
+}
+
+.sun_kb_brand__mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #04120f;
+  background: linear-gradient(135deg, var(--sun_mint), var(--sun_blue));
+  box-shadow: 0 8px 20px rgba(108, 229, 196, 0.28);
+}
+
+.sun_kb_brand__text {
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.sun_kb_brand__text small {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--sun_muted);
+}
+
+.sun_kb_topbar__nav {
+  display: flex;
+  gap: clamp(12px, 2vw, 26px);
+}
+
+.sun_kb_topbar__link {
+  font-size: 13.5px;
+  color: var(--sun_muted);
+  text-decoration: none;
+  transition: color 0.22s ease;
+}
+
+.sun_kb_topbar__link:hover {
+  color: #ffffff;
+}
+
+/* 主容器 */
+.sun_kb_main {
+  position: relative;
+  z-index: 10;
+  width: min(1080px, 92vw);
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 56px) 0 40px;
+}
+
+.sun_kb_hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 14px;
+  padding: 6px 14px;
+  border: 1px solid rgba(108, 229, 196, 0.28);
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: #b9f4e4;
+  background: rgba(108, 229, 196, 0.08);
+}
+
+.sun_dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sun_mint);
+  animation: sun_kb_pulse 2.2s ease-out infinite;
+}
+
+@keyframes sun_kb_pulse {
+  0% { box-shadow: 0 0 0 0 rgba(108, 229, 196, 0.55); }
+  70% { box-shadow: 0 0 0 10px rgba(108, 229, 196, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(108, 229, 196, 0); }
+}
+
+.sun_kb_hero__title {
+  margin: 0 0 12px;
+  font-size: clamp(1.9rem, 3.6vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.sun_kb_hero__desc {
+  max-width: 68ch;
+  margin: 0 0 26px;
+  font-size: 14.5px;
+  color: var(--sun_muted);
+}
+
+/* 统计 */
+.sun_kb_stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sun_kb_stats__item {
+  position: relative;
+  padding: 16px 18px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.sun_kb_stats__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(108, 229, 196, 0.6), transparent);
+}
+
+.sun_kb_stats__item span {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--sun_muted);
+}
+
+.sun_kb_stats__item strong {
+  display: block;
+  margin-top: 4px;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* 区块 */
+.sun_kb_section {
+  margin-top: clamp(34px, 5vh, 54px);
+}
+
+.sun_kb_section__head {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--sun_line);
+}
+
+.sun_kb_section__title {
+  position: relative;
+  margin: 0 0 6px;
+  padding-left: 14px;
+  font-size: 1.16rem;
+  font-weight: 700;
+}
+
+.sun_kb_section__title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 4px;
+  height: 1em;
+  transform: translateY(-50%);
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--sun_mint), var(--sun_blue));
+}
+
+.sun_kb_section__desc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--sun_muted);
+}
+
+/* 上传区 */
+.sun_kb_upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(28px, 5vw, 46px) 20px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.18);
+  border-radius: var(--sun_radius);
+  background: rgba(255, 255, 255, 0.022);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.28s ease, background 0.28s ease, transform 0.28s ease;
+}
+
+.sun_kb_upload:hover {
+  border-color: rgba(108, 229, 196, 0.5);
+  background: rgba(108, 229, 196, 0.06);
+}
+
+.sun_kb_upload--drag {
+  border-color: rgba(108, 229, 196, 0.75);
+  background: rgba(108, 229, 196, 0.1);
+  transform: scale(1.004);
+}
+
+.sun_kb_upload__icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 14px;
+  border-radius: 17px;
+  color: #04120f;
+  background: linear-gradient(135deg, var(--sun_mint), var(--sun_blue));
+  box-shadow: 0 14px 30px rgba(108, 229, 196, 0.22);
+}
+
+.sun_kb_upload__title {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sun_kb_upload__hint {
+  margin: 0 0 14px;
+  font-size: 12.5px;
+  color: var(--sun_muted);
+}
+
+.sun_kb_upload__types {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.sun_kb_upload__types span {
+  padding: 4px 10px;
+  border: 1px solid var(--sun_line);
+  border-radius: 999px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(147, 163, 191, 0.9);
+}
+
+/* 上传进度 */
+.sun_kb_progress {
+  margin-top: 14px;
+  padding: 14px 18px;
+  border: 1px solid var(--sun_line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sun_kb_progress__bar {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.sun_kb_progress__bar span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sun_mint), var(--sun_blue));
+  transition: width 0.25s ease;
+}
+
+.sun_kb_progress__text {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: var(--sun_muted);
+}
+
+/* 文件卡片 */
+.sun_kb_files {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sun_kb_file {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.035);
+  transition: border-color 0.26s ease, background 0.26s ease, transform 0.26s ease;
+}
+
+.sun_kb_file:hover {
+  transform: translateY(-2px);
+  border-color: rgba(121, 169, 255, 0.36);
+  background: rgba(121, 169, 255, 0.07);
+}
+
+.sun_kb_file__ext {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #0a2c26;
+  background: linear-gradient(135deg, #9df0d8, #a9d3ff);
+}
+
+.sun_kb_file__ext--pdf { background: linear-gradient(135deg, #ffc9c9, #ffd9b0); color: #4a1717; }
+.sun_kb_file__ext--ppt { background: linear-gradient(135deg, #ffd9b0, #ffe9c4); color: #4a2c10; }
+.sun_kb_file__ext--doc { background: linear-gradient(135deg, #cfe1ff, #e6d6ff); color: #1c2b4a; }
+.sun_kb_file__ext--txt { background: linear-gradient(135deg, #dfe7f3, #c9d6e8); color: #22303f; }
+
+.sun_kb_file__name {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sun_kb_file__meta {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--sun_muted);
+}
+
+.sun_kb_file__meta b {
+  font-weight: 600;
+  color: rgba(108, 229, 196, 0.92);
+}
+
+.sun_kb_file__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.sun_kb_btn {
+  padding: 7px 13px;
+  border: 1px solid var(--sun_line);
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: #cfdaea;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: color 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+}
+
+.sun_kb_btn:hover {
+  color: #ffffff;
+  border-color: rgba(121, 169, 255, 0.5);
+  background: rgba(121, 169, 255, 0.12);
+}
+
+.sun_kb_btn--danger:hover {
+  color: #ffc0c0;
+  border-color: rgba(255, 130, 130, 0.45);
+  background: rgba(255, 130, 130, 0.12);
+}
+
+.sun_kb_empty {
+  padding: 26px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  font-size: 13.5px;
+  text-align: center;
+  color: var(--sun_muted);
+}
+
+/* 问答 */
+.sun_kb_ask {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sun_kb_ask__input {
+  flex: 1;
+  padding: 13px 16px;
+  border: 1px solid var(--sun_line);
+  border-radius: 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--sun_ink);
+  background: rgba(255, 255, 255, 0.04);
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sun_kb_ask__input::placeholder {
+  color: rgba(147, 163, 191, 0.75);
+}
+
+.sun_kb_ask__input:focus {
+  border-color: rgba(108, 229, 196, 0.45);
+  box-shadow: 0 0 0 4px rgba(108, 229, 196, 0.08);
+}
+
+.sun_kb_ask__btn {
+  padding: 0 26px;
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 650;
+  color: #04120f;
+  background: linear-gradient(135deg, var(--sun_mint), #9ad4ff);
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+}
+
+.sun_kb_ask__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(108, 229, 196, 0.26);
+}
+
+.sun_kb_ask__btn:disabled {
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.sun_kb_samples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.sun_kb_sample {
+  padding: 7px 13px;
+  border: 1px solid var(--sun_line);
+  border-radius: 999px;
+  font-size: 12px;
+  color: #d6e2f5;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: border-color 0.22s ease, background 0.22s ease, transform 0.22s ease;
+}
+
+.sun_kb_sample:hover {
+  transform: translateY(-2px);
+  border-color: rgba(108, 229, 196, 0.45);
+  background: rgba(108, 229, 196, 0.1);
+}
+
+.sun_kb_answer {
+  padding: 20px 22px;
+  border: 1px solid var(--sun_line);
+  border-radius: var(--sun_radius);
+  background: linear-gradient(150deg, rgba(121, 169, 255, 0.1), rgba(255, 255, 255, 0.02));
+  animation: sun_kb_fade 0.35s ease both;
+}
+
+@keyframes sun_kb_fade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sun_kb_answer__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.sun_kb_answer__badge {
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #04120f;
+  background: linear-gradient(120deg, var(--sun_mint), #9ae2ff);
+}
+
+.sun_kb_answer__badge--miss {
+  color: #ffd9d9;
+  background: rgba(255, 120, 120, 0.2);
+  border: 1px solid rgba(255, 120, 120, 0.35);
+}
+
+.sun_kb_answer__meta {
+  font-size: 12px;
+  color: var(--sun_muted);
+}
+
+.sun_kb_answer__text {
+  margin: 0;
+  font-size: 13.8px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #e6eefc;
+}
+
+.sun_kb_answer__sources {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.sun_kb_source {
+  padding: 10px 13px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  font-size: 12px;
+  color: var(--sun_muted);
+}
+
+.sun_kb_source b {
+  color: #cfe9ff;
+  font-weight: 600;
+}
+
+.sun_kb_source span {
+  color: rgba(108, 229, 196, 0.9);
+}
+
+/* hidden 属性优先级修复（元素设置了 display 时 hidden 会失效） */
+.sun_kb_modal[hidden],
+.sun_kb_progress[hidden],
+.sun_kb_answer[hidden] {
+  display: none !important;
+}
+
+/* 弹层 */
+.sun_kb_modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(2, 5, 10, 0.68);
+  backdrop-filter: blur(4px);
+}
+
+.sun_kb_modal__panel {
+  display: flex;
+  flex-direction: column;
+  width: min(820px, 94vw);
+  max-height: 82vh;
+  border: 1px solid var(--sun_line);
+  border-radius: var(--sun_radius);
+  background: rgba(10, 16, 28, 0.96);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.sun_kb_modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px 20px;
+  border-bottom: 1px solid var(--sun_line);
+}
+
+.sun_kb_modal__head h3 {
+  margin: 0;
+  font-size: 14.5px;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sun_kb_modal__close {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--sun_line);
+  border-radius: 9px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--sun_muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.sun_kb_modal__close:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.sun_kb_modal__body {
+  padding: 16px 20px 22px;
+  overflow-y: auto;
+}
+
+.sun_kb_chunk {
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border: 1px solid var(--sun_line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.sun_kb_chunk__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 11.5px;
+  color: var(--sun_muted);
+}
+
+.sun_kb_chunk__head b {
+  color: rgba(121, 169, 255, 0.9);
+  font-weight: 600;
+}
+
+.sun_kb_chunk__text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  color: #dbe6f5;
+}
+
+/* 页脚 */
+.sun_kb_footer {
+  position: relative;
+  z-index: 10;
+  margin-top: 40px;
+  padding: 22px 20px 34px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 12px;
+  text-align: center;
+  color: rgba(147, 163, 191, 0.8);
+}
+
+@media (max-width: 820px) {
+  .sun_kb_stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sun_kb_file {
+    grid-template-columns: 40px minmax(0, 1fr);
+    row-gap: 10px;
+  }
+
+  .sun_kb_file__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
+  .sun_kb_ask {
+    flex-direction: column;
+  }
+
+  .sun_kb_ask__btn {
+    padding: 12px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

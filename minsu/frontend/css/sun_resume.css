@@ -1,0 +1,349 @@
+/* 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+   文件说明：个人简历页样式（深空玻璃拟态风格，与平台整体设计统一） */
+:root {
+  --sun_bg: #060b14;
+  --sun_card: rgba(255, 255, 255, 0.045);
+  --sun_line: rgba(255, 255, 255, 0.09);
+  --sun_text: #e8eef8;
+  --sun_muted: #93a4bd;
+  --sun_mint: #6ce5c4;
+  --sun_blue: #7fb1ff;
+  --sun_violet: #b59aff;
+  --sun_gold: #ffd9a0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--sun_bg);
+  color: var(--sun_text);
+  font-family: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", -apple-system, sans-serif;
+  line-height: 1.75;
+}
+#sun_resume_bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background:
+    radial-gradient(900px 520px at 12% -8%, rgba(127, 177, 255, 0.14), transparent 60%),
+    radial-gradient(760px 480px at 88% 12%, rgba(108, 229, 196, 0.10), transparent 62%),
+    radial-gradient(820px 560px at 50% 118%, rgba(181, 154, 255, 0.12), transparent 64%),
+    var(--sun_bg);
+}
+.sun_resume {
+  position: relative;
+  z-index: 1;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 56px 28px 60px;
+  display: grid;
+  gap: 30px;
+}
+/* ============ 头部 ============ */
+.sun_hero {
+  position: relative;
+  display: flex;
+  gap: 26px;
+  align-items: flex-start;
+  padding: 34px 36px;
+  border: 1px solid var(--sun_line);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+  box-shadow: 0 24px 60px rgba(2, 8, 20, 0.45);
+  overflow: hidden;
+}
+.sun_hero::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sun_mint), var(--sun_blue), var(--sun_violet), var(--sun_gold));
+}
+.sun_hero__avatar {
+  flex: 0 0 96px;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  font-size: 44px;
+  font-weight: 700;
+  color: #071018;
+  background: linear-gradient(135deg, var(--sun_mint), var(--sun_blue));
+  box-shadow: 0 18px 40px rgba(108, 229, 196, 0.25);
+}
+.sun_hero__main { flex: 1; min-width: 0; }
+.sun_hero__name { font-size: 34px; letter-spacing: 4px; }
+.sun_hero__en {
+  margin-left: 10px;
+  font-size: 14px;
+  letter-spacing: 5px;
+  color: var(--sun_muted);
+  font-weight: 500;
+}
+.sun_hero__intent {
+  margin-top: 8px;
+  font-size: 16.5px;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--sun_mint), var(--sun_blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  width: fit-content;
+}
+.sun_hero__contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 14px;
+  list-style: none;
+  font-size: 13.5px;
+  color: var(--sun_muted);
+}
+.sun_hero__contacts a {
+  color: var(--sun_blue);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(127, 177, 255, 0.4);
+}
+.sun_hero__contacts a:hover { color: #fff; }
+.sun_hero__edu { margin-top: 12px; font-size: 13px; color: var(--sun_muted); letter-spacing: 0.5px; }
+.sun_hero__print {
+  flex: 0 0 auto;
+  padding: 10px 18px;
+  border: 1px solid rgba(108, 229, 196, 0.4);
+  border-radius: 999px;
+  font-size: 13px;
+  color: #b9f4e4;
+  background: rgba(108, 229, 196, 0.1);
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+.sun_hero__print:hover { color: #04120f; background: var(--sun_mint); }
+/* ============ 区块与卡片网格 ============ */
+.sun_section { padding: 4px 6px; }
+.sun_section__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  font-size: 21px;
+  letter-spacing: 3px;
+}
+.sun_section__title::before {
+  content: "";
+  width: 8px;
+  height: 22px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--sun_mint), var(--sun_blue));
+  box-shadow: 0 6px 16px rgba(108, 229, 196, 0.35);
+}
+.sun_grid { display: grid; gap: 14px; }
+.sun_grid--4 { grid-template-columns: repeat(4, 1fr); }
+.sun_grid--2 { grid-template-columns: repeat(2, 1fr); }
+.sun_mini {
+  padding: 18px 20px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: var(--sun_card);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.sun_mini:hover {
+  transform: translateY(-4px);
+  border-color: rgba(108, 229, 196, 0.4);
+  box-shadow: 0 16px 34px rgba(2, 8, 20, 0.4);
+}
+.sun_mini h3 { font-size: 15px; color: var(--sun_mint); margin-bottom: 8px; letter-spacing: 1px; }
+.sun_mini p { font-size: 13px; color: #b8c5d9; }
+/* ============ 技能 ============ */
+.sun_skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.sun_skill {
+  padding: 18px 20px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: var(--sun_card);
+}
+.sun_skill header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.sun_skill b { font-size: 15px; letter-spacing: 1px; }
+.sun_skill em {
+  font-style: normal;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: #06131f;
+  background: linear-gradient(135deg, var(--sun_mint), #a8f0dd);
+}
+.sun_skill p { font-size: 12.8px; color: #b8c5d9; }
+.sun_bars { display: grid; gap: 12px; margin-top: 18px; }
+.sun_bar {
+  display: grid;
+  grid-template-columns: 200px 1fr 46px;
+  align-items: center;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--sun_muted);
+}
+.sun_bar i { height: 10px; border-radius: 999px; background: rgba(255, 255, 255, 0.07); overflow: hidden; }
+.sun_bar b {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--sun_mint), var(--sun_blue));
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sun_bar em { font-style: normal; color: var(--sun_mint); font-size: 12.5px; text-align: right; }
+.sun_extra {
+  margin-top: 16px;
+  padding: 12px 18px;
+  border: 1px dashed var(--sun_line);
+  border-radius: 12px;
+  font-size: 12.8px;
+  color: var(--sun_muted);
+}
+.sun_extra b { color: var(--sun_gold); }
+/* ============ AI 流程 ============ */
+.sun_flow { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin-bottom: 16px; counter-reset: sun_flow; }
+.sun_flow li {
+  counter-increment: sun_flow;
+  position: relative;
+  padding: 9px 20px 9px 38px;
+  border: 1px solid rgba(127, 177, 255, 0.3);
+  border-radius: 999px;
+  font-size: 13px;
+  color: #cfe0ff;
+  background: rgba(127, 177, 255, 0.08);
+}
+.sun_flow li::before {
+  content: counter(sun_flow);
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  color: #071018;
+  background: var(--sun_blue);
+}
+/* ============ 项目经历 ============ */
+.sun_project {
+  position: relative;
+  margin-bottom: 16px;
+  padding: 22px 26px;
+  border: 1px solid var(--sun_line);
+  border-radius: 18px;
+  background: var(--sun_card);
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+.sun_project:hover {
+  border-color: rgba(181, 154, 255, 0.45);
+  transform: translateY(-3px);
+}
+.sun_project header { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+.sun_project h3 { font-size: 17.5px; letter-spacing: 1px; }
+.sun_project__sub { font-size: 12.5px; color: var(--sun_violet); margin-top: 4px; }
+.sun_project time {
+  font-size: 12.5px;
+  color: var(--sun_muted);
+  padding: 4px 12px;
+  border: 1px solid var(--sun_line);
+  border-radius: 999px;
+  white-space: nowrap;
+  height: fit-content;
+}
+.sun_project__stack {
+  margin: 12px 0 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: #b9f4e4;
+  background: rgba(108, 229, 196, 0.08);
+  width: fit-content;
+}
+.sun_project ul { padding-left: 20px; }
+.sun_project li { font-size: 13.2px; color: #b8c5d9; margin: 6px 0; }
+.sun_project li::marker { color: var(--sun_mint); }
+/* ============ 教育背景 / 链接 ============ */
+.sun_edu {
+  padding: 18px 22px;
+  border: 1px solid var(--sun_line);
+  border-radius: 16px;
+  background: var(--sun_card);
+}
+.sun_edu header { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.sun_edu b { font-size: 15.5px; }
+.sun_edu time { font-size: 12.5px; color: var(--sun_muted); }
+.sun_edu p { font-size: 13px; color: #b8c5d9; margin-top: 4px; }
+.sun_edu p b { font-size: 13px; color: var(--sun_gold); }
+.sun_links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.sun_links a {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  border: 1px solid rgba(127, 177, 255, 0.3);
+  border-radius: 14px;
+  background: rgba(127, 177, 255, 0.07);
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.sun_links a:hover {
+  transform: translateY(-3px);
+  border-color: var(--sun_blue);
+  box-shadow: 0 14px 30px rgba(127, 177, 255, 0.15);
+}
+.sun_links b { font-size: 14.5px; color: var(--sun_blue); }
+.sun_links span { font-size: 12.5px; color: var(--sun_muted); }
+.sun_foot { text-align: center; font-size: 12px; color: rgba(147, 164, 189, 0.7); padding-top: 8px; }
+/* ============ 进场动画 ============ */
+.sun_reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sun_reveal--on { opacity: 1; transform: none; }
+/* ============ 响应式 ============ */
+@media (max-width: 920px) {
+  .sun_grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .sun_skills { grid-template-columns: 1fr; }
+  .sun_bar { grid-template-columns: 130px 1fr 42px; }
+}
+@media (max-width: 640px) {
+  .sun_resume { padding: 28px 14px 40px; }
+  .sun_hero { flex-direction: column; align-items: flex-start; padding: 26px 22px; }
+  .sun_grid--4, .sun_grid--2, .sun_links { grid-template-columns: 1fr; }
+  .sun_bar { grid-template-columns: 1fr; gap: 6px; }
+  .sun_bar em { text-align: left; }
+  .sun_hero__name { font-size: 26px; }
+}
+/* ============ 打印样式 ============ */
+@media print {
+  #sun_resume_bg, .sun_hero__print { display: none; }
+  body { background: #fff; color: #1a2233; }
+  .sun_resume { max-width: 100%; padding: 0; gap: 18px; }
+  .sun_hero, .sun_mini, .sun_skill, .sun_project, .sun_edu, .sun_links a {
+    background: #fff;
+    border-color: #d5ddea;
+    box-shadow: none;
+    color: #1a2233;
+  }
+  .sun_mini h3 { color: #0e7d64; }
+  .sun_mini p, .sun_skill p, .sun_project li, .sun_edu p { color: #3c4658; }
+  .sun_hero__contacts a { color: #2456a8; border: 0; }
+  .sun_project time, .sun_edu time, .sun_links span, .sun_hero__edu { color: #6b7688; }
+  .sun_reveal { opacity: 1; transform: none; }
+  .sun_bar b { width: 100% !important; }
+  .sun_section__title { color: #14233c; }
+}
+/* 无障碍：系统开启「减弱动态效果」时直接展示内容，不做进场动画 */
+@media (prefers-reduced-motion: reduce) {
+  .sun_reveal { opacity: 1; transform: none; transition: none; }
+  .sun_mini, .sun_project, .sun_links a { transition: none; }
+}

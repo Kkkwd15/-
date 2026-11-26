@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<!--
+  姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-12 | 大模型：Auto
+  文件说明：云栖民宿预订平台 - 首页（项目信息展示 + 全站页面导航 + canvas 背景动画）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="云栖民宿预订平台 - 孙宁 24001011016 - 课程综合实践项目首页" />
+  <title>云栖民宿预订平台 | 孙宁 24001011016</title>
+  <link rel="stylesheet" href="./css/sun_index.css" />
+</head>
+<body class="sun_body">
+  <!-- canvas 动态背景 -->
+  <canvas id="sun_canvas_bg" class="sun_canvas_bg"></canvas>
+  <div class="sun_aura sun_aura--mint" aria-hidden="true"></div>
+  <div class="sun_aura sun_aura--violet" aria-hidden="true"></div>
+
+  <!-- 顶部导航条 -->
+  <header class="sun_topbar">
+    <a class="sun_brand" href="./index.html">
+      <span class="sun_brand__mark">栖</span>
+      <span class="sun_brand__text">云栖民宿<small>YUNQI HOMESTAY</small></span>
+    </a>
+    <nav class="sun_topbar__nav">
+      <a class="sun_topbar__link" href="./sun_home.html">新版首页</a>
+      <a class="sun_topbar__link" href="./sun_hub.html">服务网站</a>
+      <a class="sun_topbar__link" href="./sun_admin.html">后台管理</a>
+      <a class="sun_topbar__link" href="#sun_section_nav">页面导航</a>
+      <a class="sun_topbar__link" href="#sun_section_tech">技术栈</a>
+      <a class="sun_topbar__link" href="#sun_section_about">项目信息</a>
+    </nav>
+  </header>
+
+  <main class="sun_main">
+    <!-- 首屏：项目与作者信息 -->
+    <section class="sun_hero">
+      <p class="sun_hero__eyebrow">
+        <span class="sun_dot" aria-hidden="true"></span>课程综合实践 · 项目类别：自选
+      </p>
+      <h1 class="sun_hero__title">云栖<span class="sun_hero__title--accent">民宿</span>预订平台</h1>
+      <p class="sun_hero__desc">
+        面向山野度假场景的民宿在线预订系统，涵盖房源浏览、房源详情、在线预订与订单管理。
+        全站以原生 HTML / CSS / JavaScript 构建，后端采用 Node.js + Express 提供 RESTful 接口。
+      </p>
+
+      <ul class="sun_profile">
+        <li class="sun_profile__item">
+          <span class="sun_profile__label">姓名</span>
+          <strong class="sun_profile__value">孙宁</strong>
+        </li>
+        <li class="sun_profile__item">
+          <span class="sun_profile__label">学号</span>
+          <strong class="sun_profile__value">24001011016</strong>
+        </li>
+        <li class="sun_profile__item">
+          <span class="sun_profile__label">项目类别</span>
+          <strong class="sun_profile__value">自选</strong>
+        </li>
+        <li class="sun_profile__item">
+          <span class="sun_profile__label">已完成页面</span>
+          <strong class="sun_profile__value"><span id="sun_page_count">1</span> 个</strong>
+        </li>
+      </ul>
+
+      <div class="sun_hero__actions">
+        <a class="sun_btn sun_btn--primary" href="#sun_section_nav">浏览页面导航</a>
+        <a class="sun_btn sun_btn--ghost" href="#sun_section_tech">查看技术栈</a>
+      </div>
+    </section>
+
+    <!-- 页面导航 -->
+    <section class="sun_section" id="sun_section_nav">
+      <div class="sun_section__head">
+        <h2 class="sun_section__title">页面导航</h2>
+        <p class="sun_section__desc">
+          全部已完成页面在此登记入口，新建页面后按规则追加超链接（文件名包含 detail 的详情页除外）
+        </p>
+      </div>
+
+      <div class="sun_grid" id="sun_nav_grid">
+        <a class="sun_card sun_card--active" href="./index.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">01</span>
+          <h3 class="sun_card__title">首页</h3>
+          <p class="sun_card__desc">项目信息总览、全站页面导航入口与 canvas 动态背景</p>
+          <span class="sun_card__path">/index.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_hub.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">02</span>
+          <h3 class="sun_card__title">云栖酒店服务网站</h3>
+          <p class="sun_card__desc">AI 聊天与评论情感分析整合导航，点击板块卡片一键跳转</p>
+          <span class="sun_card__path">/sun_hub.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_chat.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">03</span>
+          <h3 class="sun_card__title">AI 对话</h3>
+          <p class="sun_card__desc">云栖小助手聊天界面，支持历史会话、消息气泡与打字动效</p>
+          <span class="sun_card__path">/sun_chat.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_kb.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">04</span>
+          <h3 class="sun_card__title">知识库管理</h3>
+          <p class="sun_card__desc">上传 doc/docx/pdf/ppt/txt 文件，自动解析切片并支持 RAG 检索问答</p>
+          <span class="sun_card__path">/sun_kb.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_sentiment.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">05</span>
+          <h3 class="sun_card__title">评论情感分析</h3>
+          <p class="sun_card__desc">上传 Excel 评论文件，大模型三分类并绘制饼状图与精选评论</p>
+          <span class="sun_card__path">/sun_sentiment.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_admin.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">06</span>
+          <h3 class="sun_card__title">后台管理</h3>
+          <p class="sun_card__desc">管理员登录鉴权、房源/订单/住客增删改查与搜索分页、真实数据仪表盘</p>
+          <span class="sun_card__path">/sun_admin.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_news.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">07</span>
+          <h3 class="sun_card__title">科技 AI 新闻</h3>
+          <p class="sun_card__desc">Supabase 云端新闻库，分类筛选、关键词搜索、热度排序与分页加载</p>
+          <span class="sun_card__path">/sun_news.html</span>
+        </a>
+
+        <a class="sun_card sun_card--active" href="./sun_resume.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">08</span>
+          <h3 class="sun_card__title">个人简历</h3>
+          <p class="sun_card__desc">大学生个人简历展示页，Canvas 粒子背景动画、技能条与滚动进场</p>
+          <span class="sun_card__path">/sun_resume.html</span>
+        </a>
+
+        <div class="sun_card sun_card--pending">
+          <span class="sun_card__badge sun_card__badge--pending">待建设</span>
+          <span class="sun_card__index">09</span>
+          <h3 class="sun_card__title">房源列表</h3>
+          <p class="sun_card__desc">按城市、价格、房型筛选民宿房源，卡片式列表展示</p>
+          <span class="sun_card__path">/sun_list.html</span>
+        </div>
+
+        <div class="sun_card sun_card--pending">
+          <span class="sun_card__badge sun_card__badge--pending">待建设</span>
+          <span class="sun_card__index">10</span>
+          <h3 class="sun_card__title">在线预订</h3>
+          <p class="sun_card__desc">选择入住日期与房型，提交订单并校验库存</p>
+          <span class="sun_card__path">/sun_booking.html</span>
+        </div>
+
+        <div class="sun_card sun_card--pending">
+          <span class="sun_card__badge sun_card__badge--pending">待建设</span>
+          <span class="sun_card__index">11</span>
+          <h3 class="sun_card__title">我的订单</h3>
+          <p class="sun_card__desc">查看订单状态、取消预订与入住评价</p>
+          <span class="sun_card__path">/sun_orders.html</span>
+        </div>
+
+        <a class="sun_card sun_card--active" href="./sun_home.html">
+          <span class="sun_card__badge">已完成</span>
+          <span class="sun_card__index">12</span>
+          <h3 class="sun_card__title">新版导航首页</h3>
+          <p class="sun_card__desc">只收录纯前端与 Supabase 页面链接，突出个人简历，后台接口页面附截图说明页</p>
+          <span class="sun_card__path">/sun_home.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 技术栈 -->
+    <section class="sun_section" id="sun_section_tech">
+      <div class="sun_section__head">
+        <h2 class="sun_section__title">技术栈</h2>
+        <p class="sun_section__desc">前端零依赖、零 CDN，后端统一 /api 前缀与 JSON 响应规范</p>
+      </div>
+
+      <div class="sun_tech">
+        <article class="sun_tech__item">
+          <h3 class="sun_tech__name">原生前端</h3>
+          <p class="sun_tech__desc">HTML5 + CSS3 + JavaScript（ES6+），不使用任何第三方库与框架</p>
+        </article>
+        <article class="sun_tech__item">
+          <h3 class="sun_tech__name">Node.js + Express</h3>
+          <p class="sun_tech__desc">RESTful + MVC 分层，接口统一以 /api 为前缀，端口 8016</p>
+        </article>
+        <article class="sun_tech__item">
+          <h3 class="sun_tech__name">MySQL</h3>
+          <p class="sun_tech__desc">mysql2 连接池访问，表与字段命名统一 sun_ 前缀</p>
+        </article>
+        <article class="sun_tech__item">
+          <h3 class="sun_tech__name">统一响应</h3>
+          <p class="sun_tech__desc">{ code, msg, data } 结构，code=0 成功，非 0 失败</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 项目信息 -->
+    <section class="sun_section sun_section--about" id="sun_section_about">
+      <div class="sun_about">
+        <h2 class="sun_about__title">项目信息</h2>
+        <dl class="sun_about__list">
+          <div class="sun_about__row"><dt>作者姓名</dt><dd>孙宁</dd></div>
+          <div class="sun_about__row"><dt>学号</dt><dd>24001011016</dd></div>
+          <div class="sun_about__row"><dt>项目名称</dt><dd>云栖民宿预订平台</dd></div>
+          <div class="sun_about__row"><dt>项目类别</dt><dd>自选</dd></div>
+          <div class="sun_about__row"><dt>接口前缀</dt><dd>/api</dd></div>
+          <div class="sun_about__row"><dt>服务端口</dt><dd>8016</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="sun_footer">
+    <p class="sun_footer__text">© 2026 云栖民宿预订平台 · 孙宁 · 24001011016</p>
+    <p class="sun_footer__sub">原生前端 · Express 后端 · MySQL 数据库</p>
+  </footer>
+
+  <script src="./js/sun_index.js"></script>
+</body>
+</html>

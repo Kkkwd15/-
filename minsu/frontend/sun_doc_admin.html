@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- 姓名：【孙宁】 | 学号：【24001011016】 | 时间：2026-11-26 | 大模型：Auto
+     文件说明：后台管理页面说明（截图 + 功能说明 + 接口清单） -->
+<html lang="zh-CN"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>后台管理 · 页面说明</title><link rel="stylesheet" href="./css/sun_doc.css" /></head>
+<body><canvas id="sun_doc_bg" aria-hidden="true"></canvas>
+<main class="sun_doc">
+  <nav class="sun_top"><a href="./sun_home.html">← 返回新版首页</a><a class="sun_top__open" href="./sun_admin.html">打开实际页面 →</a></nav>
+  <header class="sun_hero sun_reveal">
+    <span class="sun_hero__badge">需本地后端 · 接口页面</span>
+    <h1>后台管理 · Admin Console</h1>
+    <p>管理员登录后进入数据仪表盘与实体管理：房源、订单、住客三类数据的增删改查、搜索分页与详情；所有管理接口由 Bearer Token 鉴权，未登录访问返回 401。</p>
+  </header>
+  <section class="sun_sec sun_reveal"><h2>页面截图</h2>
+    <a class="sun_shot" href="./images/sun_shot_admin.png" target="_blank" rel="noopener">
+      <img src="./images/sun_shot_admin.png" alt="后台管理仪表盘真实截图" />
+      <div class="sun_shot__cap">真实运行截图（演示账号 admin / admin123 登录后）· <b>点击图片可放大查看</b></div>
+    </a>
+  </section>
+  <section class="sun_sec sun_reveal"><h2>功能与实现说明</h2>
+    <div class="sun_info">
+      <article class="sun_box"><h3>主要功能</h3><ul>
+        <li>管理员登录 / 登出，Token 保存在 localStorage，刷新保持登录态</li>
+        <li>仪表盘：近 7 日订单量与金额、房型分布、订单状态、情感分布，全部由后端真实聚合数据驱动</li>
+        <li>房源 / 订单 / 住客三张管理表格：分页、搜索、新增、编辑、删除、详情</li>
+        <li>接口统一返回 JSON，错误码与消息在页面顶部提示</li>
+      </ul></article>
+      <article class="sun_box"><h3>技术实现</h3><ul>
+        <li>Express 路由 + sun_admin_auth 中间件（Bearer Token，401 拦截）</li>
+        <li>MySQL 五张表：管理员、Token、房源、订单、住客，含种子数据</li>
+        <li>前端原生 JS + Canvas 自绘图表，无第三方图表库</li>
+        <li>登录成功后写入 sun_admin_token / sun_admin_name，退出时清除</li>
+      </ul></article>
+      <article class="sun_box sun_box--full"><h3>主要后台接口</h3><div class="sun_api">
+        <code>POST /api/admin/login</code><code>POST /api/admin/logout</code>
+        <code>GET /api/admin/profile</code><code>GET /api/admin/dashboard</code>
+        <code>/api/admin/rooms（GET/POST/PUT/DELETE）</code>
+        <code>/api/admin/orders（GET/POST/PUT/DELETE）</code>
+        <code>/api/admin/guests（GET/POST/PUT/DELETE）</code>
+      </div></article>
+    </div>
+  </section>
+  <section class="sun_sec sun_reveal"><h2>运行方式</h2>
+    <p class="sun_cmd">cd backend &amp;&amp; node app.js　→　http://localhost:8016/sun_admin.html　（演示账号 admin / admin123）</p>
+    <p class="sun_note" style="margin-top:12px">注意：登录与全部管理接口必须本地 Node 后端 + MySQL 支持；静态托管下无法登录，故新版首页只链接本说明页。</p>
+  </section>
+  <div class="sun_ctas sun_reveal"><a class="sun_ctas__primary" href="./sun_admin.html">打开后台管理页面</a><a class="sun_ctas__ghost" href="./sun_home.html">返回新版首页</a></div>
+  <footer class="sun_foot">孙宁 · 24001011016 · 页面说明文档 D5</footer>
+</main><script src="./js/sun_common.js"></script></body></html>
